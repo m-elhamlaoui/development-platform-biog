@@ -1,12 +1,11 @@
-package org.biog.unihivebackend.models;
+package org.biog.unihivebackend.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -14,10 +13,11 @@ import java.util.UUID;
 @Data
 @Table(name = "super admin", schema = "public")
 public class SuperAdmin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
+
+  @Column(name = "created_at")
+  private Instant createdAt;
 }
