@@ -38,7 +38,7 @@ their engagement in student life.
 <img src="Mockups\Events Page.jpg" width="700"/>
 
 ### Events page (events drop-down)
-<img src="Mockups\Events Page (Events DropDown).jpg" width="700"/>
+<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Events Page (Events Drop-Down).jpg" width="700"/>
 
 ### Clubs page
 <img src="Mockups\Clubs Page.jpg" width="700"/>
