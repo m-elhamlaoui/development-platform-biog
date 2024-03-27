@@ -1,4 +1,4 @@
-package org.biog.unihivebackend.models;
+package org.biog.unihivebackend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
