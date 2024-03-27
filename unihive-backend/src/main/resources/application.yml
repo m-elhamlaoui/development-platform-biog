@@ -1,0 +1,25 @@
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: always
+
+supabase:
+  url: https://yfnmatryhthmdluxgbdb.supabase.co
+  anon: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlmbm1hdHJ5aHRobWRsdXhnYmRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA0ODk2MDEsImV4cCI6MjAyNjA2NTYwMX0.4hYSYPs3_bNIuoMVRV023VJv2iMHExnISOCiFPu5V20
+  jwt_secret: AndWL5D2oEVYvhWiyTFAm7gN2P/0lpOaL8i4gYXq37u5wOKis5GLuU5tT7AOySYBwFeEF1oq5rxyA/RvR0/uuw==
+
+spring:
+  application:
+    name: unihive-backend
+  datasource:
+    url: jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
+    username: postgres.yfnmatryhthmdluxgbdb
+    password: UniHive575859
+    driverClassName: org.postgresql.Driver
+  jpa:
+    open-in-view: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+      show-sql: true
