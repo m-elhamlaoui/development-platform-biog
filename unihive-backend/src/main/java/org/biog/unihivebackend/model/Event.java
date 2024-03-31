@@ -42,6 +42,9 @@ public class Event {
   @Column(name = "event_rating")
   private float eventRating;
 
+  @Column(name = "rating_count")
+  private int ratingCount;
+
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
   private Club club_id;

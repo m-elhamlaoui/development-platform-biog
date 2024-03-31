@@ -33,6 +33,9 @@ public class Club {
   @Column(name = "club_rating")
   private float clubRating;
 
+  @Column(name = "rating_count")
+  private int ratingCount;
+
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(
     name = "student_id",
