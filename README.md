@@ -38,7 +38,7 @@ their engagement in student life.
 <img src="Mockups\Events Page.jpg" width="700"/>
 
 ### Events page (events drop-down)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Events Page (Events Drop-Down).jpg" width="700"/>
+<img src="Mockups\Events Page (Events Drop-Down).jpg" width="700"/>
 
 ### Clubs page
 <img src="Mockups\Clubs Page.jpg" width="700"/>
@@ -62,33 +62,33 @@ their engagement in student life.
 <img src="Mockups\User Profile Page (Settings).jpg" width="700"/>
 
 ### Calendar page
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Calendar Page.jpg" width="700"/>
+<img src="Mockups\Calendar Page.jpg" width="700"/>
 
 ### Contact page
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Contact Page.jpg" width="700"/>
+<img src="Mockups\Contact Page.jpg" width="700"/>
 
 ### About page
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\About Page.jpg" width="700"/>
+<img src="Mockups\About Page.jpg" width="700"/>
 
 ### Admin page (dashboard)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Admin Page (Dashboard).jpg" width="700"/>
+<img src="Mockups\Admin Page (Dashboard).jpg" width="700"/>
 
 ### Super Admin page (dashboard)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Dashboard).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Dashboard).jpg" width="700"/>
 
 ### Super Admin page (table - example: admins)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Table - Example_ Admins).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Table - Example_ Admins).jpg" width="700"/>
 
 ### Super Admin page (requests)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Requests).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Requests).jpg" width="700"/>
 
 ### Super Admin page (table modification - example: admins)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Table Modification - Example_ Admins).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Table Modification - Example_ Admins).jpg" width="700"/>
 
 ### Super Admin page (request view)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Request View).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Request View).jpg" width="700"/>
 
 ### Super Admin Page (profile with drop-down)
-<img src="D:\Ghita\2A\S4\JEE\Project JEE\development-platform-biog\Mockups\Super Admin Page (Profile with Drop-Down).jpg" width="700"/>
+<img src="Mockups\Super Admin Page (Profile with Drop-Down).jpg" width="700"/>
 
 
