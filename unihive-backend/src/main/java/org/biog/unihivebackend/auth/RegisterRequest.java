@@ -1,13 +1,11 @@
 package org.biog.unihivebackend.auth;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.biog.unihivebackend.model.Gender;
+import org.biog.unihivebackend.model.Club;
+import org.biog.unihivebackend.model.School;
 
 @Data
 @Builder
@@ -19,16 +17,25 @@ public class RegisterRequest {
 
   private String firstName;
 
-  private String address;
-
-  private LocalDate dateOfBirth;
-
   private String password;
 
-  @Enumerated(EnumType.STRING)
-  private Gender gender;
-
-  private String phoneNumber;
-
   private String email;
+
+  private School school;
+
+  private Club club;
+
+  private int numApogee;
+
+  private String cne;
+
+  private String profileImage;
+
+  private String clubName;
+
+  private String clubLogo;
+
+  private String clubDescription;
+
+  private String clubBanner;
 }

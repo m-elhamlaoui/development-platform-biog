@@ -5,12 +5,14 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 @Table(name = "students", schema = "public")
 public class Student {
@@ -37,10 +39,19 @@ public class Student {
   @Column(name = "profile_image", nullable = false)
   private String profileImage;
 
-  @OneToMany(mappedBy = "student_id")
+  @ManyToMany
+  @JoinTable(
+    name = "follows",
+    joinColumns = @JoinColumn(name = "student_id"),
+    inverseJoinColumns = @JoinColumn(name = "club_id")
+  )
   private List<Club> clubs;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school_id;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  private User user_id;
 }

@@ -17,7 +17,7 @@ public class AuthenticationController {
   private final AuthenticationService service;
 
   @PostMapping("/auth/register/admin")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<AuthenticationResponse> registerAdmin(
     @RequestBody RegisterRequest request
   ) {
@@ -25,19 +25,19 @@ public class AuthenticationController {
   }
 
   @PostMapping("/auth/register/student")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<AuthenticationResponse> registerStudent(
     @RequestBody RegisterRequest request
   ) {
     return ResponseEntity.ok(service.registerStudent(request));
   }
 
-  @PostMapping("/auth/register/professor")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public ResponseEntity<AuthenticationResponse> registerProfessor(
+  @PostMapping("/auth/register/club")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+  public ResponseEntity<AuthenticationResponse> registerClub(
     @RequestBody RegisterRequest request
   ) {
-    return ResponseEntity.ok(service.registerProfessor(request));
+    return ResponseEntity.ok(service.registerClub(request));
   }
 
   @PostMapping("/auth/authenticate")
@@ -48,7 +48,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/auth/changePassword")
-  @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_PROFESSOR')")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_CLUB')")
   public ResponseEntity<AuthenticationResponse> changePassword(
     @RequestBody AuthenticationRequest request
   ) {

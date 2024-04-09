@@ -20,4 +20,8 @@ public class SuperAdmin {
 
   @Column(name = "created_at")
   private Instant createdAt;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  private User user_id;
 }
