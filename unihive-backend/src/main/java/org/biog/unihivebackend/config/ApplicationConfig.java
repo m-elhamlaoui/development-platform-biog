@@ -1,5 +1,6 @@
 package org.biog.unihivebackend.config;
 
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.biog.unihivebackend.model.User;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,20 +23,14 @@ public class ApplicationConfig {
   public final UserRepository userRepository;
 
   @Bean
-  public UserDetailsService userDetailsService() {
+  public UserDetailsService userDetailsService() throws UsernameNotFoundException {
     return username -> {
       Optional<User> user = userRepository.findByEmail(username);
-      if (
-        user.isPresent() &&
-        (
-          user.get().getRole().equals("ADMIN") ||
-          user.get().getRole().equals("STUDENT") ||
-          user.get().getRole().equals("CLUB")
-        )
-      ) {
+      if (user.isPresent() && 
+          Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
         return user.get();
       } else {
-        return null;
+        throw new UsernameNotFoundException("User not found");
       }
     };
   }

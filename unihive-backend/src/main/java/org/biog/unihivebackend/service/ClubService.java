@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClubService {
-    Club addClub(Club club);
     Club updateClub(UUID id ,Club newclub);
     void deleteClub(UUID id);
     Club getClub(UUID id);

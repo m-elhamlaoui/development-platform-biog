@@ -3,6 +3,9 @@ package org.biog.unihivebackend.auth;
 import ch.qos.logback.core.spi.ErrorCodes;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
 import org.biog.unihivebackend.config.JwtAuthenticationFilter;
 import org.biog.unihivebackend.config.JwtService;
 import org.biog.unihivebackend.email.EmailService;
@@ -108,22 +111,14 @@ public class AuthenticationService {
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        request.getEmail(),
-        request.getPassword()
-      )
+    new UsernamePasswordAuthenticationToken(
+      request.getEmail(),
+      request.getPassword()
+    )
     );
 
     var user = userRepository.findByEmail(request.getEmail());
-    if (
-      user.isPresent() &&
-      (
-        user.get().getRole().equals("SUPER_ADMIN") ||
-        user.get().getRole().equals("ADMIN") ||
-        user.get().getRole().equals("STUDENT") ||
-        user.get().getRole().equals("CLUB")
-      )
-    ) {
+    if (user.isPresent() && Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
       var jwtToken = jwtService.generateToken(user.get());
       return AuthenticationResponse.builder().token(jwtToken).build();
     } else {
@@ -135,11 +130,7 @@ public class AuthenticationService {
     var user = userRepository.findByEmail(jwtAuthFilter.getCurrentUserEmail());
     if (
       user.isPresent() &&
-      (
-        user.get().getRole().equals("ADMIN") ||
-        user.get().getRole().equals("STUDENT") ||
-        user.get().getRole().equals("CLUB")
-      )
+      Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())
     ) {
       if (
         passwordEncoder.matches(
@@ -205,7 +196,7 @@ public class AuthenticationService {
       user.get().setPassword(passwordEncoder.encode(newPassword));
       emailService.sendEmail(
         request.getEmail(),
-        "Internship Management System",
+        "UniHive Corporation",
         "Your new password is " +
         newPassword +
         "." +

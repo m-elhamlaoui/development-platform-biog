@@ -41,10 +41,10 @@ public class Club {
   @ManyToMany
   @JoinTable(
     name = "follows",
-    joinColumns = @JoinColumn(name = "club_id"),
-    inverseJoinColumns = @JoinColumn(name = "student_id")
+    joinColumns = @JoinColumn(name = "clubs"),
+    inverseJoinColumns = @JoinColumn(name = "students")
   )
-  private List<Student> student_id;
+  private List<Student> students;
 
   @OneToMany(mappedBy = "club_id")
   private List<Event> events;

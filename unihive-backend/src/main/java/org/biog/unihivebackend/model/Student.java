@@ -42,8 +42,8 @@ public class Student {
   @ManyToMany
   @JoinTable(
     name = "follows",
-    joinColumns = @JoinColumn(name = "student_id"),
-    inverseJoinColumns = @JoinColumn(name = "club_id")
+    joinColumns = @JoinColumn(name = "students"),
+    inverseJoinColumns = @JoinColumn(name = "clubs")
   )
   private List<Club> clubs;
 

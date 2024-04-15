@@ -8,7 +8,6 @@ import org.biog.unihivebackend.service.AdminService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +28,6 @@ public class AdminController {
   @GetMapping("/getadmin/{id}")
   public Admin getAdmin(@PathVariable UUID id) {
     return adminService.getAdmin(id);
-  }
-
-  @PostMapping("/addadmin")
-  public Admin addAdmin(@RequestBody Admin admin) {
-    return adminService.addAdmin(admin);
   }
 
   @DeleteMapping("/deladmin/{id}")
