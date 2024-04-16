@@ -1,0 +1,19 @@
+.navbar {
+    background-color: #333; /* Set background color */
+    color: white; /* Set text color */
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Distribute items evenly along the main axis */
+    align-items: center; /* Center items vertically */
+    padding: 10px 20px; /* Add padding */
+}
+
+.navbar a {
+    color: white; /* Set link text color */
+    text-decoration: none; /* Remove underline */
+    padding: 5px 10px; /* Add padding */
+}
+
+.navbar a.logo {
+    font-weight: bold; /* Make logo text bold */
+    font-size: 20px; /* Adjust font size */
+}
