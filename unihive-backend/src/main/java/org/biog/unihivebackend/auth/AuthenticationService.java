@@ -3,15 +3,20 @@ package org.biog.unihivebackend.auth;
 import ch.qos.logback.core.spi.ErrorCodes;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
 import org.biog.unihivebackend.config.JwtAuthenticationFilter;
 import org.biog.unihivebackend.config.JwtService;
 import org.biog.unihivebackend.email.EmailService;
 import org.biog.unihivebackend.model.Admin;
-import org.biog.unihivebackend.model.Professor;
+import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Student;
+import org.biog.unihivebackend.model.User;
 import org.biog.unihivebackend.repository.AdminRepository;
-import org.biog.unihivebackend.repository.ProfessorRepository;
+import org.biog.unihivebackend.repository.ClubRepository;
 import org.biog.unihivebackend.repository.StudentRepository;
+import org.biog.unihivebackend.repository.UserRepository;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -25,9 +30,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+  private final UserRepository userRepository;
   private final AdminRepository adminRepository;
   private final StudentRepository studentRepository;
-  private final ProfessorRepository professorRepository;
+  private final ClubRepository clubRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final JwtAuthenticationFilter jwtAuthFilter;
@@ -35,121 +41,114 @@ public class AuthenticationService {
   private final EmailService emailService;
 
   public AuthenticationResponse registerAdmin(RegisterRequest request) {
-    var admin = Admin
+    var user = User
       .builder()
       .email(request.getEmail())
       .password(passwordEncoder.encode(request.getPassword()))
       .build();
+
+    userRepository.save(user);
+
+    var admin = Admin
+      .builder()
+      .lastName(request.getLastName())
+      .firstName(request.getFirstName())
+      .user_id(user)
+      .school_id(request.getSchool())
+      .build();
+
     adminRepository.save(admin);
-    var jwtToken = jwtService.generateToken(admin);
+    var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().token(jwtToken).build();
   }
 
   public AuthenticationResponse registerStudent(RegisterRequest request) {
+    var user = User
+      .builder()
+      .email(request.getEmail())
+      .password(passwordEncoder.encode(request.getPassword()))
+      .build();
+
+    userRepository.save(user);
+
     var student = Student
       .builder()
       .lastName(request.getLastName())
       .firstName(request.getFirstName())
-      .email(request.getEmail())
-      .password(passwordEncoder.encode(request.getPassword()))
-      .address(request.getAddress())
-      .dateOfBirth(request.getDateOfBirth())
-      .phoneNumber(request.getPhoneNumber())
-      .gender(request.getGender())
+      .cne(request.getCne())
+      .numApogee(request.getNumApogee())
+      .profileImage(request.getProfileImage())
+      .school_id(request.getSchool())
+      .user_id(user)
       .build();
     studentRepository.save(student);
-    var jwtToken = jwtService.generateToken(student);
+    var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().token(jwtToken).build();
   }
 
-  public AuthenticationResponse registerProfessor(RegisterRequest request) {
-    var professor = Professor
+  public AuthenticationResponse registerClub(RegisterRequest request) {
+    var user = User
       .builder()
-      .lastName(request.getLastName())
-      .firstName(request.getFirstName())
       .email(request.getEmail())
       .password(passwordEncoder.encode(request.getPassword()))
-      .address(request.getAddress())
-      .phoneNumber(request.getPhoneNumber())
       .build();
-    professorRepository.save(professor);
-    var jwtToken = jwtService.generateToken(professor);
+
+    userRepository.save(user);
+
+    var club = Club
+      .builder()
+      .clubName(request.getClubName())
+      .clubLogo(request.getClubLogo())
+      .clubDescription(request.getClubDescription())
+      .clubBanner(request.getClubBanner())
+      .user_id(user)
+      .school_id(request.getSchool())
+      .build();
+    clubRepository.save(club);
+    var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().token(jwtToken).build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        request.getEmail(),
-        request.getPassword()
-      )
+    new UsernamePasswordAuthenticationToken(
+      request.getEmail(),
+      request.getPassword()
+    )
     );
 
-    var admin = adminRepository.findByEmail(request.getEmail());
-    if (admin.isPresent()) {
-      var jwtToken = jwtService.generateToken(admin.get());
+    var user = userRepository.findByEmail(request.getEmail());
+    if (user.isPresent() && Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
+      var jwtToken = jwtService.generateToken(user.get());
       return AuthenticationResponse.builder().token(jwtToken).build();
     } else {
-      var professor = professorRepository.findByEmail(request.getEmail());
-      if (professor.isPresent()) {
-        var jwtToken = jwtService.generateToken(professor.get());
-        return AuthenticationResponse.builder().token(jwtToken).build();
-      } else {
-        var student = studentRepository.findByEmail(request.getEmail());
-        if (student.isPresent()) {
-          var jwtToken = jwtService.generateToken(student.get());
-          return AuthenticationResponse.builder().token(jwtToken).build();
-        } else {
-          return AuthenticationResponse
-            .builder()
-            .token("INVALID_TOKEN")
-            .build();
-        }
-      }
+      return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
     }
   }
 
   public AuthenticationResponse changePassword(AuthenticationRequest request) {
-    var professor = professorRepository.findByEmail(
-      jwtAuthFilter.getCurrentUserEmail()
-    );
-    if (professor.isPresent()) {
+    var user = userRepository.findByEmail(jwtAuthFilter.getCurrentUserEmail());
+    if (
+      user.isPresent() &&
+      Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())
+    ) {
       if (
         passwordEncoder.matches(
           request.getOldPassword(),
-          professor.get().getPassword()
+          user.get().getPassword()
         )
       ) {
-        professor
+        user
           .get()
           .setPassword(passwordEncoder.encode(request.getNewPassword()));
-        professorRepository.save(professor.get());
-        var jwtToken = jwtService.generateToken(professor.get());
+        userRepository.save(user.get());
+        var jwtToken = jwtService.generateToken(user.get());
         return AuthenticationResponse.builder().token(jwtToken).build();
-      }
-      return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
-    } else {
-      var student = studentRepository.findByEmail(
-        jwtAuthFilter.getCurrentUserEmail()
-      );
-      if (student.isPresent()) {
-        if (
-          passwordEncoder.matches(
-            request.getOldPassword(),
-            student.get().getPassword()
-          )
-        ) {
-          student
-            .get()
-            .setPassword(passwordEncoder.encode(request.getNewPassword()));
-          studentRepository.save(student.get());
-          var jwtToken = jwtService.generateToken(student.get());
-          return AuthenticationResponse.builder().token(jwtToken).build();
-        }
-        return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
       } else {
         return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
       }
+    } else {
+      return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
     }
   }
 
@@ -191,40 +190,23 @@ public class AuthenticationService {
 
   public AuthenticationResponse forgotPassword(AuthenticationRequest request)
     throws MessagingException {
-    var professor = professorRepository.findByEmail(request.getEmail());
-    if (professor.isPresent()) {
+    var user = userRepository.findByEmail(request.getEmail());
+    if (user.isPresent()) {
       String newPassword = generatePassayPassword();
-      professor.get().setPassword(passwordEncoder.encode(newPassword));
+      user.get().setPassword(passwordEncoder.encode(newPassword));
       emailService.sendEmail(
         request.getEmail(),
-        "Internship Management System",
+        "UniHive Corporation",
         "Your new password is " +
         newPassword +
         "." +
         " Please change it after logging in."
       );
-      professorRepository.save(professor.get());
-      var jwtToken = jwtService.generateToken(professor.get());
+      userRepository.save(user.get());
+      var jwtToken = jwtService.generateToken(user.get());
       return AuthenticationResponse.builder().token(jwtToken).build();
     } else {
-      var student = studentRepository.findByEmail(request.getEmail());
-      if (student.isPresent()) {
-        String newPassword = generatePassayPassword();
-        student.get().setPassword(passwordEncoder.encode(newPassword));
-        emailService.sendEmail(
-          request.getEmail(),
-          "Internship Management System",
-          "Your new password is " +
-          newPassword +
-          "." +
-          " Please change it after logging in."
-        );
-        studentRepository.save(student.get());
-        var jwtToken = jwtService.generateToken(student.get());
-        return AuthenticationResponse.builder().token(jwtToken).build();
-      } else {
-        return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
-      }
+      return AuthenticationResponse.builder().token("INVALID_TOKEN").build();
     }
   }
 }

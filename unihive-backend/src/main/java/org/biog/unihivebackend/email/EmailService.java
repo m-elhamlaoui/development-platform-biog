@@ -1,4 +1,4 @@
-package ma.internship.ensias.internshipmanagement.email;
+package org.biog.unihivebackend.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

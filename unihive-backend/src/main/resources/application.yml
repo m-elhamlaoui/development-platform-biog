@@ -23,3 +23,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: update
       show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: info.unihive@gmail.com
+    password: adhutlynxawdtvbr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

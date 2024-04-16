@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-  private final String SECRET_KEY =
-    "5367566B59703373357638792F423F4528482B4D6251655468576D5A71347437";
+  @Value("${supabase.jwt_secret}")
+  private String SECRET_KEY;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);

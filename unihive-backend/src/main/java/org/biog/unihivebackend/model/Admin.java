@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 @Table(name = "admins", schema = "public")
 public class Admin {
@@ -28,6 +30,10 @@ public class Admin {
   private Instant createdAt;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = true)
+  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school_id;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  private User user_id;
 }

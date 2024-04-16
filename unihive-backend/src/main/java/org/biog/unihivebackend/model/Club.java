@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 @Table(name = "clubs", schema = "public")
 public class Club {
@@ -33,13 +35,16 @@ public class Club {
   @Column(name = "club_rating")
   private float clubRating;
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(
-    name = "student_id",
-    referencedColumnName = "id",
-    nullable = false
+  @Column(name = "rating_count")
+  private int ratingCount;
+
+  @ManyToMany
+  @JoinTable(
+    name = "follows",
+    joinColumns = @JoinColumn(name = "clubs"),
+    inverseJoinColumns = @JoinColumn(name = "students")
   )
-  private Student student_id;
+  private List<Student> students;
 
   @OneToMany(mappedBy = "club_id")
   private List<Event> events;
@@ -47,4 +52,8 @@ public class Club {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school_id;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  private User user_id;
 }
