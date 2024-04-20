@@ -1,6 +1,8 @@
 package org.biog.unihivebackend.model;
 
 import jakarta.persistence.*;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -39,21 +41,25 @@ public class Club {
   private int ratingCount;
 
   @ManyToMany
-  @JoinTable(
-    name = "follows",
-    joinColumns = @JoinColumn(name = "clubs"),
-    inverseJoinColumns = @JoinColumn(name = "students")
-  )
+  @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "club_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
   private List<Student> students;
 
-  @OneToMany(mappedBy = "club_id")
+  @OneToMany(mappedBy = "club")
   private List<Event> events;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  private School school_id;
+  private School school;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-  private User user_id;
+  private User user;
+
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
 }

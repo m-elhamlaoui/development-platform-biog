@@ -8,8 +8,12 @@ import java.util.UUID;
 
 public interface AdminService {
     List<Admin> getAll();
-    Admin updateAdmin(UUID id , Admin newadmin);
+
+    Admin updateAdmin(UUID id, Admin newadmin);
+
     void deleteAdmin(UUID id);
+
     Admin getAdmin(UUID id);
+
     School getSchoolByAdmin(UUID id);
 }

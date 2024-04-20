@@ -31,9 +31,14 @@ public class Admin {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  private School school_id;
+  private School school;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-  private User user_id;
+  private User user;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
 }

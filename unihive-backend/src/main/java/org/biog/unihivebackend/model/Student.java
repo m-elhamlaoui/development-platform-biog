@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,18 +42,25 @@ public class Student {
   private String profileImage;
 
   @ManyToMany
-  @JoinTable(
-    name = "follows",
-    joinColumns = @JoinColumn(name = "students"),
-    inverseJoinColumns = @JoinColumn(name = "clubs")
-  )
+  @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "club_id"))
   private List<Club> clubs;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  private School school_id;
+  private School school;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-  private User user_id;
+  private User user;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
+
+  public List<Club> getClubsBySchool(UUID schoolId) {
+    return clubs.stream()
+        .filter(club -> club.getSchool().getId().equals(schoolId))
+        .collect(Collectors.toList());
+  }
 }

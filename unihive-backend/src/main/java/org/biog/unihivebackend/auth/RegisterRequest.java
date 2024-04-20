@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.biog.unihivebackend.model.Club;
-import org.biog.unihivebackend.model.School;
+
+import java.util.UUID;
 
 @Data
 @Builder
@@ -21,9 +21,9 @@ public class RegisterRequest {
 
   private String email;
 
-  private School school;
+  private UUID school;
 
-  private Club club;
+  private UUID club;
 
   private int numApogee;
 

@@ -34,16 +34,16 @@ public class User implements UserDetails {
   @Column(name = "encrypted_password", nullable = false, unique = true)
   private String password;
 
-  @OneToOne(mappedBy = "user_id")
+  @OneToOne(mappedBy = "user")
   private Admin admin;
 
-  @OneToOne(mappedBy = "user_id")
+  @OneToOne(mappedBy = "user")
   private SuperAdmin superAdmin;
 
-  @OneToOne(mappedBy = "user_id")
+  @OneToOne(mappedBy = "user")
   private Student student;
 
-  @OneToOne(mappedBy = "user_id")
+  @OneToOne(mappedBy = "user")
   private Club club;
 
   @Override

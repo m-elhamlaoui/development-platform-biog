@@ -31,12 +31,17 @@ public class School {
   @Column(name = "school_address", nullable = false)
   private String schoolAddress;
 
-  @OneToOne(mappedBy = "school_id")
+  @OneToOne(mappedBy = "school")
   private Admin admin;
 
-  @OneToMany(mappedBy = "school_id")
+  @OneToMany(mappedBy = "school")
   private List<Club> clubs;
 
-  @OneToMany(mappedBy = "school_id")
+  @OneToMany(mappedBy = "school")
   private List<Student> students;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
 }

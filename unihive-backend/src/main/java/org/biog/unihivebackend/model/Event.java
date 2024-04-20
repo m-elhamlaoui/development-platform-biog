@@ -47,5 +47,10 @@ public class Event {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
-  private Club club_id;
+  private Club club;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
 }

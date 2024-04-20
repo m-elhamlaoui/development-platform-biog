@@ -9,12 +9,15 @@ import java.util.Arrays;
 import org.biog.unihivebackend.config.JwtAuthenticationFilter;
 import org.biog.unihivebackend.config.JwtService;
 import org.biog.unihivebackend.email.EmailService;
+import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
+import org.biog.unihivebackend.model.Role;
 import org.biog.unihivebackend.model.Student;
 import org.biog.unihivebackend.model.User;
 import org.biog.unihivebackend.repository.AdminRepository;
 import org.biog.unihivebackend.repository.ClubRepository;
+import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.repository.UserRepository;
 import org.passay.CharacterData;
@@ -34,6 +37,7 @@ public class AuthenticationService {
   private final AdminRepository adminRepository;
   private final StudentRepository studentRepository;
   private final ClubRepository clubRepository;
+  private final SchoolRepository schoolRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final JwtAuthenticationFilter jwtAuthFilter;
@@ -42,20 +46,23 @@ public class AuthenticationService {
 
   public AuthenticationResponse registerAdmin(RegisterRequest request) {
     var user = User
-      .builder()
-      .email(request.getEmail())
-      .password(passwordEncoder.encode(request.getPassword()))
-      .build();
+        .builder()
+        .email(request.getEmail())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .role(Role.ADMIN)
+        .build();
 
     userRepository.save(user);
 
     var admin = Admin
-      .builder()
-      .lastName(request.getLastName())
-      .firstName(request.getFirstName())
-      .user_id(user)
-      .school_id(request.getSchool())
-      .build();
+        .builder()
+        .lastName(request.getLastName())
+        .firstName(request.getFirstName())
+        .user(user)
+        .school(schoolRepository.findById(request.getSchool()).orElseThrow(
+            () -> new NotFoundException(
+                "School not found with id " + request.getSchool())))
+        .build();
 
     adminRepository.save(admin);
     var jwtToken = jwtService.generateToken(user);
@@ -64,23 +71,26 @@ public class AuthenticationService {
 
   public AuthenticationResponse registerStudent(RegisterRequest request) {
     var user = User
-      .builder()
-      .email(request.getEmail())
-      .password(passwordEncoder.encode(request.getPassword()))
-      .build();
+        .builder()
+        .email(request.getEmail())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .role(Role.STUDENT)
+        .build();
 
     userRepository.save(user);
 
     var student = Student
-      .builder()
-      .lastName(request.getLastName())
-      .firstName(request.getFirstName())
-      .cne(request.getCne())
-      .numApogee(request.getNumApogee())
-      .profileImage(request.getProfileImage())
-      .school_id(request.getSchool())
-      .user_id(user)
-      .build();
+        .builder()
+        .lastName(request.getLastName())
+        .firstName(request.getFirstName())
+        .cne(request.getCne())
+        .numApogee(request.getNumApogee())
+        .profileImage(request.getProfileImage())
+        .school(schoolRepository.findById(request.getSchool()).orElseThrow(
+            () -> new NotFoundException(
+                "School not found with id " + request.getSchool())))
+        .user(user)
+        .build();
     studentRepository.save(student);
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().token(jwtToken).build();
@@ -88,22 +98,25 @@ public class AuthenticationService {
 
   public AuthenticationResponse registerClub(RegisterRequest request) {
     var user = User
-      .builder()
-      .email(request.getEmail())
-      .password(passwordEncoder.encode(request.getPassword()))
-      .build();
+        .builder()
+        .email(request.getEmail())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .role(Role.CLUB)
+        .build();
 
     userRepository.save(user);
 
     var club = Club
-      .builder()
-      .clubName(request.getClubName())
-      .clubLogo(request.getClubLogo())
-      .clubDescription(request.getClubDescription())
-      .clubBanner(request.getClubBanner())
-      .user_id(user)
-      .school_id(request.getSchool())
-      .build();
+        .builder()
+        .clubName(request.getClubName())
+        .clubLogo(request.getClubLogo())
+        .clubDescription(request.getClubDescription())
+        .clubBanner(request.getClubBanner())
+        .user(user)
+        .school(schoolRepository.findById(request.getSchool()).orElseThrow(
+            () -> new NotFoundException(
+                "School not found with id " + request.getSchool())))
+        .build();
     clubRepository.save(club);
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder().token(jwtToken).build();
@@ -111,14 +124,13 @@ public class AuthenticationService {
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
-    new UsernamePasswordAuthenticationToken(
-      request.getEmail(),
-      request.getPassword()
-    )
-    );
+        new UsernamePasswordAuthenticationToken(
+            request.getEmail(),
+            request.getPassword()));
 
     var user = userRepository.findByEmail(request.getEmail());
-    if (user.isPresent() && Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
+    if (user.isPresent()
+        && Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
       var jwtToken = jwtService.generateToken(user.get());
       return AuthenticationResponse.builder().token(jwtToken).build();
     } else {
@@ -128,19 +140,14 @@ public class AuthenticationService {
 
   public AuthenticationResponse changePassword(AuthenticationRequest request) {
     var user = userRepository.findByEmail(jwtAuthFilter.getCurrentUserEmail());
-    if (
-      user.isPresent() &&
-      Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())
-    ) {
-      if (
-        passwordEncoder.matches(
+    if (user.isPresent() &&
+        Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
+      if (passwordEncoder.matches(
           request.getOldPassword(),
-          user.get().getPassword()
-        )
-      ) {
+          user.get().getPassword())) {
         user
-          .get()
-          .setPassword(passwordEncoder.encode(request.getNewPassword()));
+            .get()
+            .setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user.get());
         var jwtToken = jwtService.generateToken(user.get());
         return AuthenticationResponse.builder().token(jwtToken).build();
@@ -179,29 +186,27 @@ public class AuthenticationService {
     splCharRule.setNumberOfCharacters(2);
 
     String password = gen.generatePassword(
-      10,
-      splCharRule,
-      lowerCaseRule,
-      upperCaseRule,
-      digitRule
-    );
+        10,
+        splCharRule,
+        lowerCaseRule,
+        upperCaseRule,
+        digitRule);
     return password;
   }
 
   public AuthenticationResponse forgotPassword(AuthenticationRequest request)
-    throws MessagingException {
+      throws MessagingException {
     var user = userRepository.findByEmail(request.getEmail());
     if (user.isPresent()) {
       String newPassword = generatePassayPassword();
       user.get().setPassword(passwordEncoder.encode(newPassword));
       emailService.sendEmail(
-        request.getEmail(),
-        "UniHive Corporation",
-        "Your new password is " +
-        newPassword +
-        "." +
-        " Please change it after logging in."
-      );
+          request.getEmail(),
+          "UniHive Corporation",
+          "Your new password is " +
+              newPassword +
+              "." +
+              " Please change it after logging in.");
       userRepository.save(user.get());
       var jwtToken = jwtService.generateToken(user.get());
       return AuthenticationResponse.builder().token(jwtToken).build();

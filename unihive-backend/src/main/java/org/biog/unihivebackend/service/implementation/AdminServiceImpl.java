@@ -10,7 +10,6 @@ import org.biog.unihivebackend.model.User;
 import org.biog.unihivebackend.repository.AdminRepository;
 import org.biog.unihivebackend.repository.UserRepository;
 import org.biog.unihivebackend.service.AdminService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,50 +23,40 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @Override
     public List<Admin> getAll() {
         return adminRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @Override
     public Admin updateAdmin(UUID id, Admin newadmin) {
         Admin oldadmin = adminRepository.findById(id).orElseThrow(
-            () -> new NotFoundException("Admin with id " + id + " not found")
-        );
-        User olduser = oldadmin.getUser_id();
-        olduser.setEmail(newadmin.getUser_id().getEmail());
-        olduser.setPassword(passwordEncoder.encode(newadmin.getUser_id().getPassword()));
+                () -> new NotFoundException("Admin with id " + id + " not found"));
+        User olduser = oldadmin.getUser();
+        olduser.setEmail(newadmin.getUser().getEmail());
+        olduser.setPassword(passwordEncoder.encode(newadmin.getUser().getPassword()));
         userRepository.save(olduser);
         oldadmin.setFirstName(newadmin.getFirstName());
         oldadmin.setLastName(newadmin.getLastName());
         return adminRepository.save(oldadmin);
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @Override
     public void deleteAdmin(UUID id) {
         userRepository.deleteById(adminRepository.findById(id).orElseThrow(
-            () -> new NotFoundException("Admin with id " + id + " not found")
-        ).getUser_id().getId());
+                () -> new NotFoundException("Admin with id " + id + " not found")).getUser().getId());
         adminRepository.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @Override
     public Admin getAdmin(UUID id) {
         return adminRepository.findById(id).orElseThrow(
-            () -> new NotFoundException("Admin with id " + id + " not found")
-        );
+                () -> new NotFoundException("Admin with id " + id + " not found"));
     }
 
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @Override
     public School getSchoolByAdmin(UUID id) {
         return adminRepository.findById(id).orElseThrow(
-            () -> new NotFoundException("Admin with id " + id + " not found")
-        ).getSchool_id();
+                () -> new NotFoundException("Admin with id " + id + " not found")).getSchool();
     }
-    
 }
