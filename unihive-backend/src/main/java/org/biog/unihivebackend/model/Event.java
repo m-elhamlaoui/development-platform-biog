@@ -3,6 +3,9 @@ package org.biog.unihivebackend.model;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +50,7 @@ public class Event {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
+  @JsonManagedReference(value = "club-event")
   private Club club;
 
   @PrePersist

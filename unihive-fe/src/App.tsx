@@ -1,12 +1,18 @@
-import React from "react";
-import Navbar from "./components/Navbar";
-import HomePage from "./components/HomePage";
+import Login from "./auth/Login";
+import ListClubsComponent from "./components/ListClubsComponent";
+import HomePage from "./pages/HomePage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <HomePage />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/clubs" element={<ListClubsComponent />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

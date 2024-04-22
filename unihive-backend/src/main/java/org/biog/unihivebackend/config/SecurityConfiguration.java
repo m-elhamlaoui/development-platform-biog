@@ -35,7 +35,7 @@ public class SecurityConfiguration {
             .hasAnyRole("STUDENT", "SUPER_ADMIN")
             .requestMatchers("/auth/changePassword")
             .hasAnyRole("STUDENT", "CLUB", "ADMIN")
-            .requestMatchers("/**")
+            .requestMatchers("/superadmin/**")
             .hasRole("SUPER_ADMIN")
             .anyRequest()
             .authenticated())

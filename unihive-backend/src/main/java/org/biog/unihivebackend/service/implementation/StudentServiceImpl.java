@@ -10,6 +10,7 @@ import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.model.Student;
 import org.biog.unihivebackend.model.User;
 import org.biog.unihivebackend.repository.AdminRepository;
+import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.repository.UserRepository;
 import org.biog.unihivebackend.service.StudentService;
@@ -25,12 +26,13 @@ import lombok.AllArgsConstructor;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private SchoolRepository schoolRepository;
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Student updateStudent(UUID id, Student newstudent, UUID schoolId) throws AccessDeniedException {
+    public Student updateStudent(UUID id, Student newstudent, UUID... schoolId) throws AccessDeniedException {
         Student oldstudent = studentRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Student with id " + id + " not found"));
 
@@ -56,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
         UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
                 .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
                 .getId();
-        if (!schoolId.equals(loggedInUserSchoolId)) {
+        if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to modify students in this school");
         }
 
@@ -74,36 +76,50 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(UUID id, UUID schoolId) {
+    public void deleteStudent(UUID id, UUID... schoolId) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
-        if (!schoolId.equals(loggedInUserSchoolId)) {
-            throw new NotFoundException("You do not have permission to delete students in this school");
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            userRepository.deleteById(studentRepository.findById(id).orElseThrow(
+                    () -> new AccessDeniedException("Student with id " + id + " not found")).getUser().getId());
+            studentRepository.deleteById(id);
+        } else {
+            UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
+                    .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
+                    .getId();
+            if (!schoolId[0].equals(loggedInUserSchoolId)) {
+                throw new AccessDeniedException("You do not have permission to delete students in this school");
+            }
+            userRepository.deleteById(studentRepository.findById(id).orElseThrow(
+                    () -> new AccessDeniedException("Student with id " + id + " not found")).getUser().getId());
+            studentRepository.deleteById(id);
         }
-        userRepository.deleteById(studentRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Student with id " + id + " not found")).getUser().getId());
-        studentRepository.deleteById(id);
     }
 
     @Override
-    public Student getStudent(UUID id, UUID schoolId) {
+    public Student getStudent(UUID id, UUID... schoolId) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+        if (!isAdmin) {
+            return studentRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException("Student with id " + id + " not found"));
+        }
         UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
                 .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
                 .getId();
-        if (!schoolId.equals(loggedInUserSchoolId)) {
-            throw new NotFoundException("You do not have permission to get students in this school");
+        if (!schoolId[0].equals(loggedInUserSchoolId)) {
+            throw new AccessDeniedException("You do not have permission to get students in this school");
         }
         return studentRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Student with id " + id + " not found"));
     }
 
     @Override
-    public List<Student> getAll(UUID schoolId) {
+    public List<Student> getAll(UUID... schoolId) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         boolean isAdmin = authentication.getAuthorities().stream()
@@ -114,20 +130,22 @@ public class StudentServiceImpl implements StudentService {
         if (!isAdmin) {
             return studentRepository.findAll();
         }
-        if (!schoolId.equals(loggedInUserSchoolId)) {
-            throw new NotFoundException("You do not have permission to get all clubs in this school");
+        if (!schoolId[0].equals(loggedInUserSchoolId)) {
+            throw new AccessDeniedException("You do not have permission to get all clubs in this school");
         }
-        return studentRepository.findBySchool(schoolId);
+        School school = schoolRepository.findById(schoolId[0]).orElseThrow(
+                () -> new NotFoundException("School with id " + schoolId[0] + " not found"));
+        return studentRepository.findBySchool(school);
     }
 
     @Override
-    public School getSchoolByStudent(UUID id, UUID schoolId) {
+    public School getSchoolByStudent(UUID id) {
         return studentRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Student with id " + id + " not found")).getSchool();
     }
 
     @Override
-    public List<Club> getClubsByFollower(UUID id, UUID schoolId) {
+    public List<Club> getClubsByFollower(UUID id, UUID... schoolId) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         boolean isAdmin = authentication.getAuthorities().stream()
@@ -139,11 +157,11 @@ public class StudentServiceImpl implements StudentService {
             return studentRepository.findById(id).orElseThrow(
                     () -> new NotFoundException("Student with id " + id + " not found")).getClubs();
         }
-        if (!schoolId.equals(loggedInUserSchoolId)) {
-            throw new NotFoundException("You do not have permission to get all clubs in this school");
+        if (!schoolId[0].equals(loggedInUserSchoolId)) {
+            throw new AccessDeniedException("You do not have permission to get all clubs in this school");
         }
         return studentRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Student with id " + id + " not found")).getClubsBySchool(schoolId);
+                () -> new NotFoundException("Student with id " + id + " not found")).getClubsBySchool(schoolId[0]);
     }
 
 }

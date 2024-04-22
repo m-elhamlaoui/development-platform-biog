@@ -3,6 +3,9 @@ package org.biog.unihivebackend.model;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +33,12 @@ public class Admin {
   private Instant createdAt;
 
   @OneToOne(cascade = CascadeType.ALL)
+  @JsonManagedReference(value = "school-admin")
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 
   @OneToOne(cascade = CascadeType.ALL)
+  @JsonManagedReference(value = "user-admin")
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   private User user;
 

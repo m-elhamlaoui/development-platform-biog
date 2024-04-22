@@ -1,7 +1,6 @@
-import React from "react";
 import logo from "../assets/uh-logo.png";
 
-function Navbar() {
+function NavbarComponent() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
@@ -35,4 +34,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default NavbarComponent;

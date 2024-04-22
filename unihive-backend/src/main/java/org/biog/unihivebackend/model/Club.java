@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,17 +46,21 @@ public class Club {
 
   @ManyToMany
   @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "club_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+  @JsonBackReference(value = "club-student")
   private List<Student> students;
 
   @OneToMany(mappedBy = "club")
+  @JsonBackReference(value = "club-event")
   private List<Event> events;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
+  @JsonManagedReference(value = "school-club")
   private School school;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+  @JsonManagedReference(value = "user-club")
   private User user;
 
   @Column(name = "created_at", nullable = false)

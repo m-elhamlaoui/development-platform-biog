@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,12 +35,15 @@ public class School {
   private String schoolAddress;
 
   @OneToOne(mappedBy = "school")
+  @JsonBackReference(value = "school-admin")
   private Admin admin;
 
   @OneToMany(mappedBy = "school")
+  @JsonBackReference(value = "school-club")
   private List<Club> clubs;
 
   @OneToMany(mappedBy = "school")
+  @JsonBackReference(value = "school-student")
   private List<Student> students;
 
   @PrePersist

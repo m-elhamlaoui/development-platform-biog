@@ -12,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "users", schema = "auth")
 @Builder
@@ -35,15 +37,19 @@ public class User implements UserDetails {
   private String password;
 
   @OneToOne(mappedBy = "user")
+  @JsonBackReference(value = "user-admin")
   private Admin admin;
 
   @OneToOne(mappedBy = "user")
+  @JsonBackReference(value = "user-superadmin")
   private SuperAdmin superAdmin;
 
   @OneToOne(mappedBy = "user")
+  @JsonBackReference(value = "user-student")
   private Student student;
 
   @OneToOne(mappedBy = "user")
+  @JsonBackReference(value = "user-club")
   private Club club;
 
   @Override

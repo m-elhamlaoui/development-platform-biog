@@ -1,10 +1,8 @@
-import React from "react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import logo from "../assets/eitc-logo.png";
 import { Carousel } from "react-bootstrap";
-import { CarouselItem } from "react-bootstrap";
 
-function HomePage() {
+function TrendingComponent() {
   return (
     <Carousel
       controls={false}
@@ -36,14 +34,11 @@ function HomePage() {
                     className="btn btn-primary see-event-btn"
                     type="button"
                   >
-                    <span style={{ padding: "4px", fontSize: "1.1rem" }}>
-                      See Event
-                    </span>
+                    <span style={{ padding: "4px" }}>See Event</span>
                     <ChevronRightIcon
                       style={{
                         width: "20px",
                         height: "20px",
-                        transform: "translateY(-1.3px)",
                         strokeWidth: "2.5",
                       }}
                     />
@@ -88,14 +83,11 @@ function HomePage() {
                     className="btn btn-primary see-event-btn"
                     type="button"
                   >
-                    <span style={{ padding: "4px", fontSize: "1.1rem" }}>
-                      See Event
-                    </span>
+                    <span style={{ padding: "4px" }}>See Event</span>
                     <ChevronRightIcon
                       style={{
                         width: "20px",
                         height: "20px",
-                        transform: "translateY(-1.3px)",
                         strokeWidth: "2.5",
                       }}
                     />
@@ -140,14 +132,11 @@ function HomePage() {
                     className="btn btn-primary see-event-btn"
                     type="button"
                   >
-                    <span style={{ padding: "4px", fontSize: "1.1rem" }}>
-                      See Event
-                    </span>
+                    <span style={{ padding: "4px" }}>See Event</span>
                     <ChevronRightIcon
                       style={{
                         width: "20px",
                         height: "20px",
-                        transform: "translateY(-1.3px)",
                         strokeWidth: "2.5",
                       }}
                     />
@@ -192,14 +181,11 @@ function HomePage() {
                     className="btn btn-primary see-event-btn"
                     type="button"
                   >
-                    <span style={{ padding: "4px", fontSize: "1.1rem" }}>
-                      See Event
-                    </span>
+                    <span style={{ padding: "4px" }}>See Event</span>
                     <ChevronRightIcon
                       style={{
                         width: "20px",
                         height: "20px",
-                        transform: "translateY(-1.3px)",
                         strokeWidth: "2.5",
                       }}
                     />
@@ -225,4 +211,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default TrendingComponent;
