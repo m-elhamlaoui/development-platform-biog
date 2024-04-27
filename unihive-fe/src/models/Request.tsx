@@ -2,7 +2,7 @@ import Club from "./Club";
 import { Role } from "./Role";
 import School from "./School";
 
-interface Student {
+interface Request {
   id: string;
   createdAt: Date;
   cne: string;
@@ -11,10 +11,7 @@ interface Student {
   lastName: string;
   email: string;
   password: string;
-  role: Role;
-  profileImage: string;
-  clubs: Club[];
-  school: School;
+  schoolCard: string;
 }
 
-export default Student;
+export default Request;

@@ -38,4 +38,6 @@ public class RegisterRequest {
   private String clubDescription;
 
   private String clubBanner;
+
+  private String schoolCard;
 }

@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.biog.unihivebackend.exception.NotFoundException;
+import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.School;
-import org.biog.unihivebackend.model.User;
-import org.biog.unihivebackend.repository.AdminRepository;
 import org.biog.unihivebackend.repository.EventRepository;
 import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.service.EventService;
@@ -23,7 +22,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EventServiceImpl implements EventService {
 
-    private final AdminRepository adminRepository;
     private final SchoolRepository schoolRepository;
     private final EventRepository eventRepository;
 
@@ -36,9 +34,7 @@ public class EventServiceImpl implements EventService {
         if (!isAdmin) {
             return eventRepository.findAll();
         }
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
+        UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to get all events in this school");
         }
@@ -56,9 +52,7 @@ public class EventServiceImpl implements EventService {
         if (!isAdmin) {
             return eventRepository.save(event);
         }
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
+        UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to add events in this school");
         }
@@ -86,9 +80,7 @@ public class EventServiceImpl implements EventService {
             oldevent.setClub(newevent.getClub());
             return eventRepository.save(oldevent);
         }
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
+        UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to update events in this school");
         }
@@ -114,9 +106,7 @@ public class EventServiceImpl implements EventService {
         if (!isAdmin) {
             eventRepository.deleteById(id);
         } else {
-            UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                    .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                    .getId();
+            UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
             if (!schoolId[0].equals(loggedInUserSchoolId)) {
                 throw new AccessDeniedException("You do not have permission to delete events in this school");
             }
@@ -134,9 +124,7 @@ public class EventServiceImpl implements EventService {
             return eventRepository.findById(id).orElseThrow(
                     () -> new NotFoundException("Event with id " + id + " not found"));
         }
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
+        UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to get events in this school");
         }
@@ -154,9 +142,7 @@ public class EventServiceImpl implements EventService {
             return eventRepository.findById(id).orElseThrow(
                     () -> new NotFoundException("Event with id " + id + " not found")).getClub();
         }
-        UUID loggedInUserSchoolId = adminRepository.findByUser(((User) (authentication)
-                .getPrincipal())).orElseThrow(() -> new NotFoundException("Admin not found")).getSchool()
-                .getId();
+        UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to get clubs by events in this school");
         }
