@@ -32,7 +32,10 @@ public class AdminServiceImpl implements AdminService {
     public Admin updateAdmin(UUID id, Admin newadmin) {
         Admin oldadmin = adminRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Admin with id " + id + " not found"));
+        System.out.println( oldadmin);
         User olduser = oldadmin.getUser();
+
+
         olduser.setEmail(newadmin.getUser().getEmail());
         olduser.setPassword(passwordEncoder.encode(newadmin.getUser().getPassword()));
         userRepository.save(olduser);

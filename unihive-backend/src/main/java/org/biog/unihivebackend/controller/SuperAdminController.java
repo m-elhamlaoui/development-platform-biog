@@ -15,13 +15,7 @@ import org.biog.unihivebackend.service.EventService;
 import org.biog.unihivebackend.service.SchoolService;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
@@ -43,20 +37,21 @@ public class SuperAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+
     @PutMapping("/upadmin/{id}")
-    Admin updateAdmin(UUID id, Admin newadmin) {
+    Admin updateAdmin(@PathVariable UUID id, Admin newadmin) {
         return adminService.updateAdmin(id, newadmin);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/deladmin/{id}")
-    void deleteAdmin(UUID id) {
+    void deleteAdmin(@PathVariable UUID id) {
         adminService.deleteAdmin(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/admin/{id}")
-    Admin getAdmin(UUID id) {
+    Admin getAdmin(@PathVariable UUID id) {
         return adminService.getAdmin(id);
     }
 
@@ -68,7 +63,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/school/{id}")
-    School getSchool(UUID id) {
+    School getSchool(@PathVariable UUID id) {
         return schoolService.getSchool(id);
     }
 
@@ -80,13 +75,13 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delschool/{id}")
-    void deleteSchool(UUID id) {
+    void deleteSchool(@PathVariable UUID id) {
         schoolService.deleteSchool(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upschool/{id}")
-    School updateSchool(UUID id, School newschool) {
+    School updateSchool(@PathVariable UUID id, School newschool) {
         return schoolService.updateSchool(id, newschool);
     }
 
@@ -98,19 +93,19 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upstudent/{id}")
-    Student updateStudent(UUID id, Student newstudent) throws AccessDeniedException {
+    Student updateStudent(@PathVariable UUID id, Student newstudent) throws AccessDeniedException {
         return studentService.updateStudent(id, newstudent);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delstudent/{id}")
-    void deleteStudent(UUID id) throws AccessDeniedException {
+    void deleteStudent(@PathVariable UUID id) throws AccessDeniedException {
         studentService.deleteStudent(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/student/{id}")
-    Student getStudent(UUID id) throws AccessDeniedException {
+    Student getStudent(@PathVariable UUID id) throws AccessDeniedException {
         return studentService.getStudent(id);
     }
 
@@ -122,19 +117,19 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upclub/{id}")
-    Club updateClub(UUID id, Club newclub) throws AccessDeniedException {
+    Club updateClub(@PathVariable UUID id, Club newclub) throws AccessDeniedException {
         return clubService.updateClub(id, newclub);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delclub/{id}")
-    void deleteClub(UUID id) throws AccessDeniedException {
+    void deleteClub(@PathVariable UUID id) throws AccessDeniedException {
         clubService.deleteClub(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/club/{id}")
-    Club getClub(UUID id) throws AccessDeniedException {
+    Club getClub(@PathVariable UUID id) throws AccessDeniedException {
         return clubService.getClub(id);
     }
 
@@ -146,19 +141,19 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upevent/{id}")
-    Event updateEvent(UUID id, Event newevent) throws AccessDeniedException {
+    Event updateEvent(@PathVariable UUID id, Event newevent) throws AccessDeniedException {
         return eventService.updateEvent(id, newevent);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delevent/{id}")
-    void deleteEvent(UUID id) throws AccessDeniedException {
+    void deleteEvent(@PathVariable UUID id) throws AccessDeniedException {
         eventService.deleteEvent(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/event/{id}")
-    Event getEvent(UUID id) throws AccessDeniedException {
+    Event getEvent(@PathVariable UUID id) throws AccessDeniedException {
         return eventService.getEvent(id);
     }
 }
