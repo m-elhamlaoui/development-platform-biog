@@ -45,7 +45,6 @@ public class StudentServiceImpl implements StudentService {
                         oldstudent.setCne(newstudent.getCne());
                         oldstudent.setNumApogee(newstudent.getNumApogee());
                         oldstudent.setProfileImage(newstudent.getProfileImage());
-                        oldstudent.setClubs(newstudent.getClubs());
                         return studentRepository.save(oldstudent);
                 }
 
@@ -61,7 +60,6 @@ public class StudentServiceImpl implements StudentService {
                 oldstudent.setCne(newstudent.getCne());
                 oldstudent.setNumApogee(newstudent.getNumApogee());
                 oldstudent.setProfileImage(newstudent.getProfileImage());
-                oldstudent.setClubs(newstudent.getClubs());
                 return studentRepository.save(oldstudent);
         }
 

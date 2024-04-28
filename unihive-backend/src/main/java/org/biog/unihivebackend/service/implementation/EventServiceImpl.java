@@ -9,6 +9,7 @@ import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.School;
+import org.biog.unihivebackend.repository.ClubRepository;
 import org.biog.unihivebackend.repository.EventRepository;
 import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.service.EventService;
@@ -23,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class EventServiceImpl implements EventService {
 
     private final SchoolRepository schoolRepository;
+    private final ClubRepository clubRepository;
     private final EventRepository eventRepository;
 
     @Override
@@ -77,7 +79,9 @@ public class EventServiceImpl implements EventService {
             oldevent.setEventBanner(newevent.getEventBanner());
             oldevent.setEventRating(newevent.getEventRating());
             oldevent.setRatingCount(newevent.getRatingCount());
-            oldevent.setClub(newevent.getClub());
+            oldevent.setClub(clubRepository.findById(newevent.getClub().getId()).orElseThrow(
+                    () -> new NotFoundException(
+                            "Club not found with id " + newevent.getClub().getId())));
             return eventRepository.save(oldevent);
         }
         UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
@@ -93,7 +97,9 @@ public class EventServiceImpl implements EventService {
         oldevent.setEventBanner(newevent.getEventBanner());
         oldevent.setEventRating(newevent.getEventRating());
         oldevent.setRatingCount(newevent.getRatingCount());
-        oldevent.setClub(newevent.getClub());
+        oldevent.setClub(clubRepository.findById(newevent.getClub().getId()).orElseThrow(
+                () -> new NotFoundException(
+                        "Club not found with id " + newevent.getClub().getId())));
         return eventRepository.save(oldevent);
     }
 

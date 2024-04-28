@@ -39,5 +39,7 @@ public class RegisterRequest {
 
   private String clubBanner;
 
+  private String schoolName;
+
   private String schoolCard;
 }

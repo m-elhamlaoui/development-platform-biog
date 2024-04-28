@@ -23,4 +23,8 @@ public interface ClubService {
     List<Event> getEventsByClub(UUID id, UUID... schoolId) throws AccessDeniedException;
 
     List<Student> getFollowers(UUID id, UUID... schoolId);
+
+    Club addFollowers(UUID id, List<Student> students, UUID... schoolId) throws AccessDeniedException;
+
+    void deleteFollowers(UUID id, List<Student> students, UUID... schoolId) throws AccessDeniedException;
 }

@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { listClubs } from "../services/ClubsService";
+import ModelService from "../services/ModelsService";
 import { Table } from "react-bootstrap";
 import Club from "../models/Club";
-import AuthService from "../services/authService";
+import { isExpired } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
 function ListClubsComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
-
-  const token = localStorage.getItem("user");
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const token = localStorage.getItem("user") as string;
+  const isMyTokenExpired = isExpired(token);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    listClubs(token)
+    if (isMyTokenExpired) {
+      localStorage.removeItem("user");
+      navigate("/login");
+    }
+    ModelService.listClubs(token)
       .then((response) => {
         setClubs(response.data);
       })
@@ -23,7 +26,6 @@ function ListClubsComponent() {
   }, []);
 
   const clubsArray = Object.values(clubs);
-  console.log(AuthService.getCurrentUser());
 
   return (
     <div className="cont2">
