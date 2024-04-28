@@ -69,7 +69,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PostMapping("/addschool")
-    School addSchool(School school) {
+    School addSchool(@RequestBody School school) {
         return schoolService.addSchool(school);
     }
 

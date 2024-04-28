@@ -2,12 +2,16 @@ package org.biog.unihivebackend.model;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Table(name = "students", schema = "public")
-public class Student {
+public class Student implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,6 +45,12 @@ public class Student {
   @Column(name = "last_name", nullable = false)
   private String lastName;
 
+  @Column(name = "email", nullable = false, unique = true)
+  private String email;
+
+  @Column(name = "password", nullable = false)
+  private String password;
+
   @Column(name = "profile_image", nullable = false)
   private String profileImage;
 
@@ -51,13 +61,12 @@ public class Student {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  @JsonManagedReference(value = "school-student")
+  @JsonBackReference(value = "school-student")
   private School school;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-  @JsonManagedReference(value = "user-student")
-  private User user;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private Role role = Role.STUDENT;
 
   @PrePersist
   protected void onCreate() {
@@ -68,5 +77,40 @@ public class Student {
     return clubs.stream()
         .filter(club -> club.getSchool().getId().equals(schoolId))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role.name()));
+  }
+
+  @Override
+  public String getUsername() {
+    return this.email;
+  }
+
+  @Override
+  public String getPassword() {
+    return this.password;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 }

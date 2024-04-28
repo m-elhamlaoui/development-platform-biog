@@ -1,11 +1,14 @@
 import Student from "./Student";
 import School from "./School";
 import Event from "./Event";
-import User from "./User";
+import { Role } from "./Role";
 
 interface Club {
   id: string;
   clubName: string;
+  email: string;
+  password: string;
+  role: Role;
   clubLogo: string;
   clubDescription: string;
   clubBanner: string;
@@ -14,7 +17,6 @@ interface Club {
   students: Student[];
   events: Event[];
   school: School;
-  user: User;
   createdAt: Date;
 }
 

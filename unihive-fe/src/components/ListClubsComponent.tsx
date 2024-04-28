@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { listClubs } from "../services/ListClubsService";
+import { listClubs } from "../services/ClubsService";
 import { Table } from "react-bootstrap";
 import Club from "../models/Club";
+import AuthService from "../services/authService";
 
 function ListClubsComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("user");
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -22,7 +23,7 @@ function ListClubsComponent() {
   }, []);
 
   const clubsArray = Object.values(clubs);
-  console.log(clubsArray);
+  console.log(AuthService.getCurrentUser());
 
   return (
     <div className="cont2">
@@ -67,7 +68,7 @@ function ListClubsComponent() {
               <td>{club.clubRating}</td>
               <td>{club.ratingCount}</td>
               <td>{club.school.schoolName}</td>
-              <td>{club.user.email}</td>
+              <td>{club.email}</td>
             </tr>
           ))}
         </tbody>

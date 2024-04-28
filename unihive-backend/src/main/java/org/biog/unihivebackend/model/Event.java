@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,7 +50,7 @@ public class Event {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
-  @JsonManagedReference(value = "club-event")
+  @JsonBackReference(value = "club-event")
   private Club club;
 
   @PrePersist
