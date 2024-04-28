@@ -2,9 +2,13 @@ package org.biog.unihivebackend.auth;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +72,13 @@ public class AuthenticationController {
   public ResponseEntity<String> signUp(
       @RequestBody RegisterRequest request) {
     return service.signup(request);
+  }
+
+  @PostMapping("/accept/{id}")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+  public ResponseEntity<String> acceptRequest(
+      @PathVariable UUID id) {
+    return service.acceptRequest(id);
   }
 
   @PostMapping("/logout")

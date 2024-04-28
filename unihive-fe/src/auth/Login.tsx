@@ -1,39 +1,33 @@
 import { useEffect, useState } from "react";
+import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { isExpired } from "react-jwt";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
-  async function login(event: { preventDefault: () => void }) {
-    event.preventDefault();
-    try {
-      await axios
-        .post("http://localhost:8080/auth/authenticate", {
-          email: email,
-          password: password,
-        })
-        .then(
-          (res) => {
-            console.log(res.data);
-
-            if (res.data.token) {
-              localStorage.setItem("token", res.data.token);
-              navigate("/clubs");
-            } else {
-              alert("Incorrect Email and Password not match");
-            }
-          },
-          (fail) => {
-            console.error(fail); // Error!
-          }
-        );
-    } catch (err) {
-      alert(err);
+  useEffect(() => {
+    var token = localStorage.getItem("user") as string;
+    if (token && !isExpired(token)) {
+      navigate("/clubs");
     }
-  }
+  });
+
+  const login = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    AuthService.login(email, password).then(
+      () => {
+        console.log("Login successful");
+        navigate("/clubs");
+      },
+      () => {
+        console.error("Incorrect email or password");
+      }
+    );
+  };
 
   return (
     <div>

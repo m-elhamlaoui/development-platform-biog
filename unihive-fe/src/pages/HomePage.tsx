@@ -1,11 +1,11 @@
-import Navbar from "../components/NavbarComponent";
+import HomeNavbar from "../components/HomeNavbarComponent";
 import Trending from "../components/TrendingComponent";
 import Rankings from "../components/RankingsComponent";
 
 function HomePage() {
   return (
     <>
-      <Navbar />
+      <HomeNavbar />
       <Trending />
       <Rankings />
     </>

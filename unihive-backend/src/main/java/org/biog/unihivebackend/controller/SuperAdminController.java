@@ -117,7 +117,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upclub/{id}")
-    Club updateClub(@PathVariable UUID id, Club newclub) throws AccessDeniedException {
+    Club updateClub(@PathVariable UUID id, @RequestBody Club newclub) throws AccessDeniedException {
         return clubService.updateClub(id, newclub);
     }
 
@@ -131,6 +131,18 @@ public class SuperAdminController {
     @GetMapping("/club/{id}")
     Club getClub(@PathVariable UUID id) throws AccessDeniedException {
         return clubService.getClub(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PostMapping("/addfollowers/{id}")
+    Club addFollowers(@PathVariable UUID id, @RequestBody List<Student> followers) throws AccessDeniedException {
+        return clubService.addFollowers(id, followers);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @DeleteMapping("/delfollowers/{id}")
+    void deleteFollowers(@PathVariable UUID id, @RequestBody List<Student> followers) throws AccessDeniedException {
+        clubService.deleteFollowers(id, followers);
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

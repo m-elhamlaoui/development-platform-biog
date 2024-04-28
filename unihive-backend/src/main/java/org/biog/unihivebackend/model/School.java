@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,11 +39,11 @@ public class School {
   private Admin admin;
 
   @OneToMany(mappedBy = "school")
-  @JsonManagedReference(value = "school-club")
+  @JsonBackReference(value = "school-club")
   private List<Club> clubs;
 
   @OneToMany(mappedBy = "school")
-  @JsonManagedReference(value = "school-student")
+  @JsonBackReference(value = "school-student")
   private List<Student> students;
 
   @PrePersist

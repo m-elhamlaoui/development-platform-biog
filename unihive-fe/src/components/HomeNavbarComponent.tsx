@@ -1,6 +1,6 @@
 import logo from "../assets/uh-logo.png";
 
-function NavbarComponent() {
+function HomeNavbarComponent() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
@@ -34,4 +34,4 @@ function NavbarComponent() {
   );
 }
 
-export default NavbarComponent;
+export default HomeNavbarComponent;

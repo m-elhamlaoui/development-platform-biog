@@ -17,7 +17,10 @@
     "bootstrap": "^5.3.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-jwt": "^1.2.1",
+    "react-validation": "^3.0.7",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

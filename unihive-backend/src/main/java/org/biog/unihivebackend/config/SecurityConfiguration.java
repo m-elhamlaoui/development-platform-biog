@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(requests -> requests
-            .requestMatchers("/auth/authenticate")
+            .requestMatchers("/auth/authenticate", "/auth/signup")
             .permitAll()
             .requestMatchers("/auth/forgotPassword")
             .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
