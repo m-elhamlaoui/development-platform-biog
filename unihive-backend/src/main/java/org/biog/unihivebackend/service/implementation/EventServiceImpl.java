@@ -26,6 +26,13 @@ public class EventServiceImpl implements EventService {
     private final SchoolRepository schoolRepository;
     private final ClubRepository clubRepository;
     private final EventRepository eventRepository;
+    @Override
+    public List<Event> getAllbyStudent(){
+
+        return eventRepository.findAll();
+
+
+    }
 
     @Override
     public List<Event> getAll(UUID... schoolId) throws AccessDeniedException {
