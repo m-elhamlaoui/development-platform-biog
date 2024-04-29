@@ -11,9 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +24,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Table(name = "clubs", schema = "public")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Club implements UserDetails {
 
   @Id
@@ -62,12 +59,11 @@ public class Club implements UserDetails {
   private List<Student> students;
 
   @OneToMany(mappedBy = "club")
-  @JsonManagedReference(value = "club-event")
+  @JsonIgnore
   private List<Event> events;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  @JsonManagedReference(value = "school-club")
   private School school;
 
   @Column(name = "created_at", nullable = false)

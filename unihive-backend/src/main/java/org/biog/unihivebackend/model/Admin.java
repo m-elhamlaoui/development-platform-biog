@@ -10,8 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,7 +47,6 @@ public class Admin implements UserDetails {
   private Instant createdAt;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JsonManagedReference(value = "school-admin")
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 
