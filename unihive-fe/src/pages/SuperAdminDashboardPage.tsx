@@ -8,6 +8,7 @@ import SuperAdminEventsComponent from "../components/SuperAdminEventsComponent";
 import SuperAdminSchoolsComponent from "../components/SuperAdminSchoolsComponent";
 import SuperAdminStudentsComponent from "../components/SuperAdminStudentsComponent";
 import SuperAdminRequestsComponent from "../components/SuperAdminRequestsComponent";
+import SuperAdminAddClubComponent from "../components/SuperAdminAddClubComponent";
 
 function SuperAdminDashboardPage() {
   const { option } = useParams();
@@ -21,6 +22,7 @@ function SuperAdminDashboardPage() {
       {option === "schools" && <SuperAdminSchoolsComponent />}
       {option === "students" && <SuperAdminStudentsComponent />}
       {option === "requests" && <SuperAdminRequestsComponent />}
+      {option === "addclub" && <SuperAdminAddClubComponent />}
     </>
   );
 }

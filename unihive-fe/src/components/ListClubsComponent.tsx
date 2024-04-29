@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ModelService from "../services/ModelsService";
+import ModelService from "../services/SuperAdminModelsService";
 import { Table } from "react-bootstrap";
 import Club from "../models/Club";
 import { isExpired } from "react-jwt";

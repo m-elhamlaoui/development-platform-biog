@@ -3,7 +3,7 @@ import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/ModelsService";
+import ModelsService from "../services/SuperAdminModelsService";
 import Club from "../models/Club";
 
 function SuperAdminClubsComponent() {
@@ -143,7 +143,11 @@ function SuperAdminClubsComponent() {
             </div>
           )}
         </div>
-        <button className="btn btn-add1" type="button">
+        <button
+          className="btn btn-add1"
+          onClick={() => navigate("/superadmin/addclub")}
+          type="button"
+        >
           Add Club
         </button>
       </Col>

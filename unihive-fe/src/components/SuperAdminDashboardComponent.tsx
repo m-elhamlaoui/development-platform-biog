@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import Club from "../models/Club";
-import ModelsService from "../services/ModelsService";
+import ModelsService from "../services/SuperAdminModelsService";
 import Admin from "../models/Admin";
 import School from "../models/School";
 import Student from "../models/Student";

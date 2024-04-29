@@ -3,7 +3,7 @@ import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/ModelsService";
+import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 
 function SuperAdminSchoolsComponent() {

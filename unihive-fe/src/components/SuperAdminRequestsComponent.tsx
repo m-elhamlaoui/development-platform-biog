@@ -3,7 +3,7 @@ import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/ModelsService";
+import ModelsService from "../services/SuperAdminModelsService";
 import Request from "../models/Request";
 
 function SuperAdminRequestsComponent() {
@@ -78,7 +78,7 @@ function SuperAdminRequestsComponent() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>CNE</th>
+                    <th>CNE / MASSAR</th>
                     <th>NUM APOGEE</th>
                     <th>FIRST NAME</th>
                     <th>LAST NAME</th>
@@ -86,7 +86,7 @@ function SuperAdminRequestsComponent() {
                     <th>SCHOOL</th>
                     <th>EMAIL</th>
                     <th>PASSWORD</th>
-                    <th>EDIT/DELETE</th>
+                    <th>VIEW/ACCEPT/REJECT</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,22 +124,25 @@ function SuperAdminRequestsComponent() {
                           : request.schoolName}
                       </td>
                       <td>
-                        {request.email.length > 9
-                          ? request.email.slice(0, 9) + "..."
+                        {request.email.length > 8
+                          ? request.email.slice(0, 8) + "..."
                           : request.email}
                       </td>
                       <td>
-                        {request.password.length > 9
-                          ? request.password.slice(0, 9) + "..."
+                        {request.password.length > 8
+                          ? request.password.slice(0, 8) + "..."
                           : request.password}
                       </td>
                       <td>
                         <div className="modify">
                           <button className="btn btn-edit" type="button">
-                            Edit
+                            View
+                          </button>
+                          <button className="btn btn-edit" type="button">
+                            Accept
                           </button>
                           <button className="btn btn-delete" type="button">
-                            Delete
+                            Reject
                           </button>
                         </div>
                       </td>

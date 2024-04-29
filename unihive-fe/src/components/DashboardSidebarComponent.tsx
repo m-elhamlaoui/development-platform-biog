@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 function DashboardSidebarComponent(props: { option: string }) {
   const dash = props.option === "dashboard";
   const admin = props.option === "admins";
-  const club = props.option === "clubs";
+  const club = props.option === "clubs" || "addclub" || "upclub/:";
   const event = props.option === "events";
   const school = props.option === "schools";
   const student = props.option === "students";
