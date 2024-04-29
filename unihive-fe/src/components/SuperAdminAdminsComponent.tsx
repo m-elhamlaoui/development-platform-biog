@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/ModelsService";
-import Club from "../models/Club";
+import Admin from "../models/Admin";
 
-function SuperAdminClubsComponent() {
-  const [clubs, setClubs] = useState<Club[]>([]);
+function SuperAdminAdminsComponent() {
+  const [admins, setAdmins] = useState<Admin[]>([]);
   const token = localStorage.getItem("user") as string;
   const isMyTokenExpired = isExpired(token);
   const navigate = useNavigate();
@@ -17,59 +17,60 @@ function SuperAdminClubsComponent() {
       localStorage.removeItem("user");
       navigate("/login");
     }
-    ModelsService.listClubs(token)
+    ModelsService.listAdmins(token)
       .then((response) => {
-        setClubs(response.data);
+        setAdmins(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  const clubsArray = Object.values(clubs);
-  const clubsCount = clubsArray.length;
+  const adminsArray = Object.values(admins);
+  const adminsCount = adminsArray.length;
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Club[]>(clubs);
+  const [searchResults, setSearchResults] = useState<Admin[]>(admins);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    const results = clubs.filter(
-      (club) =>
-        club.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        club.clubName.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = admins.filter(
+      (admin) =>
+        admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        admin.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        admin.lastName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, clubs]);
+  }, [searchTerm, admins]);
 
-  const filteredClubs = searchTerm ? searchResults : clubsArray;
+  const filteredAdmins = searchTerm ? searchResults : adminsArray;
 
   return (
     <Row className="row2">
       <Col className="col-md-2">
-        <DashboardSidebarComponent option={"clubs"} />
+        <DashboardSidebarComponent option={"admins"} />
       </Col>
       <Col className="col2">
         <div className="table-entity">
           <div className="header">
-            <span style={{ fontSize: "1.5rem" }}>Clubs Table</span>
+            <span style={{ fontSize: "1.5rem" }}>Admins Table</span>
             <span style={{ fontSize: "1.2rem" }}>
-              {clubsCount} {clubsCount > 1 ? "rows" : "row"}
+              {adminsCount} {adminsCount > 1 ? "rows" : "row"}
             </span>
           </div>
-          <div className="table-bar1">
+          <div className="table-bar2">
             <div>Search</div>
             <input
               type="text"
-              placeholder="Email, or club name"
+              placeholder="Email, first name, or last name"
               value={searchTerm}
               onChange={handleSearch}
             />
           </div>
-          {clubsCount === 0 ? (
+          {adminsCount === 0 ? (
             <div className="no-data">No Data.</div>
           ) : (
             <div className="table-table">
@@ -77,12 +78,8 @@ function SuperAdminClubsComponent() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>CLUB NAME</th>
-                    <th>CLUB LOGO</th>
-                    <th>CLUB DESCRIPTION</th>
-                    <th>CLUB BANNER</th>
-                    <th>CLUB RATING</th>
-                    <th>RATING COUNT</th>
+                    <th>FIRST NAME</th>
+                    <th>LAST NAME</th>
                     <th>SCHOOL</th>
                     <th>EMAIL</th>
                     <th>PASSWORD</th>
@@ -90,41 +87,33 @@ function SuperAdminClubsComponent() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredClubs.map((club) => (
-                    <tr key={club.id}>
-                      <td>{club.id.slice(0, 5)}...</td>
+                  {filteredAdmins.map((admin) => (
+                    <tr key={admin.id}>
+                      <td>{admin.id.slice(0, 5)}...</td>
                       <td>
-                        {club.clubName.length > 6
-                          ? club.clubName.slice(0, 6) + "..."
-                          : club.clubName}
+                        {admin.firstName.length > 20
+                          ? admin.firstName.slice(0, 20) + "..."
+                          : admin.firstName}
                       </td>
                       <td>
-                        {club.clubLogo.length > 6
-                          ? club.clubLogo.slice(0, 6) + "..."
-                          : club.clubLogo}
+                        {admin.lastName.length > 20
+                          ? admin.lastName.slice(0, 20) + "..."
+                          : admin.lastName}
                       </td>
                       <td>
-                        {club.clubDescription.length > 12
-                          ? club.clubDescription.slice(0, 12) + "..."
-                          : club.clubDescription}
+                        {admin.school.schoolName.length > 20
+                          ? admin.school.schoolName.slice(0, 20) + "..."
+                          : admin.school.schoolName}
                       </td>
                       <td>
-                        {club.clubBanner.length > 6
-                          ? club.clubBanner.slice(0, 6) + "..."
-                          : club.clubBanner}
-                      </td>
-                      <td>{club.clubRating}</td>
-                      <td>{club.ratingCount}</td>
-                      <td>{club.school.schoolName}</td>
-                      <td>
-                        {club.email.length > 6
-                          ? club.email.slice(0, 6) + "..."
-                          : club.email}
+                        {admin.email.length > 20
+                          ? admin.email.slice(0, 20) + "..."
+                          : admin.email}
                       </td>
                       <td>
-                        {club.password.length > 8
-                          ? club.password.slice(0, 8) + "..."
-                          : club.password}
+                        {admin.password.length > 36
+                          ? admin.password.slice(0, 36) + "..."
+                          : admin.password}
                       </td>
                       <td>
                         <div className="modify">
@@ -143,12 +132,12 @@ function SuperAdminClubsComponent() {
             </div>
           )}
         </div>
-        <button className="btn btn-add1" type="button">
-          Add Club
+        <button className="btn btn-add2" type="button">
+          Add Admin
         </button>
       </Col>
     </Row>
   );
 }
 
-export default SuperAdminClubsComponent;
+export default SuperAdminAdminsComponent;

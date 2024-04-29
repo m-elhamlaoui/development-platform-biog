@@ -15,6 +15,7 @@ function SuperAdminDashboardComponent() {
   const [events, setEvents] = useState<Event[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [requests, setRequests] = useState<Request[]>([]);
   const token = localStorage.getItem("user") as string;
   const isMyTokenExpired = isExpired(token);
   const navigate = useNavigate();
@@ -59,6 +60,13 @@ function SuperAdminDashboardComponent() {
       .catch((error) => {
         console.error(error);
       });
+    ModelsService.listRequests(token)
+      .then((response) => {
+        setRequests(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const clubsCount = clubs.length;
@@ -66,6 +74,7 @@ function SuperAdminDashboardComponent() {
   const eventsCount = events.length;
   const schoolsCount = schools.length;
   const studentsCount = students.length;
+  const requestsCount = requests.length;
 
   return (
     <Row className="row2">
@@ -76,7 +85,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Admins Table</span>
           <div className="rb">
-            <span>{adminsCount} rows</span>
+            <span>
+              {adminsCount} {adminsCount > 1 ? "rows" : "row"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/admins")}
@@ -89,7 +100,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Clubs Table</span>
           <div className="rb">
-            <span>{clubsCount} rows</span>
+            <span>
+              {clubsCount} {clubsCount > 1 ? "rows" : "row"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/clubs")}
@@ -102,7 +115,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Events Table</span>
           <div className="rb">
-            <span>{eventsCount} rows</span>
+            <span>
+              {eventsCount} {eventsCount > 1 ? "rows" : "row"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/events")}
@@ -115,7 +130,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Schools Table</span>
           <div className="rb">
-            <span>{schoolsCount} rows</span>
+            <span>
+              {schoolsCount} {schoolsCount > 1 ? "rows" : "row"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/schools")}
@@ -128,7 +145,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Students Table</span>
           <div className="rb">
-            <span>{studentsCount} rows</span>
+            <span>
+              {studentsCount} {studentsCount > 1 ? "rows" : "row"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/students")}
@@ -141,7 +160,9 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Pending Sign Up Requests</span>
           <div className="rb">
-            <span>4 requests</span>
+            <span>
+              {requestsCount} {requestsCount > 1 ? "requests" : "request"}
+            </span>
             <button
               className="btn btn-pr2"
               onClick={() => navigate("/superadmin/requests")}

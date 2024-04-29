@@ -7,11 +7,13 @@ import java.util.UUID;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
+import org.biog.unihivebackend.model.Request;
 import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.model.Student;
 import org.biog.unihivebackend.service.AdminService;
 import org.biog.unihivebackend.service.ClubService;
 import org.biog.unihivebackend.service.EventService;
+import org.biog.unihivebackend.service.RequestService;
 import org.biog.unihivebackend.service.SchoolService;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +31,7 @@ public class SuperAdminController {
     private final ClubService clubService;
     private final EventService eventService;
     private final SchoolService schoolService;
+    private final RequestService requestService;
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/admins")
@@ -167,5 +170,35 @@ public class SuperAdminController {
     @GetMapping("/event/{id}")
     Event getEvent(@PathVariable UUID id) throws AccessDeniedException {
         return eventService.getEvent(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PostMapping("/addevent")
+    Event addEvent(@RequestBody Event event) throws AccessDeniedException {
+        return eventService.addEvent(event);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/requests")
+    List<Request> getAllRequests() throws AccessDeniedException {
+        return requestService.getAll();
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PutMapping("/uprequest/{id}")
+    Request updateRequest(@PathVariable UUID id, @RequestBody Request newrequest) throws AccessDeniedException {
+        return requestService.updateRequest(id, newrequest);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @DeleteMapping("/delrequest/{id}")
+    void deleteRequest(@PathVariable UUID id) throws AccessDeniedException {
+        requestService.deleteRequest(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/request/{id}")
+    Request getRequest(@PathVariable UUID id) throws AccessDeniedException {
+        return requestService.getRequest(id);
     }
 }

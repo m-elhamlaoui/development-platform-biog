@@ -59,13 +59,34 @@ public class EventServiceImpl implements EventService {
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
         if (!isAdmin) {
-            return eventRepository.save(event);
+            Event newevent = new Event();
+            newevent.setEventName(event.getEventName());
+            newevent.setEventDescription(event.getEventDescription());
+            newevent.setEventCategory(event.getEventCategory());
+            newevent.setEventLocation(event.getEventLocation());
+            newevent.setStartTime(event.getStartTime());
+            newevent.setEndTime(event.getEndTime());
+            newevent.setEventBanner(event.getEventBanner());
+            newevent.setClub(clubRepository.findById(event.getClub().getId()).orElseThrow(
+                    () -> new NotFoundException(
+                            "Club not found with id " + event.getClub().getId())));
+            return eventRepository.save(newevent);
         }
         UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to add events in this school");
         }
-        return eventRepository.save(event);
+        Event newevent = new Event();
+        newevent.setEventName(event.getEventName());
+        newevent.setEventDescription(event.getEventDescription());
+        newevent.setEventCategory(event.getEventCategory());
+        newevent.setStartTime(event.getStartTime());
+        newevent.setEndTime(event.getEndTime());
+        newevent.setEventBanner(event.getEventBanner());
+        newevent.setClub(clubRepository.findById(event.getClub().getId()).orElseThrow(
+                () -> new NotFoundException(
+                        "Club not found with id " + event.getClub().getId())));
+        return eventRepository.save(newevent);
     }
 
     @Override
