@@ -20,7 +20,7 @@ function EventComponent() {
       EventService.getEvents(token)
         .then((response) => {
           setEvents(response.data);
-          console.log(response);
+          console.log(response)
         })
         .catch((error) => {
           console.error(error);
