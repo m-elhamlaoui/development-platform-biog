@@ -17,15 +17,7 @@ import org.biog.unihivebackend.service.RequestService;
 import org.biog.unihivebackend.service.SchoolService;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
@@ -48,8 +40,9 @@ public class SuperAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+
     @PutMapping("/upadmin/{id}")
-    Admin updateAdmin(@PathVariable UUID id, @RequestBody Admin newadmin) {
+    Admin updateAdmin(@PathVariable UUID id, Admin newadmin) {
         return adminService.updateAdmin(id, newadmin);
     }
 
@@ -91,7 +84,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upschool/{id}")
-    School updateSchool(@PathVariable UUID id, @RequestBody School newschool) {
+    School updateSchool(@PathVariable UUID id, School newschool) {
         return schoolService.updateSchool(id, newschool);
     }
 
@@ -103,7 +96,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upstudent/{id}")
-    Student updateStudent(@PathVariable UUID id, @RequestBody Student newstudent) throws AccessDeniedException {
+    Student updateStudent(@PathVariable UUID id, Student newstudent) throws AccessDeniedException {
         return studentService.updateStudent(id, newstudent);
     }
 
@@ -163,7 +156,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upevent/{id}")
-    Event updateEvent(@PathVariable UUID id, @RequestBody Event newevent) throws AccessDeniedException {
+    Event updateEvent(@PathVariable UUID id, Event newevent) throws AccessDeniedException {
         return eventService.updateEvent(id, newevent);
     }
 

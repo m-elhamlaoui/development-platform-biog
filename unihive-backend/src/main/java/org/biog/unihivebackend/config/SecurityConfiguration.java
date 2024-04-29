@@ -39,12 +39,16 @@ public class SecurityConfiguration {
             .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
             .requestMatchers("/superadmin/**")
             .hasRole("SUPER_ADMIN")
-            .requestMatchers("/upload/**", "/download/**", "/delete/**", "/list/**", "/file/**")
-            .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
+            .requestMatchers("/upload/**", "/download/**", "/delete/**", "/list/**", "/file/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
             .requestMatchers("/**")
             .hasRole("SUPER_ADMIN")
+            .requestMatchers("/student/events")
+            .hasRole("STUDENT")
             .anyRequest()
             .authenticated())
+            
+            
+            
         .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(
