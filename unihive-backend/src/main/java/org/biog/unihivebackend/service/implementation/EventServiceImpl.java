@@ -26,11 +26,11 @@ public class EventServiceImpl implements EventService {
     private final SchoolRepository schoolRepository;
     private final ClubRepository clubRepository;
     private final EventRepository eventRepository;
+
     @Override
-    public List<Event> getAllbyStudent(){
+    public List<Event> getAllbyStudent() {
 
         return eventRepository.findAll();
-
 
     }
 
@@ -67,9 +67,7 @@ public class EventServiceImpl implements EventService {
             newevent.setStartTime(event.getStartTime());
             newevent.setEndTime(event.getEndTime());
             newevent.setEventBanner(event.getEventBanner());
-            newevent.setClub(clubRepository.findById(event.getClub().getId()).orElseThrow(
-                    () -> new NotFoundException(
-                            "Club not found with id " + event.getClub().getId())));
+            newevent.setClub(event.getClub());
             return eventRepository.save(newevent);
         }
         UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();

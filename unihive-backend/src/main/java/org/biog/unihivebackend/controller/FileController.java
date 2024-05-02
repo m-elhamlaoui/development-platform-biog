@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class FileController {
 
     private final FileService fileService;

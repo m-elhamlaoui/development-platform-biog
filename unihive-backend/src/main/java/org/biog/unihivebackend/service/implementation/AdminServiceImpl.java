@@ -7,8 +7,8 @@ import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.repository.AdminRepository;
+import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.service.AdminService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final SchoolRepository schoolRepository;
 
     @Override
     public List<Admin> getAll() {
@@ -31,9 +31,11 @@ public class AdminServiceImpl implements AdminService {
                 () -> new NotFoundException("Admin with id " + id + " not found"));
 
         oldadmin.setEmail(newadmin.getEmail());
-        oldadmin.setPassword(passwordEncoder.encode(newadmin.getPassword()));
         oldadmin.setFirstName(newadmin.getFirstName());
         oldadmin.setLastName(newadmin.getLastName());
+        oldadmin.setSchool(schoolRepository.findById(newadmin.getSchool().getId()).orElseThrow(
+                () -> new NotFoundException(
+                        "School not found with id " + newadmin.getSchool().getId())));
         return adminRepository.save(oldadmin);
     }
 

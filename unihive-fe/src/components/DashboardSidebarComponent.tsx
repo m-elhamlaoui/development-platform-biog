@@ -21,12 +21,27 @@ import { useNavigate } from "react-router-dom";
 
 function DashboardSidebarComponent(props: { option: string }) {
   const dash = props.option === "dashboard";
-  const admin = props.option === "admins";
-  const club = props.option === "clubs" || "addclub" || "upclub/:";
-  const event = props.option === "events";
-  const school = props.option === "schools";
-  const student = props.option === "students";
-  const request = props.option === "requests";
+  const admin =
+    props.option === "admins" ||
+    props.option === "addadmin" ||
+    props.option === "upadmin";
+  const club =
+    props.option === "clubs" ||
+    props.option === "addclub" ||
+    props.option === "upclub";
+  const event =
+    props.option === "events" ||
+    props.option === "addevent" ||
+    props.option === "upevent";
+  const school =
+    props.option === "schools" ||
+    props.option === "addschool" ||
+    props.option === "upschool";
+  const student =
+    props.option === "students" ||
+    props.option === "addstudent" ||
+    props.option === "upstudent";
+  const request = props.option === "requests" || props.option === "viewrequest";
 
   const navigate = useNavigate();
 

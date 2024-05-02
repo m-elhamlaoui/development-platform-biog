@@ -4,6 +4,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
@@ -42,7 +43,6 @@ public class ClubServiceImpl implements ClubService {
 				.anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 		if (!isAdmin) {
 			oldclub.setEmail(newclub.getEmail());
-			oldclub.setPassword(passwordEncoder.encode(newclub.getPassword()));
 			oldclub.setClubName(newclub.getClubName());
 			oldclub.setClubLogo(newclub.getClubLogo());
 			oldclub.setClubDescription(newclub.getClubDescription());
@@ -52,6 +52,12 @@ public class ClubServiceImpl implements ClubService {
 			oldclub.setSchool(schoolRepository.findById(newclub.getSchool().getId()).orElseThrow(
 					() -> new NotFoundException(
 							"School not found with id " + newclub.getSchool().getId())));
+			List<Student> newStudents = newclub.getStudents().stream()
+					.map(student -> studentRepository.findById(student.getId())
+							.orElseThrow(() -> new NotFoundException(
+									"Student not found with id " + student.getId())))
+					.collect(Collectors.toList());
+			oldclub.setStudents(newStudents);
 			return clubRepository.save(oldclub);
 		}
 
@@ -68,6 +74,14 @@ public class ClubServiceImpl implements ClubService {
 		oldclub.setClubBanner(newclub.getClubBanner());
 		oldclub.setClubRating(newclub.getClubRating());
 		oldclub.setRatingCount(newclub.getRatingCount());
+		List<Student> newStudents = newclub.getStudents().stream()
+				.map(student -> studentRepository.findById(student.getId())
+						.orElseThrow(() -> new NotFoundException(
+								"Student not found with id " + student.getId())))
+				.collect(Collectors.toList());
+		newStudents = newStudents.stream().filter(student -> student.getSchool().getId().equals(schoolId[0]))
+				.collect(Collectors.toList());
+		oldclub.setStudents(newStudents);
 		return clubRepository.save(oldclub);
 	}
 

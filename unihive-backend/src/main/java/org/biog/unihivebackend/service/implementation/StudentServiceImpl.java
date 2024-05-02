@@ -14,7 +14,6 @@ import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +24,6 @@ public class StudentServiceImpl implements StudentService {
 
         private final StudentRepository studentRepository;
         private SchoolRepository schoolRepository;
-        private final PasswordEncoder passwordEncoder;
 
         @Override
         public Student updateStudent(UUID id, Student newstudent, UUID... schoolId) throws AccessDeniedException {
@@ -38,7 +36,6 @@ public class StudentServiceImpl implements StudentService {
                                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
                 if (!isAdmin) {
                         oldstudent.setEmail(newstudent.getEmail());
-                        oldstudent.setPassword(passwordEncoder.encode(newstudent.getPassword()));
                         oldstudent.setFirstName(newstudent.getFirstName());
                         oldstudent.setLastName(newstudent.getLastName());
                         oldstudent.setSchool(newstudent.getSchool());
@@ -54,7 +51,6 @@ public class StudentServiceImpl implements StudentService {
                 }
 
                 oldstudent.setEmail(newstudent.getEmail());
-                oldstudent.setPassword(passwordEncoder.encode(newstudent.getPassword()));
                 oldstudent.setFirstName(newstudent.getFirstName());
                 oldstudent.setLastName(newstudent.getLastName());
                 oldstudent.setCne(newstudent.getCne());

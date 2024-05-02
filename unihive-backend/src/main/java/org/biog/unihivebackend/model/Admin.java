@@ -47,7 +47,7 @@ public class Admin implements UserDetails {
   private Instant createdAt;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false, unique = true)
   private School school;
 
   @PrePersist

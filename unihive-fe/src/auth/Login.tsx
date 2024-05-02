@@ -12,7 +12,7 @@ function Login() {
   useEffect(() => {
     var token = localStorage.getItem("user") as string;
     if (token && !isExpired(token)) {
-      navigate("/clubs");
+      navigate("/superadmin/dashboard");
     }
   });
 
@@ -21,7 +21,7 @@ function Login() {
     AuthService.login(email, password).then(
       () => {
         console.log("Login successful");
-        navigate("/clubs");
+        navigate("/superadmin/dashboard");
       },
       () => {
         console.error("Incorrect email or password");
