@@ -61,7 +61,7 @@ public class Student implements UserDetails {
   private List<Club> clubs;
 
   @ManyToOne
-  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false, unique = true)
+  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 
   @Builder.Default
