@@ -63,7 +63,7 @@ public class Club implements UserDetails {
   private List<Event> events;
 
   @ManyToOne
-  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false, unique = true)
+  @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 
   @Column(name = "created_at", nullable = false)
