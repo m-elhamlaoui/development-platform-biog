@@ -134,8 +134,24 @@ function EventComponent() {
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
         {filteredEvents.map((event) => (
-          <Card key={event.id} style={{ width: '18rem', marginLeft: '10px', marginTop: '35px', height: '400px' }}>
-          </Card>
+           <Card key={event.id} style={{ width: '18rem', marginLeft: '10px' , marginTop:'35px',height:'400px'}}>
+           <div style={{ height: '200px', overflow: 'hidden', borderRadius: '20px',margin:'5px' }}>
+             <img src={event.eventBanner} style={{ width: '100%', height: 'auto' }} />
+           </div>       
+            <Card.Body>
+             <Card.Title>{event.eventName}</Card.Title>
+             <Card.Subtitle>{`From ${formatDate(event.startTime)} to ${formatDate(event.endTime)}`}</Card.Subtitle>
+             <Button variant="primary" style={{bottom: '10px' }} >Learn More</Button>
+             
+           </Card.Body>
+   
+           <a href={`/club/${event.club.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+     <h6 style={{ textAlign: 'right', margin: 0 }}>{event.club.clubName}</h6>
+   </a>
+   
+    
+   
+         </Card>
         ))}
       </div>
     </>

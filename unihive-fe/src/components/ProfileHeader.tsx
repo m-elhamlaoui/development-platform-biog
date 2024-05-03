@@ -50,7 +50,7 @@ function ProfileHeader() {
         />
         
   </div>
-  <div style={{marginTop:'0px',transform: 'translate(200px,10px)'}}>
+  <div style={{marginTop:'0px',transform: 'translate(200px,10px)', width:'500px'}}>
         <h2 style={{    color: 'black', zIndex: '2', textAlign: 'left', display: 'inlineBlock' }}>{club.clubName}</h2>
         <Button variant="primary" style={{ transform: 'translate(600px,-40px)'}}>Follow</Button>{' '}
 

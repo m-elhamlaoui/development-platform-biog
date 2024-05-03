@@ -7,7 +7,7 @@ import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 
 public interface EventService {
-  List<Event> getAllbyStudent();
+  List<Event> getAllByStudent();
   List<Event> getAll(UUID... schoolId) throws AccessDeniedException;
 
   Event addEvent(Event event, UUID... schoolId) throws AccessDeniedException;

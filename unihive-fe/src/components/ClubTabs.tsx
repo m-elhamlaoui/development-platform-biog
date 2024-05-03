@@ -12,7 +12,7 @@ function ClubTabs() {
       defaultActiveKey="profile"
       id="uncontrolled-tab-example"
       className="mb-3"
-      style={{marginTop:'70px',width:'910px',marginLeft:'200px'}}
+      style={{marginTop:'30px',width:'910px',marginLeft:'200px'}}
     >
       <Tab eventKey="event" title="Event">
         

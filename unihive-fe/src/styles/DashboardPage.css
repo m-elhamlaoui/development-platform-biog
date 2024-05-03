@@ -184,6 +184,7 @@
 }
 
 .table-table {
+  width: 100%;
   overflow-y: auto;
   max-height: 320px;
 }
@@ -196,6 +197,14 @@
 .table-table thead th {
   position: sticky;
   top: 0;
+}
+
+.table-table th:last-child,
+td:last-child {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: 2.1rem;
 }
 
 .table-table th {
@@ -393,7 +402,6 @@
   border: 2px solid #d5d5d5;
   padding: 0.4rem 0.7rem 0.4rem 0.7rem;
   width: 16rem;
-  color: #757587;
 }
 
 .info-row textarea {
@@ -402,14 +410,75 @@
   border: 2px solid #d5d5d5;
   padding: 0.4rem 0.7rem 0.4rem 0.7rem;
   width: 16rem;
-  height: 4rem;
+  height: 3.9rem;
   max-height: 10rem;
   min-height: 2.5rem;
 }
 
+.info-row select {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 1.7rem 0.4rem 0.7rem;
+  width: 16rem;
+  background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")
+    no-repeat;
+  background-position: calc(100% - 0.75rem) center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  max-height: 100px !important;
+}
+
 .info-row input:focus,
-.info-row textarea:focus {
+.info-row textarea:focus,
+select:focus {
   outline: none;
+  border-color: #46bfff;
+}
+
+.info-row input:disabled {
+  background-color: #d5d5d5;
+  color: black;
+}
+
+.info-row input[type="file"] {
+  box-shadow: none;
+}
+
+.info-row input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
+.info-row input[type="file"]::file-selector-button {
+  display: none;
+}
+
+.info-row input[type="file"]:focus {
+  outline: none;
+  border-color: #d5d5d5;
+}
+
+.input-group {
+  width: 16rem !important;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+}
+
+.input-group:hover label {
+  cursor: pointer;
+}
+
+.input-group label {
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.7rem 0 0.7rem;
+  background-color: #d5d5d5;
+  border: 2px solid #d5d5d5;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .info-btns {
@@ -420,23 +489,35 @@
   align-self: flex-end;
 }
 
-.save {
+.save-save {
   --btn-save: #46bfff;
   background-color: var(--btn-save) !important;
   border-color: var(--btn-save) !important;
   color: white !important;
   border-radius: 0.3rem !important;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
-  width: 6.32rem;
+  width: 7.9rem;
 }
 
-.save:hover {
+.save-update {
+  --btn-save: #46bfff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 5.2rem;
+}
+
+.save-save:hover,
+.save-update:hover {
   --btn-save: #21b1ff;
   background-color: var(--btn-save) !important;
   border-color: var(--btn-save) !important;
 }
 
-.save:active {
+.save-save:active,
+.save-update:active {
   --btn-save: #0eabff;
   background-color: var(--btn-save) !important;
   border-color: var(--btn-save) !important;
@@ -449,7 +530,25 @@
   color: white !important;
   border-radius: 0.3rem !important;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
-  width: 9.48rem;
+  width: 5.2rem;
+}
+
+.cancel-save {
+  --btn-save: #ff2f2f;
+  background-color: white !important;
+  border-color: var(--btn-save) !important;
+  color: var(--btn-save) !important;
+  border-radius: 0.3rem !important;
+  width: 7.9rem;
+}
+
+.cancel-update {
+  --btn-save: #ff2f2f;
+  background-color: white !important;
+  border-color: var(--btn-save) !important;
+  color: var(--btn-save) !important;
+  border-radius: 0.3rem !important;
+  width: 5.2rem;
 }
 
 .delete:hover {
@@ -458,8 +557,264 @@
   border-color: var(--btn-save) !important;
 }
 
+.cancel-save:hover,
+.cancel-update:hover {
+  --btn-save: #ff1919;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+}
+
 .delete:active {
   --btn-save: #ff0b0b;
   background-color: var(--btn-save) !important;
   border-color: var(--btn-save) !important;
+}
+
+.cancel-save:active,
+.cancel-update:active {
+  --btn-save: #ff0b0b;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+}
+
+.is-loading {
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: black;
+  margin-top: 1.5rem;
+  margin-bottom: 5rem;
+}
+
+.tags-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.2rem;
+}
+
+.tag {
+  width: 7.9rem;
+  --tag: #d5d5d5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--tag);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-right: 0;
+  padding-left: 0.7rem;
+  overflow: hidden;
+}
+
+.tag span {
+  line-height: 1.15;
+}
+
+.delete-tag {
+  height: 100% !important;
+  color: black !important;
+  font-size: 1rem;
+  font-weight: 600;
+  border-color: #d5d5d5 !important;
+  border-radius: 0 !important;
+}
+
+.add-tag {
+  width: 7.9rem;
+  --tag: #d5d5d5;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  color: black !important;
+  border-color: #d5d5d5 !important;
+  background-color: var(--tag) !important;
+  border-radius: 0.5rem !important;
+}
+
+.tag-save {
+  --btn-save: #46bfff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 3.85rem;
+  height: 2.5rem;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  align-self: center !important;
+}
+
+.tag-save:hover {
+  --btn-save: #21b1ff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.tag-save:active {
+  --btn-save: #0eabff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.tag-cancel {
+  --btn-save: #ff2f2f;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 3.85rem;
+  height: 2.5rem;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  align-self: center !important;
+}
+
+.tag-cancel:hover {
+  --btn-save: #ff1919;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.tag-cancel:active {
+  --btn-save: #ff0b0b;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.delete-tag:hover,
+.add-tag:hover {
+  --tag: #c5c5c5;
+  background-color: var(--tag) !important;
+  border-color: var(--tag) !important;
+}
+
+.delete-tag:active,
+.add-tag:active {
+  --tag: #b0b0b0;
+  background-color: var(--tag) !important;
+  border-color: var(--tag) !important;
+  outline: none !important;
+}
+
+.delete-tag:focus {
+  outline: none !important;
+}
+
+.modal-content {
+  border: 2px solid #d5d5d5 !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25) !important;
+}
+
+.modal-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #ff1919 !important;
+}
+
+.title2 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: #46bfff !important;
+}
+
+.modal-header {
+  border-bottom: 0 !important;
+}
+
+.modal-body {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: black !important;
+}
+
+.modal-footer {
+  border-top: 0 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 0.2rem !important;
+}
+
+.modal-confirm {
+  --btn-save: #ff2f2f;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  margin: 0 !important;
+}
+
+.modal-confirm-2 {
+  --btn-save: #46bfff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  margin: 0 !important;
+}
+
+.modal-confirm-2:hover {
+  --btn-save: #21b1ff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  margin: 0 !important;
+}
+
+.modal-confirm-2:active {
+  --btn-save: #0eabff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  margin: 0 !important;
+}
+
+.modal-confirm:hover {
+  --btn-save: #ff1919;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.modal-confirm:active {
+  --btn-save: #ff0b0b;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.modal-cancel {
+  --btn-save: #ff2f2f;
+  background-color: white !important;
+  border-color: var(--btn-save) !important;
+  color: var(--btn-save) !important;
+  border-radius: 0.3rem !important;
+  margin: 0 !important;
+}
+
+.modal-cancel:hover {
+  --btn-save: #ff1919;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+}
+
+.modal-cancel:active {
+  --btn-save: #ff0b0b;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
 }

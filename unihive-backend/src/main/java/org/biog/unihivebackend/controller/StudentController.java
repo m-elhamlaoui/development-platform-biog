@@ -1,6 +1,7 @@
 package org.biog.unihivebackend.controller;
 
 import lombok.AllArgsConstructor;
+import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.service.ClubService;
@@ -22,8 +23,8 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/events")
-    List<Event> getAllEvents( ) {
-        return eventService.getAllbyStudent();
+    List<Event> getAllEvents() {
+        return eventService.getAllByStudent();
     }
 
 
@@ -35,8 +36,13 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/club/{id}/events")
-    List<Event> getEventByClub(@PathVariable UUID id) {
+    List<Event> getAllEventsByClub(@PathVariable UUID id) {
         return clubService.getAllEventsByClub(id);
+    }
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/test")
+    void test(){
+        System.out.println("test");
     }
 
 

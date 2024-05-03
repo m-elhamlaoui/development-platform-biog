@@ -49,7 +49,7 @@ public class Event {
   @Column(name = "rating_count")
   private int ratingCount;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
   private Club club;
 

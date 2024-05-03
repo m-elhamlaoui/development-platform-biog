@@ -29,7 +29,7 @@ public class SecurityConfiguration {
             .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
             .requestMatchers("/auth/register/**")
             .hasRole("SUPER_ADMIN")
-            .requestMatchers("/admin/**", "/auth/register/admin")
+            .requestMatchers("/admin/**", "/auth/register/admin", "/auth/acceptrequest/**")
             .hasAnyRole("ADMIN", "SUPER_ADMIN")
             .requestMatchers("/club/**", "/auth/register/club")
             .hasAnyRole("CLUB", "SUPER_ADMIN")
@@ -39,18 +39,18 @@ public class SecurityConfiguration {
             .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
             .requestMatchers("/superadmin/**")
             .hasRole("SUPER_ADMIN")
-            .requestMatchers("/upload/**", "/download/**", "/delete/**", "/list/**", "/file/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
+            .requestMatchers("/upload/**", "/download/**", "/delete/**", "/list/**", "/file/**")
+            .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
             .requestMatchers("/**")
             .hasRole("SUPER_ADMIN")
             .requestMatchers("/student/events")
             .hasRole("STUDENT")
-            .requestMatchers("/student/club/{id}")
+            .requestMatchers("/student/club/**")
             .hasRole("STUDENT")
+
             .anyRequest()
             .authenticated())
-            
-            
-            
+
         .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(

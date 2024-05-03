@@ -23,22 +23,28 @@ const REST_API_URL_STUDENT_POST = "http://localhost:8080/auth/register/student";
 const REST_API_URL_REQUEST_POST = "http://localhost:8080/superadmin/addrequest";
 
 // PUT_APIS
-const REST_API_URL_CLUB_PUT = "http://localhost:8080/superadmin/upclub";
-const REST_API_URL_ADMIN_PUT = "http://localhost:8080/superadmin/upadmin";
-const REST_API_URL_EVENT_PUT = "http://localhost:8080/superadmin/upevent";
-const REST_API_URL_SCHOOL_PUT = "http://localhost:8080/superadmin/upschool";
-const REST_API_URL_STUDENT_PUT = "http://localhost:8080/superadmin/upstudent";
-const REST_API_URL_REQUEST_PUT = "http://localhost:8080/superadmin/uprequest";
+const REST_API_URL_CLUB_PUT = "http://localhost:8080/superadmin/upclub/";
+const REST_API_URL_ADMIN_PUT = "http://localhost:8080/superadmin/upadmin/";
+const REST_API_URL_EVENT_PUT = "http://localhost:8080/superadmin/upevent/";
+const REST_API_URL_SCHOOL_PUT = "http://localhost:8080/superadmin/upschool/";
+const REST_API_URL_STUDENT_PUT = "http://localhost:8080/superadmin/upstudent/";
+const REST_API_URL_REQUEST_PUT = "http://localhost:8080/superadmin/uprequest/";
 
 // DELETE_APIS
-const REST_API_URL_CLUB_DELETE = "http://localhost:8080/superadmin/delclub";
-const REST_API_URL_ADMIN_DELETE = "http://localhost:8080/superadmin/deladmin";
-const REST_API_URL_EVENT_DELETE = "http://localhost:8080/superadmin/delevent";
-const REST_API_URL_SCHOOL_DELETE = "http://localhost:8080/superadmin/delschool";
+const REST_API_URL_CLUB_DELETE = "http://localhost:8080/superadmin/delclub/";
+const REST_API_URL_ADMIN_DELETE = "http://localhost:8080/superadmin/deladmin/";
+const REST_API_URL_EVENT_DELETE = "http://localhost:8080/superadmin/delevent/";
+const REST_API_URL_SCHOOL_DELETE =
+  "http://localhost:8080/superadmin/delschool/";
 const REST_API_URL_STUDENT_DELETE =
-  "http://localhost:8080/superadmin/delstudent";
+  "http://localhost:8080/superadmin/delstudent/";
 const REST_API_URL_REQUEST_DELETE =
-  "http://localhost:8080/superadmin/delrequest";
+  "http://localhost:8080/superadmin/delrequest/";
+
+const REST_API_URL_FILE_UPLOAD = "http://localhost:8080/upload";
+
+// ACCEPT_REQUEST
+const REST_API_URL_REQUEST_ACCEPT = "http://localhost:8080/auth/acceptrequest/";
 
 const listClubs = (token: string | null) =>
   axios.get(REST_API_URL_CLUBS_GET, {
@@ -130,33 +136,33 @@ const addRequest = (token: string | null, data: any) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateClub = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_CLUB_PUT, data, {
+const updateClub = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_CLUB_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateAdmin = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_ADMIN_PUT, data, {
+const updateAdmin = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_ADMIN_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateEvent = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_EVENT_PUT, data, {
+const updateEvent = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_EVENT_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateSchool = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_SCHOOL_PUT, data, {
+const updateSchool = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_SCHOOL_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateStudent = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_STUDENT_PUT, data, {
+const updateStudent = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_STUDENT_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-const updateRequest = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_REQUEST_PUT, data, {
+const updateRequest = (token: string | null, id: string | null, data: any) =>
+  axios.put(REST_API_URL_REQUEST_PUT + id, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -190,6 +196,22 @@ const deleteRequest = (token: string | null, id: string | null) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
+const acceptRequest = (token: string | null, id: string | null) =>
+  axios.put(REST_API_URL_REQUEST_ACCEPT + id, null, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+const uploadFile = (token: string | null, file: any) =>
+  axios.post(REST_API_URL_FILE_UPLOAD, file, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
 const ModelsService = {
   listClubs,
   listAdmins,
@@ -221,6 +243,8 @@ const ModelsService = {
   deleteSchool,
   deleteStudent,
   deleteRequest,
+  acceptRequest,
+  uploadFile,
 };
 
 export default ModelsService;

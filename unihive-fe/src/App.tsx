@@ -1,5 +1,4 @@
 import Login from "./auth/Login";
-import ListClubsComponent from "./components/ListClubsComponent";
 import HomePage from "./pages/HomePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
@@ -19,9 +18,12 @@ function App() {
             path={"/superadmin/:option"}
             element={<SuperAdminDashboardPage />}
           />
+          <Route
+            path={"/superadmin/:option/:id"}
+            element={<SuperAdminDashboardPage />}
+          />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/clubs" element={<ListClubsComponent />} />
           <Route path="/events" element={<Event />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />

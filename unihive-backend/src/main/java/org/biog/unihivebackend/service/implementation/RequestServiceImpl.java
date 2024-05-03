@@ -13,7 +13,6 @@ import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.service.RequestService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +23,6 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final SchoolRepository schoolRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<Request> getAll(UUID... schoolId) throws AccessDeniedException {
@@ -59,9 +57,7 @@ public class RequestServiceImpl implements RequestService {
             oldrequest.setLastName(newrequest.getLastName());
             oldrequest.setSchoolName(newrequest.getSchoolName());
             oldrequest.setEmail(newrequest.getEmail());
-            oldrequest.setPassword(passwordEncoder.encode(newrequest.getPassword()));
             oldrequest.setNumApogee(newrequest.getNumApogee());
-            oldrequest.setSchoolCard(newrequest.getSchoolCard());
             return requestRepository.save(oldrequest);
         }
 
@@ -74,9 +70,7 @@ public class RequestServiceImpl implements RequestService {
         oldrequest.setLastName(newrequest.getLastName());
         oldrequest.setSchoolName(newrequest.getSchoolName());
         oldrequest.setEmail(newrequest.getEmail());
-        oldrequest.setPassword(passwordEncoder.encode(newrequest.getPassword()));
         oldrequest.setNumApogee(newrequest.getNumApogee());
-        oldrequest.setSchoolCard(newrequest.getSchoolCard());
         return requestRepository.save(oldrequest);
     }
 

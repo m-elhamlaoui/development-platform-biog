@@ -51,15 +51,16 @@ public class Student implements UserDetails {
   @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "profile_image", nullable = false)
-  private String profileImage;
+  @Builder.Default
+  @Column(name = "profile_image")
+  private String profileImage = "https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg";
 
   @ManyToMany
   @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "club_id"))
   @JsonIgnore
   private List<Club> clubs;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 

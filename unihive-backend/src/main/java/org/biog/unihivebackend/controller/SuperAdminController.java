@@ -42,7 +42,7 @@ public class SuperAdminController {
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
 
     @PutMapping("/upadmin/{id}")
-    Admin updateAdmin(@PathVariable UUID id, Admin newadmin) {
+    Admin updateAdmin(@PathVariable UUID id, @RequestBody Admin newadmin) {
         return adminService.updateAdmin(id, newadmin);
     }
 
@@ -84,7 +84,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upschool/{id}")
-    School updateSchool(@PathVariable UUID id, School newschool) {
+    School updateSchool(@PathVariable UUID id, @RequestBody School newschool) {
         return schoolService.updateSchool(id, newschool);
     }
 
@@ -96,7 +96,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upstudent/{id}")
-    Student updateStudent(@PathVariable UUID id, Student newstudent) throws AccessDeniedException {
+    Student updateStudent(@PathVariable UUID id, @RequestBody Student newstudent) throws AccessDeniedException {
         return studentService.updateStudent(id, newstudent);
     }
 
@@ -156,7 +156,7 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/upevent/{id}")
-    Event updateEvent(@PathVariable UUID id, Event newevent) throws AccessDeniedException {
+    Event updateEvent(@PathVariable UUID id, @RequestBody Event newevent) throws AccessDeniedException {
         return eventService.updateEvent(id, newevent);
     }
 

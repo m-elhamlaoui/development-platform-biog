@@ -58,11 +58,11 @@ public class Club implements UserDetails {
   @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "club_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
   private List<Student> students;
 
-  @OneToMany(mappedBy = "club")
+  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<Event> events;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 

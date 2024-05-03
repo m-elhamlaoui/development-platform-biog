@@ -86,7 +86,6 @@ public class AuthenticationService {
         .firstName(request.getFirstName())
         .cne(request.getCne())
         .numApogee(request.getNumApogee())
-        .profileImage(request.getProfileImage())
         .school(schoolRepository.findById(request.getSchool()).orElseThrow(
             () -> new NotFoundException(
                 "School not found with id " + request.getSchool())))
@@ -174,6 +173,7 @@ public class AuthenticationService {
         .school(schoolRepository.findBySchoolName(requestModel.getSchoolName()).orElseThrow(
             () -> new NotFoundException(
                 "School not found with name " + requestModel.getSchoolName())))
+        .profileImage("https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg")
         .build();
     studentRepository.save(student);
     requestRepository.delete(requestModel);

@@ -34,15 +34,15 @@ public class School {
   @Column(name = "school_address", nullable = false)
   private String schoolAddress;
 
-  @OneToOne(mappedBy = "school")
+  @OneToOne(mappedBy = "school", cascade = CascadeType.ALL)
   @JsonIgnore
   private Admin admin;
 
-  @OneToMany(mappedBy = "school")
+  @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<Club> clubs;
 
-  @OneToMany(mappedBy = "school")
+  @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<Student> students;
 
