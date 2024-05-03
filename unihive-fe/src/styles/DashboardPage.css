@@ -20,7 +20,7 @@
   background-color: white;
   border-right: 1.5px solid #d5d5d5;
   height: 84vh;
-  width: 16rem;
+  min-width: 16rem;
   margin-top: 1rem;
   padding-top: 0.5rem;
   padding-left: 1rem;
@@ -204,7 +204,7 @@ td:last-child {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  padding-top: 2.1rem;
+  padding-top: 1.1rem;
 }
 
 .table-table th {
