@@ -302,3 +302,53 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.cont3 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 1rem;
+  color: black !important;
+  margin-top: 3rem !important;
+  margin-left: 7rem !important;
+  margin-right: 7rem !important;
+}
+
+.upcomings-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: black;
+}
+
+.upcomings {
+  display: flex;
+  color: black;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.up-event-card {
+  width: 100%;
+  height: 8.5rem;
+  border: 2px solid #d5d5d5;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.up-event-card-date {
+  margin-left: 2.5rem;
+  font-weight: 600;
+  color: black;
+}
+
+.up-event-card-date .num {
+  font-size: 2.5rem;
+}
+
+.up-event-card-date .mon {
+  font-size: 1.5rem;
+}

@@ -44,11 +44,9 @@ function SuperAdminEventsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        setIsLoading(true);
         ModelsService.listEvents(token)
           .then((response) => {
             setEvents(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);

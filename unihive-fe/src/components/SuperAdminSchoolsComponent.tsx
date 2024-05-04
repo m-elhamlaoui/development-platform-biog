@@ -44,11 +44,9 @@ function SuperAdminSchoolsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        setIsLoading(true);
         ModelsService.listSchools(token)
           .then((response) => {
             setSchools(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);

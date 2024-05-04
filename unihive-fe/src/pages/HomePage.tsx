@@ -1,6 +1,7 @@
 import HomeNavbar from "../components/HomeNavbarComponent";
 import Trending from "../components/TrendingComponent";
 import Rankings from "../components/RankingsComponent";
+import UpcomingEvents from "../components/UpcomingEventsComponent";
 
 function HomePage() {
   return (
@@ -8,6 +9,7 @@ function HomePage() {
       <HomeNavbar />
       <Trending />
       <Rankings />
+      <UpcomingEvents />
     </>
   );
 }

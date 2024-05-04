@@ -72,11 +72,9 @@ function SuperAdminRequestsComponent() {
       .then((response) => {
         console.log(response);
         handleClose2();
-        setIsLoading(true);
         ModelsService.listRequests(token)
           .then((response) => {
             setRequests(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);

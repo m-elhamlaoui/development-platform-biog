@@ -44,11 +44,9 @@ function SuperAdminClubsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        setIsLoading(true);
         ModelsService.listClubs(token)
           .then((response) => {
             setClubs(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);

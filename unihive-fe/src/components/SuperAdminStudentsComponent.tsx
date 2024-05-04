@@ -44,11 +44,9 @@ function SuperAdminStudentsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        setIsLoading(true);
         ModelsService.listStudents(token)
           .then((response) => {
             setStudents(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);

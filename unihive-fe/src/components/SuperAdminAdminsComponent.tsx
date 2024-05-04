@@ -44,11 +44,9 @@ function SuperAdminAdminsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        setIsLoading(true);
         ModelsService.listAdmins(token)
           .then((response) => {
             setAdmins(response.data);
-            setIsLoading(false);
           })
           .catch((error) => {
             console.error(error);
