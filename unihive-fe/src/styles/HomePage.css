@@ -260,6 +260,7 @@
   width: 12rem;
   text-align: right;
   padding-right: 1rem;
+  padding-top: 2.5rem;
 }
 
 .tb table td img {
@@ -300,5 +301,4 @@
 .rating {
   display: flex;
   gap: 0.5rem;
-  position: relative;
 }
