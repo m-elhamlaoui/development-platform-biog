@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/Footer";
-import '../Styles/events.css';
 import Sidebar from "../components/sidebar";
 
 function Events() {

@@ -45,6 +45,9 @@ public class SecurityConfiguration {
             .hasRole("SUPER_ADMIN")
             .requestMatchers("/student/events")
             .hasRole("STUDENT")
+            .requestMatchers("/student/club/**")
+            .hasRole("STUDENT")
+
             .anyRequest()
             .authenticated())
 

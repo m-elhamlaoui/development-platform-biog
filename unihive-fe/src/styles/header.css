@@ -64,32 +64,4 @@
     text-align: center;
     color: black;
   }
-  nav {
-    height: 40px;
-    width: 940px;
-    display: flex;
-    margin: 0 auto;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #ccc;
-    margin: 50px auto 0; /* Add margin at the top */
-
-  }
-  
-  nav ul {
-    list-style: none; /* Remove default bullet points */
-    display: flex;
-    margin: 0;
-    padding: 0;
-  }
-  
-  nav li {
-    margin-left: 20px; /* Add margin between list items */
-  }
-  
-  nav a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-  }
   

@@ -31,6 +31,16 @@ public class ClubServiceImpl implements ClubService {
 	private final SchoolRepository schoolRepository;
 	private final StudentRepository studentRepository;
 	private final PasswordEncoder passwordEncoder;
+	@Override
+	public List <Event> getAllEventsByClub(UUID id){
+		return clubRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Club with id " + id + " not found")).getEvents();
+
+	}
+	public Club getClubByStudent(UUID id){
+		return clubRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Club with id " + id + " not found"));
+	}
 
 	@Override
 	public Club updateClub(UUID id, Club newclub, UUID... schoolId) throws AccessDeniedException {
@@ -102,6 +112,7 @@ public class ClubServiceImpl implements ClubService {
 			clubRepository.deleteById(id);
 		}
 	}
+
 
 	@Override
 	public Club getClub(UUID id, UUID... schoolId) throws AccessDeniedException {

@@ -28,9 +28,8 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<Event> getAllbyStudent() {
-
-        return eventRepository.findAll();
+    public List<Event> getAllByStudent() {
+       return eventRepository.findAll();
 
     }
 

@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClubService {
+    List <Event> getAllEventsByClub(UUID id);
     Club updateClub(UUID id, Club newclub, UUID... schoolId) throws AccessDeniedException;
 
     void deleteClub(UUID id, UUID... schoolId) throws AccessDeniedException;
+
+    Club getClubByStudent(UUID id);
 
     Club getClub(UUID id, UUID... schoolId) throws AccessDeniedException;
 
