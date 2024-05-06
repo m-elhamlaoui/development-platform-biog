@@ -818,3 +818,97 @@ select:focus {
   border-color: var(--btn-save) !important;
   color: white !important;
 }
+
+.req-entity {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.school-card {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 20rem;
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.sc-img {
+  width: 100%;
+  height: 10rem;
+}
+
+.sc-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sc-title {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: flex-end;
+  font-size: 1rem;
+  font-weight: 600;
+  color: black;
+  background-color: #d5d5d5;
+  overflow: hidden;
+}
+
+.sc-title span {
+  margin-left: 6rem;
+}
+
+.sc-title-btn {
+  display: flex;
+  justify-self: flex-end;
+}
+
+.fs {
+  --btn-fs: #d5d5d5;
+  background-color: var(--btn-fs) !important;
+  border-color: var(--btn-fs) !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.fs:hover {
+  --btn-fs: #c5c5c5;
+  background-color: var(--btn-fs) !important;
+  border-color: var(--btn-fs) !important;
+}
+
+.fs:active {
+  --btn-fs: #b0b0b0;
+  background-color: var(--btn-fs) !important;
+  border-color: var(--btn-fs) !important;
+}
+
+.modal-img-cont .modal-content {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.modal-img {
+  width: fit-content !important;
+  height: fit-content !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.modal-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

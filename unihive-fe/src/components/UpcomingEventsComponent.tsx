@@ -1,6 +1,6 @@
 function UpcomingEventsComponent() {
   return (
-    <div className="container cont3">
+    <div className="container cont4">
       <div className="upcomings-title">Upcoming Events</div>
       <div className="upcomings">
         <div className="up-event-card">

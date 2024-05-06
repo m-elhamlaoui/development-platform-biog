@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import Request from "../models/Request";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 
 function SuperAdminViewRequestComponent() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ function SuperAdminViewRequestComponent() {
   const [isLoading, setIsLoading] = useState(true);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,8 @@ function SuperAdminViewRequestComponent() {
   const handleClose1 = () => setShow1(false);
   const handleShow2 = () => setShow2(true);
   const handleClose2 = () => setShow2(false);
+  const handleShow3 = () => setShow3(true);
+  const handleClose3 = () => setShow3(false);
 
   const handleReject = () => {
     ModelsService.deleteRequest(token, request.id)
@@ -100,7 +104,7 @@ function SuperAdminViewRequestComponent() {
     <>
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"uprequest"} />
+          <DashboardSidebarComponent option={"viewrequest"} />
         </Col>
         <Col className="col2">
           <div className="table-entity-add">
@@ -110,161 +114,169 @@ function SuperAdminViewRequestComponent() {
             {isLoading ? (
               <div className="is-loading">Loading...</div>
             ) : (
-              <form>
-                <div className="info">
-                  <div className="info-row">
-                    ID
-                    <input type="text" value={request.id} disabled />
+              <div className="req-entity">
+                <form>
+                  <div className="info">
+                    <div className="info-row">
+                      ID
+                      <input type="text" value={request.id} disabled />
+                    </div>
+                    <div className="info-row">
+                      FIRST NAME
+                      <input
+                        type="text"
+                        placeholder="first name"
+                        value={request.firstName}
+                        onChange={(event) => {
+                          const updatedRequest = {
+                            ...request,
+                            firstName: event.target.value,
+                          };
+                          setRequest(updatedRequest);
+                        }}
+                      />
+                    </div>
+                    <div className="info-row">
+                      LAST NAME
+                      <input
+                        type="text"
+                        placeholder="last name"
+                        value={request.lastName}
+                        onChange={(event) => {
+                          const updatedRequest = {
+                            ...request,
+                            lastName: event.target.value,
+                          };
+                          setRequest(updatedRequest);
+                        }}
+                      />
+                    </div>
+                    <div className="info-row">
+                      CNE
+                      <input
+                        type="text"
+                        placeholder="cne"
+                        value={request.cne}
+                        onChange={(event) => {
+                          const updatedRequest = {
+                            ...request,
+                            cne: event.target.value,
+                          };
+                          setRequest(updatedRequest);
+                        }}
+                      />
+                    </div>
+                    <div className="info-row">
+                      NUM APOGEE
+                      <input
+                        type="number"
+                        placeholder="num  apogee"
+                        value={request.numApogee}
+                        onChange={(event) => {
+                          const updatedClub = {
+                            ...request,
+                            numApogee: parseInt(event.target.value, 10),
+                          };
+                          setRequest(updatedClub);
+                        }}
+                        min={0}
+                      />
+                    </div>
+                    <div className="info-row">
+                      SCHOOL
+                      <select
+                        name=""
+                        id=""
+                        value={request.schoolName}
+                        onChange={(event) => {
+                          const updatedRequest = {
+                            ...request,
+                            schoolName: event.target.value,
+                          };
+                          setRequest(updatedRequest);
+                        }}
+                      >
+                        {schools.map((school) => (
+                          <option
+                            key={school.schoolName}
+                            value={school.schoolName}
+                          >
+                            {school.schoolName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="info-row">
+                      EMAIL
+                      <input
+                        type="text"
+                        placeholder="email"
+                        value={request.email}
+                        onChange={(event) => {
+                          const updatedRequest = {
+                            ...request,
+                            email: event.target.value,
+                          };
+                          setRequest(updatedRequest);
+                        }}
+                      />
+                    </div>
+                    <div className="info-row">
+                      PASSWORD
+                      <input
+                        type="text"
+                        placeholder="password"
+                        value={request.password}
+                        disabled
+                      />
+                    </div>
+                    <div className="info-btns">
+                      <button
+                        className="btn save-update"
+                        type="button"
+                        onClick={handleShow2}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="btn delete"
+                        type="button"
+                        onClick={handleShow1}
+                      >
+                        Reject
+                      </button>
+                      <button
+                        className="btn cancel-update"
+                        type="button"
+                        onClick={() => navigate("/superadmin/requests")}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                  <div className="info-row">
-                    FIRST NAME
-                    <input
-                      type="text"
-                      placeholder="first name"
-                      value={request.firstName}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          firstName: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    />
+                </form>
+                <div className="school-card">
+                  <div className="sc-img">
+                    <img src={request.schoolCard} alt="" />
                   </div>
-                  <div className="info-row">
-                    LAST NAME
-                    <input
-                      type="text"
-                      placeholder="last name"
-                      value={request.lastName}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          lastName: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    CNE
-                    <input
-                      type="text"
-                      placeholder="cne"
-                      value={request.cne}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          cne: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    NUM APOGEE
-                    <input
-                      type="number"
-                      placeholder="num  apogee"
-                      value={request.numApogee}
-                      onChange={(event) => {
-                        const updatedClub = {
-                          ...request,
-                          numApogee: parseInt(event.target.value, 10),
-                        };
-                        setRequest(updatedClub);
-                      }}
-                      min={0}
-                    />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL CARD
-                    <input
-                      type="text"
-                      placeholder="profile image"
-                      value={request.schoolCard}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          schoolCard: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL
-                    <select
-                      name=""
-                      id=""
-                      value={request.schoolName}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          schoolName: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    >
-                      {schools.map((school) => (
-                        <option
-                          key={school.schoolName}
-                          value={school.schoolName}
-                        >
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="info-row">
-                    EMAIL
-                    <input
-                      type="text"
-                      placeholder="email"
-                      value={request.email}
-                      onChange={(event) => {
-                        const updatedRequest = {
-                          ...request,
-                          email: event.target.value,
-                        };
-                        setRequest(updatedRequest);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    PASSWORD
-                    <input
-                      type="text"
-                      placeholder="password"
-                      value={request.password}
-                      disabled
-                    />
-                  </div>
-                  <div className="info-btns">
-                    <button
-                      className="btn save-update"
-                      type="button"
-                      onClick={handleShow2}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="btn delete"
-                      type="button"
-                      onClick={handleShow1}
-                    >
-                      Reject
-                    </button>
-                    <button
-                      className="btn cancel-update"
-                      type="button"
-                      onClick={() => navigate("/superadmin/requests")}
-                    >
-                      Cancel
-                    </button>
+                  <div className="sc-title">
+                    <span>SCHOOL CARD</span>
+                    <div className="sc-title-btn">
+                      <button
+                        className="btn fs"
+                        type="button"
+                        onClick={handleShow3}
+                      >
+                        <ArrowsPointingOutIcon
+                          width={20}
+                          height={20}
+                          color="black"
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </form>
+              </div>
             )}
           </div>
         </Col>
@@ -318,6 +330,16 @@ function SuperAdminViewRequestComponent() {
             Confirm
           </button>
         </Modal.Footer>
+      </Modal>
+      <Modal
+        className="modal-img-cont"
+        show={show3}
+        onHide={handleClose3}
+        centered
+      >
+        <Modal.Body className="modal-img">
+          <img src={request.schoolCard} alt="" />
+        </Modal.Body>
       </Modal>
     </>
   );
