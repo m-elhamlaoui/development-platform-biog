@@ -5,7 +5,7 @@ import cjeLogo from "../assets/cje-logo.png";
 import eaicLogo from "../assets/eaic-logo.png";
 import Rating from "./RatingComponent";
 
-function RankingsComponent() {
+function ClubsRankingsComponent() {
   return (
     <div className="container">
       <div className="row">
@@ -81,4 +81,4 @@ function RankingsComponent() {
   );
 }
 
-export default RankingsComponent;
+export default ClubsRankingsComponent;

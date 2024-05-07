@@ -206,6 +206,10 @@
   color: black;
 }
 
+.events {
+  margin-top: 2.5rem;
+}
+
 .rankings-btn {
   display: flex;
   flex-direction: column;
@@ -307,7 +311,6 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 1rem;
   color: black !important;
   margin-top: 3rem !important;
   margin-left: 7rem !important;
@@ -327,22 +330,37 @@
   gap: 0.3rem;
 }
 
+.see-more-upcomings {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-right: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
 .up-event-card {
   width: 100%;
   height: 8.5rem;
   border: 2px solid #d5d5d5;
   border-radius: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   overflow: hidden;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .up-event-card-date {
-  margin-left: 2.5rem;
+  margin-left: 3rem;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: black;
+  line-height: 1;
 }
 
 .up-event-card-date .num {
@@ -350,5 +368,126 @@
 }
 
 .up-event-card-date .mon {
-  font-size: 1.5rem;
+  font-size: 2rem;
+}
+
+.up-event-card-title {
+  width: 40rem;
+  margin-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: black;
+  line-height: 1;
+}
+
+.up-event-card-title .title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.up-event-card-title .date {
+  width: 92%;
+  font-size: 1rem;
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.up-event-card-banner {
+  width: 34%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -20px 0 60px 0 rgba(0, 0, 0, 0.1);
+}
+
+.up-event-card-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cont5 {
+  margin-top: 2rem;
+  margin-left: 6.5rem !important;
+}
+
+.calendar-img {
+  width: 60%;
+  height: 25.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(
+      to left,
+      #fff 30%,
+      rgba(255, 255, 255, 0) 70%
+    ),
+    url("https://storage.googleapis.com/unihive-files/calendar.png");
+  background-size: cover;
+}
+
+.try-calendar {
+  display: flex;
+  flex-direction: column;
+  margin-left: 52rem;
+  font-size: 4rem;
+  font-weight: 700;
+  color: black;
+  text-wrap: nowrap;
+}
+
+.try-calendar-btn {
+  width: 8rem;
+  height: 3.5rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: 1rem;
+  margin-left: 15rem;
+  border-radius: 7px !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.footer {
+  width: 100%;
+  height: 15rem;
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  color: white;
+  background-color: #186994;
+}
+
+.footer-about-contact {
+  display: flex;
+  gap: 2rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.footer-socials {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.socials {
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
 }

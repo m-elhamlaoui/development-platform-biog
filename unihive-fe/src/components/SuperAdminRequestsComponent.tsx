@@ -8,9 +8,16 @@ import Request from "../models/Request";
 
 function SuperAdminRequestsComponent() {
   const [requests, setRequests] = useState<Request[]>([]);
-  const token = localStorage.getItem("user") as string;
-  const isMyTokenExpired = isExpired(token);
+  var token: string = "";
   const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
 
   const [isLoading, setIsLoading] = useState(true);
   const [show1, setShow1] = useState(false);
@@ -19,10 +26,6 @@ function SuperAdminRequestsComponent() {
   const [requestName, setRequestName] = useState("");
 
   useEffect(() => {
-    if (isMyTokenExpired) {
-      localStorage.removeItem("user");
-      navigate("/login");
-    }
     ModelsService.listRequests(token)
       .then((response) => {
         setRequests(response.data);

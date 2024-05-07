@@ -15,9 +15,16 @@ function SuperAdminEditClubComponent() {
   const [schools, setSchools] = useState<School[]>([]);
   const [club, setClub] = useState<Club>(state.club);
   const [students, setStudents] = useState<Student[]>([]);
-  const token = localStorage.getItem("user") as string;
-  const isMyTokenExpired = isExpired(token);
+  var token: string = "";
   const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
 
   const [isAdding, setIsAdding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,10 +33,6 @@ function SuperAdminEditClubComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (isMyTokenExpired) {
-          localStorage.removeItem("user");
-          navigate("/login");
-        }
         const schoolsResponse = await ModelsService.listSchools(token);
         setSchools(schoolsResponse.data);
         const studentsResponse = await ModelsService.listStudents(token);

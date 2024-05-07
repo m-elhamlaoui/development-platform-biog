@@ -204,10 +204,9 @@ const acceptRequest = (token: string | null, id: string | null) =>
     },
   });
 
-const uploadFile = (token: string | null, file: any) =>
+const uploadFile = (file: any) =>
   axios.post(REST_API_URL_FILE_UPLOAD, file, {
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "multipart/form-data",
     },
   });

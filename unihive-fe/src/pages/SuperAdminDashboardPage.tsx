@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DashboardNavbarComponent from "../components/DashboardNavbarComponent";
 import "../styles/DashboardPage.css";
 import SuperAdminDashboardComponent from "../components/SuperAdminDashboardComponent";
@@ -19,9 +19,37 @@ import SuperAdminEditSchoolComponent from "../components/SuperAdminEditSchoolCom
 import SuperAdminAddStudentComponent from "../components/SuperAdminAddStudentComponent";
 import SuperAdminEditStudentComponent from "../components/SuperAdminEditStudentComponent";
 import SuperAdminViewRequestComponent from "../components/SuperAdminViewRequestComponent";
+import { isExpired } from "react-jwt";
+import { useEffect } from "react";
 
 function SuperAdminDashboardPage() {
   const { option } = useParams();
+  var token: string = "";
+  const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
+
+  const isMyTokenExpired = isExpired(token);
+
+  useEffect(() => {
+    if (isMyTokenExpired) {
+      if (localStorage.getItem("superadmin")) {
+        localStorage.removeItem("superadmin");
+      } else if (localStorage.getItem("admin")) {
+        localStorage.removeItem("admin");
+      } else if (localStorage.getItem("student")) {
+        localStorage.removeItem("student");
+      }
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
       <DashboardNavbarComponent name="Super Admin" />

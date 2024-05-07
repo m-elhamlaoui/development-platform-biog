@@ -16,9 +16,18 @@ function SuperAdminDashboardComponent() {
   const [schools, setSchools] = useState<School[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [requests, setRequests] = useState<Request[]>([]);
-  const token = localStorage.getItem("user") as string;
-  const isMyTokenExpired = isExpired(token);
+  var token: string = "";
   const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
+
+  const isMyTokenExpired = isExpired(token);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -50,7 +59,13 @@ function SuperAdminDashboardComponent() {
 
   useEffect(() => {
     if (isMyTokenExpired) {
-      localStorage.removeItem("user");
+      if (localStorage.getItem("superadmin")) {
+        localStorage.removeItem("superadmin");
+      } else if (localStorage.getItem("admin")) {
+        localStorage.removeItem("admin");
+      } else if (localStorage.getItem("student")) {
+        localStorage.removeItem("student");
+      }
       navigate("/login");
     }
     setIsLoading(true);

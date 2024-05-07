@@ -8,16 +8,20 @@ import School from "../models/School";
 
 function SuperAdminAddStudentComponent() {
   const [schools, setSchools] = useState<School[]>([]);
-  const token = localStorage.getItem("user") as string;
-  const isMyTokenExpired = isExpired(token);
+  var token: string = "";
   const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (isMyTokenExpired) {
-      localStorage.removeItem("user");
-      navigate("/login");
-    }
     ModelsService.listSchools(token)
       .then((response) => {
         setSchools(response.data);
@@ -77,7 +81,12 @@ function SuperAdminAddStudentComponent() {
                 </div>
                 <div className="info-row">
                   NUM APOGEE
-                  <input type="number" placeholder="num apogee" />
+                  <input
+                    type="number"
+                    placeholder="num apogee"
+                    min={0}
+                    max={99999999}
+                  />
                 </div>
                 <div className="info-row">
                   SCHOOL

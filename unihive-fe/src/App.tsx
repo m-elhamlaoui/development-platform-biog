@@ -5,9 +5,9 @@ import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
 import Event from "./pages/Events";
 import Contact from "./pages/ContactPage";
 import About from "./pages/AboutPage";
-import EventComponent from "./components/EventComponent";
-import ProfileHeader from "./components/ProfileHeader";
+import ForgottenPassword from "./auth/ForgottenPassword";
 import Profile from "./pages/ClubProfile";
+import Signup from "./auth/Signup";
 
 function App() {
   return (
@@ -24,6 +24,8 @@ function App() {
           />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgottenpassword" element={<ForgottenPassword />} />
           <Route path="/events" element={<Event />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />

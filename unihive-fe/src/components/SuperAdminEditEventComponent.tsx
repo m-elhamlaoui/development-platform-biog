@@ -12,9 +12,16 @@ function SuperAdminEditEventComponent() {
   const { state } = useLocation();
   const [clubs, setClubs] = useState<Club[]>([]);
   const [event, setEvent] = useState<Event>(state.event);
-  const token = localStorage.getItem("user") as string;
-  const isMyTokenExpired = isExpired(token);
+  var token: string = "";
   const navigate = useNavigate();
+
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
 
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
@@ -22,10 +29,6 @@ function SuperAdminEditEventComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (isMyTokenExpired) {
-          localStorage.removeItem("user");
-          navigate("/login");
-        }
         const clubsResponse = await ModelsService.listClubs(token);
         setClubs(clubsResponse.data);
         setIsLoading(false);
