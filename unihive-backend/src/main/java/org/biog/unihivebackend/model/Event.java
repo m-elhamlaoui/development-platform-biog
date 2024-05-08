@@ -3,6 +3,9 @@ package org.biog.unihivebackend.model;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,5 +50,11 @@ public class Event {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "club_id", referencedColumnName = "id", nullable = false)
-  private Club club_id;
+  @JsonBackReference(value = "club-event")
+  private Club club;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = Instant.now();
+  }
 }

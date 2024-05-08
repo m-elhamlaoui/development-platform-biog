@@ -21,34 +21,35 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-      .csrf(csrf -> csrf.disable())
-      .authorizeHttpRequests(requests ->
-        requests
-          .requestMatchers("/auth/authenticate", "/auth/forgotPassword")
-          .permitAll()
-          .requestMatchers("/auth/register/**")
-          .hasRole("SUPER_ADMIN")
-          .requestMatchers("/admin/**")
-          .hasAnyRole("ADMIN", "SUPER_ADMIN")
-          .requestMatchers("/club/**")
-          .hasAnyRole("CLUB", "SUPER_ADMIN")
-          .requestMatchers("/student/**")
-          .hasAnyRole("STUDENT", "SUPER_ADMIN")
-          .requestMatchers("/auth/changePassword")
-          .hasAnyRole("STUDENT", "CLUB", "ADMIN")
-          .requestMatchers("/**")
-          .hasRole("SUPER_ADMIN")
-          .anyRequest()
-          .authenticated()
-      )
-      .sessionManagement(management ->
-        management.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      )
-      .authenticationProvider(authenticationProvider)
-      .addFilterBefore(
-        jwtAuthFilter,
-        UsernamePasswordAuthenticationFilter.class
-      );
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers("/auth/authenticate")
+            .permitAll()
+            .requestMatchers("/auth/forgotPassword")
+            .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
+            .requestMatchers("/auth/register/**")
+            .hasRole("SUPER_ADMIN")
+            .requestMatchers("/admin/**", "/auth/register/admin")
+            .hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .requestMatchers("/club/**", "/auth/register/club")
+            .hasAnyRole("CLUB", "SUPER_ADMIN")
+            .requestMatchers("/student/**", "/auth/register/student")
+            .hasAnyRole("STUDENT", "SUPER_ADMIN")
+            .requestMatchers("/auth/changePassword")
+            .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
+            .requestMatchers("/superadmin/**")
+            .hasRole("SUPER_ADMIN")
+            .requestMatchers("/upload/**", "/download/**", "/delete/**", "/list/**", "/file/**")
+            .hasAnyRole("SUPER_ADMIN", "ADMIN", "CLUB", "STUDENT")
+            .requestMatchers("/**")
+            .hasRole("SUPER_ADMIN")
+            .anyRequest()
+            .authenticated())
+        .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authenticationProvider(authenticationProvider)
+        .addFilterBefore(
+            jwtAuthFilter,
+            UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

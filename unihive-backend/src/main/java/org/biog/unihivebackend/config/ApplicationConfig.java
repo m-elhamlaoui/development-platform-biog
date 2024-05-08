@@ -1,10 +1,16 @@
 package org.biog.unihivebackend.config;
 
-import java.util.Arrays;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.biog.unihivebackend.model.User;
-import org.biog.unihivebackend.repository.UserRepository;
+
+import org.biog.unihivebackend.model.Admin;
+import org.biog.unihivebackend.model.Club;
+import org.biog.unihivebackend.model.Student;
+import org.biog.unihivebackend.model.SuperAdmin;
+import org.biog.unihivebackend.repository.AdminRepository;
+import org.biog.unihivebackend.repository.ClubRepository;
+import org.biog.unihivebackend.repository.StudentRepository;
+import org.biog.unihivebackend.repository.SuperAdminRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,17 +26,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-  public final UserRepository userRepository;
+  public final AdminRepository adminRepository;
+  public final ClubRepository clubRepository;
+  public final StudentRepository studentRepository;
+  public final SuperAdminRepository superAdminRepository;
 
   @Bean
   public UserDetailsService userDetailsService() throws UsernameNotFoundException {
     return username -> {
-      Optional<User> user = userRepository.findByEmail(username);
-      if (user.isPresent() && 
-          Arrays.asList("SUPER_ADMIN", "ADMIN", "STUDENT", "CLUB").contains(user.get().getRole().toString())) {
-        return user.get();
+      Optional<Admin> admin = adminRepository.findByEmail(username);
+      if (admin.isPresent()) {
+        return admin.get();
       } else {
-        throw new UsernameNotFoundException("User not found");
+        Optional<Club> club = clubRepository.findByEmail(username);
+        if (club.isPresent()) {
+          return club.get();
+        } else {
+          Optional<Student> student = studentRepository.findByEmail(username);
+          if (student.isPresent()) {
+            return student.get();
+          } else {
+            Optional<SuperAdmin> superAdmin = superAdminRepository.findByEmail(username);
+            if (superAdmin.isPresent()) {
+              return superAdmin.get();
+            } else {
+              throw new UsernameNotFoundException("User not found");
+            }
+          }
+        }
       }
     };
   }
@@ -45,8 +68,7 @@ public class ApplicationConfig {
 
   @Bean
   public AuthenticationManager authenticationManager(
-    AuthenticationConfiguration config
-  ) throws Exception {
+      AuthenticationConfiguration config) throws Exception {
     return config.getAuthenticationManager();
   }
 
