@@ -54,6 +54,9 @@ public class Request implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "school_name", nullable = false)
+    private String schoolName;
+
     @Column(name = "school_card", nullable = false)
     private String schoolCard;
 

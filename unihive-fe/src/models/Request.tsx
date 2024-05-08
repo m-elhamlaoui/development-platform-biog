@@ -1,7 +1,3 @@
-import Club from "./Club";
-import { Role } from "./Role";
-import School from "./School";
-
 interface Request {
   id: string;
   createdAt: Date;
@@ -12,6 +8,7 @@ interface Request {
   email: string;
   password: string;
   schoolCard: string;
+  schoolName: string;
 }
 
 export default Request;

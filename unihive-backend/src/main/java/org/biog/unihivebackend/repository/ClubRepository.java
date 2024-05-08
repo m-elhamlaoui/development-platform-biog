@@ -12,4 +12,5 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
     List<Club> findBySchool(School school);
 
     Optional<Club> findByEmail(String email);
+
 }

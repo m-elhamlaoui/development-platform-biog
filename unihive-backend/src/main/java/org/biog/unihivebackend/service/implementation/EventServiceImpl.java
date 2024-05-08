@@ -9,6 +9,7 @@ import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.School;
+import org.biog.unihivebackend.repository.ClubRepository;
 import org.biog.unihivebackend.repository.EventRepository;
 import org.biog.unihivebackend.repository.SchoolRepository;
 import org.biog.unihivebackend.service.EventService;
@@ -23,7 +24,14 @@ import lombok.AllArgsConstructor;
 public class EventServiceImpl implements EventService {
 
     private final SchoolRepository schoolRepository;
+    private final ClubRepository clubRepository;
     private final EventRepository eventRepository;
+
+    @Override
+    public List<Event> getAllByStudent() {
+       return eventRepository.findAll();
+
+    }
 
     @Override
     public List<Event> getAll(UUID... schoolId) throws AccessDeniedException {
@@ -50,13 +58,32 @@ public class EventServiceImpl implements EventService {
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
         if (!isAdmin) {
-            return eventRepository.save(event);
+            Event newevent = new Event();
+            newevent.setEventName(event.getEventName());
+            newevent.setEventDescription(event.getEventDescription());
+            newevent.setEventCategory(event.getEventCategory());
+            newevent.setEventLocation(event.getEventLocation());
+            newevent.setStartTime(event.getStartTime());
+            newevent.setEndTime(event.getEndTime());
+            newevent.setEventBanner(event.getEventBanner());
+            newevent.setClub(event.getClub());
+            return eventRepository.save(newevent);
         }
         UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
         if (!schoolId[0].equals(loggedInUserSchoolId)) {
             throw new AccessDeniedException("You do not have permission to add events in this school");
         }
-        return eventRepository.save(event);
+        Event newevent = new Event();
+        newevent.setEventName(event.getEventName());
+        newevent.setEventDescription(event.getEventDescription());
+        newevent.setEventCategory(event.getEventCategory());
+        newevent.setStartTime(event.getStartTime());
+        newevent.setEndTime(event.getEndTime());
+        newevent.setEventBanner(event.getEventBanner());
+        newevent.setClub(clubRepository.findById(event.getClub().getId()).orElseThrow(
+                () -> new NotFoundException(
+                        "Club not found with id " + event.getClub().getId())));
+        return eventRepository.save(newevent);
     }
 
     @Override
@@ -77,7 +104,9 @@ public class EventServiceImpl implements EventService {
             oldevent.setEventBanner(newevent.getEventBanner());
             oldevent.setEventRating(newevent.getEventRating());
             oldevent.setRatingCount(newevent.getRatingCount());
-            oldevent.setClub(newevent.getClub());
+            oldevent.setClub(clubRepository.findById(newevent.getClub().getId()).orElseThrow(
+                    () -> new NotFoundException(
+                            "Club not found with id " + newevent.getClub().getId())));
             return eventRepository.save(oldevent);
         }
         UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
@@ -93,7 +122,9 @@ public class EventServiceImpl implements EventService {
         oldevent.setEventBanner(newevent.getEventBanner());
         oldevent.setEventRating(newevent.getEventRating());
         oldevent.setRatingCount(newevent.getRatingCount());
-        oldevent.setClub(newevent.getClub());
+        oldevent.setClub(clubRepository.findById(newevent.getClub().getId()).orElseThrow(
+                () -> new NotFoundException(
+                        "Club not found with id " + newevent.getClub().getId())));
         return eventRepository.save(oldevent);
     }
 

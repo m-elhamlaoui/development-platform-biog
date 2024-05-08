@@ -5,8 +5,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,16 +34,16 @@ public class School {
   @Column(name = "school_address", nullable = false)
   private String schoolAddress;
 
-  @OneToOne(mappedBy = "school")
-  @JsonBackReference(value = "school-admin")
+  @OneToOne(mappedBy = "school", cascade = CascadeType.ALL)
+  @JsonIgnore
   private Admin admin;
 
-  @OneToMany(mappedBy = "school")
-  @JsonManagedReference(value = "school-club")
+  @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+  @JsonIgnore
   private List<Club> clubs;
 
-  @OneToMany(mappedBy = "school")
-  @JsonManagedReference(value = "school-student")
+  @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+  @JsonIgnore
   private List<Student> students;
 
   @PrePersist

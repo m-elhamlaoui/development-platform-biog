@@ -4,6 +4,7 @@ import ch.qos.logback.core.spi.ErrorCodes;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import org.biog.unihivebackend.config.JwtAuthenticationFilter;
@@ -26,8 +27,10 @@ import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -84,7 +87,6 @@ public class AuthenticationService {
         .firstName(request.getFirstName())
         .cne(request.getCne())
         .numApogee(request.getNumApogee())
-        .profileImage(request.getProfileImage())
         .school(schoolRepository.findById(request.getSchool()).orElseThrow(
             () -> new NotFoundException(
                 "School not found with id " + request.getSchool())))
@@ -112,7 +114,8 @@ public class AuthenticationService {
     return AuthenticationResponse.builder().token(jwtToken).build();
   }
 
-  public ResponseEntity<String> signup(RegisterRequest request) {
+  public ResponseEntity<String> signup(RegisterRequest request)
+      throws MessagingException, UnsupportedEncodingException {
     var requestModel = Request
         .builder()
         .email(request.getEmail())
@@ -121,30 +124,74 @@ public class AuthenticationService {
         .firstName(request.getFirstName())
         .cne(request.getCne())
         .numApogee(request.getNumApogee())
+        .schoolName(request.getSchoolName())
         .schoolCard(request.getSchoolCard())
         .build();
 
     requestRepository.save(requestModel);
+    emailService.sendEmail(
+        request.getEmail(),
+        "Request sent successfully",
+        "Congratulations, your sign up request has been sent successfully. You will be notified once your request is accepted.");
     return ResponseEntity.ok("Sign Up request sent successfully");
   }
 
-  public ResponseEntity<String> acceptRequest(UUID id, RegisterRequest request) {
+  public ResponseEntity<String> acceptRequest(UUID id, UUID... schoolId)
+      throws MessagingException, UnsupportedEncodingException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    boolean isAdmin = authentication.getAuthorities().stream()
+        .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+    if (!isAdmin) {
+      var requestModel = requestRepository.findById(id).orElseThrow(
+          () -> new NotFoundException("Request not found with id " + id));
+      var student = Student
+          .builder()
+          .email(requestModel.getEmail())
+          .password(requestModel.getPassword())
+          .lastName(requestModel.getLastName())
+          .firstName(requestModel.getFirstName())
+          .cne(requestModel.getCne())
+          .numApogee(requestModel.getNumApogee())
+          .school(schoolRepository.findBySchoolName(requestModel.getSchoolName()).orElseThrow(
+              () -> new NotFoundException(
+                  "School not found with name " + requestModel.getSchoolName())))
+          .profileImage("https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg")
+          .build();
+      studentRepository.save(student);
+      requestRepository.delete(requestModel);
+      emailService.sendEmail(
+          requestModel.getEmail(),
+          "Request Accepted!",
+          "Congratulations, your sign up request has been accepted. You can now log in.");
+      return ResponseEntity.ok("Request accepted successfully");
+    }
+    UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
+    if (!schoolId[0].equals(loggedInUserSchoolId)) {
+      throw new AccessDeniedException(
+          "You do not have permission to accept sign up requests in this school");
+    }
     var requestModel = requestRepository.findById(id).orElseThrow(
         () -> new NotFoundException("Request not found with id " + id));
     var student = Student
         .builder()
-        .email(request.getEmail())
-        .password(request.getPassword())
-        .lastName(request.getLastName())
-        .firstName(request.getFirstName())
-        .cne(request.getCne())
-        .numApogee(request.getNumApogee())
-        .school(schoolRepository.findById(request.getSchool()).orElseThrow(
+        .email(requestModel.getEmail())
+        .password(requestModel.getPassword())
+        .lastName(requestModel.getLastName())
+        .firstName(requestModel.getFirstName())
+        .cne(requestModel.getCne())
+        .numApogee(requestModel.getNumApogee())
+        .school(schoolRepository.findBySchoolName(requestModel.getSchoolName()).orElseThrow(
             () -> new NotFoundException(
-                "School not found with id " + request.getSchool())))
+                "School not found with name " + requestModel.getSchoolName())))
+        .profileImage("https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg")
         .build();
     studentRepository.save(student);
     requestRepository.delete(requestModel);
+    emailService.sendEmail(
+        requestModel.getEmail(),
+        "Request Accepted!",
+        "Congratulations, your sign up request has been accepted. You can now log in.");
     return ResponseEntity.ok("Request accepted successfully");
   }
 
@@ -179,15 +226,6 @@ public class AuthenticationService {
         }
       }
     }
-  }
-
-  public ResponseEntity<String> logout() {
-    try {
-      SecurityContextHolder.getContext().setAuthentication(null);
-    } catch (Exception e) {
-      ResponseEntity.badRequest().body("Logout failed");
-    }
-    return ResponseEntity.ok("Logout successful");
   }
 
   public AuthenticationResponse changePassword(AuthenticationRequest request) {
@@ -294,14 +332,14 @@ public class AuthenticationService {
   }
 
   public AuthenticationResponse forgotPassword(AuthenticationRequest request)
-      throws MessagingException {
+      throws MessagingException, UnsupportedEncodingException {
     var admin = adminRepository.findByEmail(request.getEmail());
     if (admin.isPresent()) {
       String newPassword = generatePassayPassword();
       admin.get().setPassword(passwordEncoder.encode(newPassword));
       emailService.sendEmail(
           request.getEmail(),
-          "UniHive Corporation",
+          "Password Reset",
           "Your new password is " +
               newPassword +
               "." +
@@ -316,7 +354,7 @@ public class AuthenticationService {
         student.get().setPassword(passwordEncoder.encode(newPassword));
         emailService.sendEmail(
             request.getEmail(),
-            "UniHive Corporation",
+            "Password Reset",
             "Your new password is " +
                 newPassword +
                 "." +
@@ -331,7 +369,7 @@ public class AuthenticationService {
           club.get().setPassword(passwordEncoder.encode(newPassword));
           emailService.sendEmail(
               request.getEmail(),
-              "UniHive Corporation",
+              "Password Reset",
               "Your new password is " +
                   newPassword +
                   "." +
@@ -346,7 +384,7 @@ public class AuthenticationService {
             superAdmin.get().setPassword(passwordEncoder.encode(newPassword));
             emailService.sendEmail(
                 request.getEmail(),
-                "UniHive Corporation",
+                "Password Reset",
                 "Your new password is " +
                     newPassword +
                     "." +

@@ -6,6 +6,7 @@ interface Event {
   eventCategory: string;
   eventName: string;
   eventDescription: string;
+  eventLocation: string;
   eventBanner: string;
   startTime?: Date;
   endTime?: Date;

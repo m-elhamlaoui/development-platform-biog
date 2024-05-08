@@ -2,10 +2,16 @@ package org.biog.unihivebackend.auth;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+
+import java.io.UnsupportedEncodingException;
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +60,7 @@ public class AuthenticationController {
 
   @PostMapping("/forgotPassword")
   public ResponseEntity<AuthenticationResponse> forgotPassword(
-      @RequestBody AuthenticationRequest request) throws MessagingException {
+      @RequestBody AuthenticationRequest request) throws MessagingException, UnsupportedEncodingException {
     return ResponseEntity.ok(service.forgotPassword(request));
   }
 
@@ -66,12 +72,14 @@ public class AuthenticationController {
 
   @PostMapping("/signup")
   public ResponseEntity<String> signUp(
-      @RequestBody RegisterRequest request) {
+      @RequestBody RegisterRequest request) throws MessagingException, UnsupportedEncodingException {
     return service.signup(request);
   }
 
-  @PostMapping("/logout")
-  public ResponseEntity<String> logout() {
-    return service.logout();
+  @PutMapping("/acceptrequest/{id}")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+  public ResponseEntity<String> acceptRequest(
+      @PathVariable UUID id) throws MessagingException, UnsupportedEncodingException {
+    return service.acceptRequest(id);
   }
 }

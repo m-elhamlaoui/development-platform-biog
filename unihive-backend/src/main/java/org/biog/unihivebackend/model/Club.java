@@ -11,8 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,16 +56,14 @@ public class Club implements UserDetails {
 
   @ManyToMany
   @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "club_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
-  @JsonBackReference(value = "club-student")
   private List<Student> students;
 
-  @OneToMany(mappedBy = "club")
-  @JsonManagedReference(value = "club-event")
+  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+  @JsonIgnore
   private List<Event> events;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
-  @JsonBackReference(value = "school-club")
   private School school;
 
   @Column(name = "created_at", nullable = false)
