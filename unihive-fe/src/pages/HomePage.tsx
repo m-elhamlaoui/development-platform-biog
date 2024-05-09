@@ -14,6 +14,7 @@ import ClubService from "../services/ClubService";
 import Club from "../models/Club";
 import EventService from "../services/EventService";
 import Event from "../models/Event";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -21,6 +22,7 @@ function HomePage() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     var token: string = "";
@@ -37,6 +39,8 @@ function HomePage() {
 
     if (isMyTokenExpired) {
       setIsLogged(false);
+      localStorage.removeItem("student");
+      navigate("/login");
     }
 
     const decodedToken: any = decodeToken(token);
