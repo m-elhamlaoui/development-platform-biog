@@ -65,6 +65,7 @@ public class AuthenticationController {
   }
 
   @PostMapping("/register/superadmin")
+  @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<AuthenticationResponse> registerSuperAdmin(
       @RequestBody RegisterRequest request) {
     return ResponseEntity.ok(service.registerSuperAdmin(request));
