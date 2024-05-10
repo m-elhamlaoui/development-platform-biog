@@ -2,7 +2,8 @@ import axios from "axios";
 const REST_API_URL_EVENTS = "http://localhost:8080/student/events";
 const REST_API_URL_CLUB = "http://localhost:8080/student/club";
 const REST_API_URL_STUDENT_GET = "http://localhost:8080/student/email/";
-const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/upstudent/";
+const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/";
+const REST_API_URL_STUDENT_CLUBS = "http://localhost:8080/student/clubs/";
 
 export const getStudent = (token: string | null, id: string) =>
   axios.get(REST_API_URL_STUDENT_GET + id, {
@@ -12,24 +13,32 @@ export const getStudent = (token: string | null, id: string) =>
 export const updateStudentEmail = (
   token: string | null,
   id: string,
-  email: string
+  data: string
 ) =>
-  axios.put(REST_API_URL_STUDENT_UPDATE + id + "/email/" + email, null, {
+  axios.put(REST_API_URL_STUDENT_UPDATE + "upemail/" + id, null, {
+    params: { email: data },
     headers: { Authorization: `Bearer ${token}` },
   });
 
 export const updateStudentProfileImage = (
   token: string | null,
   id: string,
-  profileImage: string
+  data: string
 ) =>
-  axios.put(
-    REST_API_URL_STUDENT_UPDATE + id + "/profileimage/" + profileImage,
-    null,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
+  axios.put(REST_API_URL_STUDENT_UPDATE + "upprofileimage/" + id, null, {
+    params: { profileImage: data },
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const updateStudentPassword = (token: string | null, data: any) =>
+  axios.put(REST_API_URL_STUDENT_UPDATE + "uppassword/", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getClubs = (token: string | null, id: string) =>
+  axios.get(REST_API_URL_STUDENT_CLUBS + id, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
 export const getEvents = (token: string | null) =>
   axios.get(REST_API_URL_EVENTS, {
@@ -51,5 +60,7 @@ const StudentService = {
   getStudent,
   updateStudentEmail,
   updateStudentProfileImage,
+  getClubs,
+  updateStudentPassword,
 };
 export default StudentService;

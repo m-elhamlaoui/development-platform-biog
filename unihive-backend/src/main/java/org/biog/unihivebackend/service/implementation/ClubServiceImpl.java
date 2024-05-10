@@ -31,13 +31,15 @@ public class ClubServiceImpl implements ClubService {
 	private final SchoolRepository schoolRepository;
 	private final StudentRepository studentRepository;
 	private final PasswordEncoder passwordEncoder;
+
 	@Override
-	public List <Event> getAllEventsByClub(UUID id){
+	public List<Event> getAllEventsByClub(UUID id) {
 		return clubRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Club with id " + id + " not found")).getEvents();
 
 	}
-	public Club getClubByStudent(UUID id){
+
+	public Club getClubByStudent(UUID id) {
 		return clubRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Club with id " + id + " not found"));
 	}
@@ -112,7 +114,6 @@ public class ClubServiceImpl implements ClubService {
 			clubRepository.deleteById(id);
 		}
 	}
-
 
 	@Override
 	public Club getClub(UUID id, UUID... schoolId) throws AccessDeniedException {
@@ -287,5 +288,11 @@ public class ClubServiceImpl implements ClubService {
 									.toArray(Student[]::new)));
 			clubRepository.save(club);
 		}
+	}
+
+	@Override
+	public List<Club> getClubsByStudent(UUID id) {
+		return studentRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Student with id " + id + " not found")).getClubs();
 	}
 }

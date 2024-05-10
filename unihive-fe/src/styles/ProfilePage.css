@@ -283,10 +283,12 @@
 }
 
 .club-title {
+  width: 22rem;
   font-size: 2rem;
   font-weight: 600;
   color: black;
   margin-left: 2rem;
+  text-wrap: nowrap;
 }
 
 .unfollow-btn {
@@ -297,7 +299,7 @@
   font-size: 1.2rem !important;
   font-weight: 600 !important;
   height: 2.5rem !important;
-  margin-left: 11rem;
+  margin-left: 3.5rem;
 }
 
 .unfollow-btn:hover {

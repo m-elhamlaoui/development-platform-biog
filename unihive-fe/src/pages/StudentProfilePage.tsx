@@ -9,11 +9,13 @@ import ScrollToTop from "react-scroll-to-top";
 import { ArrowUpIcon } from "@heroicons/react/24/solid";
 import StudentProfileComponent from "../components/StudentProfileComponent";
 import { useNavigate } from "react-router-dom";
+import Club from "../models/Club";
 
 function StudentProfilePage() {
   const [isLogged, setIsLogged] = useState(false);
   const [student, setStudent] = useState<Student>();
   const [isLoading, setIsLoading] = useState(true);
+  const [clubs, setClubs] = useState<Club[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,6 +52,13 @@ function StudentProfilePage() {
             decodedToken.sub
           );
           setStudent(studentResponse.data);
+          if (studentResponse.data) {
+            const ClubsResponse = await StudentService.getClubs(
+              token,
+              studentResponse.data.id
+            );
+            setClubs(ClubsResponse.data);
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -68,15 +77,18 @@ function StudentProfilePage() {
       ) : (
         <>
           <HomeNavbar loggedin={isLogged} student={student!} />
-          <StudentProfileComponent student={student!} />
+          <StudentProfileComponent student={student!} clubs={clubs} />
           <Footer />
           <ScrollToTop
             smooth
             component={
-              <button
+              <div
                 style={{
                   width: "3rem",
                   height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   backgroundColor: "#46bfff",
                   borderRadius: "0.5rem",
                   border: "none",
@@ -85,7 +97,7 @@ function StudentProfilePage() {
                 }}
               >
                 <ArrowUpIcon width={30} height={30} color="white" />
-              </button>
+              </div>
             }
             style={{
               display: "flex",

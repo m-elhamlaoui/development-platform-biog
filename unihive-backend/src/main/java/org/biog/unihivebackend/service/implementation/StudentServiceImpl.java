@@ -4,6 +4,8 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
+import org.biog.unihivebackend.auth.AuthenticationResponse;
+import org.biog.unihivebackend.config.JwtService;
 import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
@@ -24,6 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
         private final StudentRepository studentRepository;
         private SchoolRepository schoolRepository;
+        private final JwtService jwtService;
 
         @Override
         public Student updateStudent(UUID id, Student newstudent, UUID... schoolId) throws AccessDeniedException {
@@ -145,11 +148,13 @@ public class StudentServiceImpl implements StudentService {
         }
 
         @Override
-        public Student updateStudentEmail(UUID id, String email) {
+        public AuthenticationResponse updateStudentEmail(UUID id, String email) {
                 Student student = studentRepository.findById(id).orElseThrow(
                                 () -> new NotFoundException("Student with id " + id + " not found"));
                 student.setEmail(email);
-                return studentRepository.save(student);
+                studentRepository.save(student);
+                var jwtToken = jwtService.generateToken(student);
+                return AuthenticationResponse.builder().token(jwtToken).build();
         }
 
         @Override
