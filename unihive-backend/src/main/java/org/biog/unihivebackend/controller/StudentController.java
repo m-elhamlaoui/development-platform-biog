@@ -61,13 +61,13 @@ public class StudentController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @PutMapping("/upemail/{id}")
-    Student updateStudentByEmail(@PathVariable UUID id, @RequestBody String email) {
+    AuthenticationResponse updateStudentByEmail(@PathVariable UUID id, @RequestParam String email) {
         return studentService.updateStudentEmail(id, email);
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @PutMapping("/upprofileimage/{id}")
-    Student updateStudentProfileImage(@PathVariable UUID id, @RequestBody String profileImage) {
+    Student updateStudentProfileImage(@PathVariable UUID id, @RequestParam String profileImage) {
         return studentService.updateStudentProfileImage(id, profileImage);
     }
 
@@ -75,6 +75,12 @@ public class StudentController {
     @PutMapping("/uppassword")
     AuthenticationResponse updateStudentPassword(@RequestBody AuthenticationRequest password) {
         return authenticationService.changePassword(password);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @GetMapping("/clubs/{id}")
+    List<Club> getClubsByStudent(@PathVariable UUID id) {
+        return clubService.getClubsByStudent(id);
     }
 
     @PreAuthorize("hasRole('STUDENT')")
