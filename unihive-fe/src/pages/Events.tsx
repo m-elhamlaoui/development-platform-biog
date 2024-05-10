@@ -7,6 +7,7 @@ import EventService from "../services/StudentService";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import Sidebar from "../components/sideBar";
+import FooterComponent from "../components/FooterComponent";
 
 function Event() {
   
@@ -20,6 +21,8 @@ function Event() {
       <div style={{display:'flex', flexDirection:'row'}}>
       <EventComponent />
       </div>
+      <FooterComponent/>
+
     </>
   );
 }

@@ -11,8 +11,15 @@ function EventComponent() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filterEvent, setFilterEvent] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
+  var token: string = "";
 
-  const token = localStorage.getItem("user") as string;
+  if (localStorage.getItem("superadmin")) {
+    token = localStorage.getItem("superadmin") as string;
+  } else if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
+  } else if (localStorage.getItem("student")) {
+    token = localStorage.getItem("student") as string;
+  }
   const isMyTokenExpired = isExpired(token);
   const navigate = useNavigate();
 

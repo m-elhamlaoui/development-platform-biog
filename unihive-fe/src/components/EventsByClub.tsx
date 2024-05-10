@@ -12,7 +12,14 @@ function EventsByClub() {
 
 
     const [events, setEvents] = useState<Event[]>([]);
-    const token = localStorage.getItem("user") as string;
+    var token: string = "";
+    if (localStorage.getItem("superadmin")) {
+      token = localStorage.getItem("superadmin") as string;
+    } else if (localStorage.getItem("admin")) {
+      token = localStorage.getItem("admin") as string;
+    } else if (localStorage.getItem("student")) {
+      token = localStorage.getItem("student") as string;
+    }
     const isMyTokenExpired = isExpired(token);
     const navigate = useNavigate();
   
