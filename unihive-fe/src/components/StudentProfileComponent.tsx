@@ -5,30 +5,40 @@ import {
   Cog6ToothIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/eitc-logo.png";
+import Student from "../models/Student";
+import StudentService from "../services/StudentService";
 
-function StudentProfileComponent() {
+function StudentProfileComponent(props: { student: Student }) {
   const [filetext, setFiletext] = useState("Choose Image...");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [email, setEmail] = useState(props.student.email);
+  const [profileImage, setProfileImage] = useState(props.student.profileImage);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const token = localStorage.getItem("student");
+  const student = props.student;
+
   return (
     <Container fluid className="cont6">
       <Row className="student-profile">
         <Col className="profile-dash-1 col-custom">
           <div className="pfp">
-            <img
-              src="https://img.uhdpaper.com/wallpaper/ninja-kamui-oni-mask-joe-higan-256@1@o-thumb.jpg?dl"
-              alt=""
-            />
+            <img src={student.profileImage} alt="" />
           </div>
-          <div className="username">Username</div>
+          <div className="username">
+            {student.firstName + " " + student.lastName}
+          </div>
           <div className="school-city">
             <div className="titles">
               <span>School</span>
               <span>City</span>
             </div>
             <div className="sc-info">
-              <span>ENSIAS</span>
-              <span>RABAT</span>
+              <span>{student.school.schoolName}</span>
+              <span>{student.school.schoolCity}</span>
             </div>
           </div>
           <div className="logout">
@@ -70,7 +80,12 @@ function StudentProfileComponent() {
           <div className="profile-info">
             <div className="profile-info-row">
               Email Address
-              <input type="email" placeholder="email" />
+              <input
+                type="email"
+                placeholder="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="profile-info-row">
               Profile Image
@@ -114,12 +129,12 @@ function StudentProfileComponent() {
               Change Password
             </div>
             <div className="profile-info-row">
-              Password
-              <input type="password" placeholder="password" />
+              Old Password
+              <input type="password" placeholder="old password" />
             </div>
             <div className="profile-info-row">
-              Confirm Password
-              <input type="password" placeholder="confirm password" />
+              New Password
+              <input type="password" placeholder="new password" />
             </div>
             <div className="profile-info-btn">
               <button className="btn save-save-2" type="button">
@@ -132,33 +147,17 @@ function StudentProfileComponent() {
       <div className="followers">
         <span className="follow-title">Clubs you're following</span>
         <div className="clubs">
-          <div className="club-item">
-            <div className="club-logo">
-              <img src={logo} alt="club logo" />
+          {student.clubs.map((club) => (
+            <div className="club-item">
+              <div className="club-logo">
+                <img src={club.clubLogo} alt="club logo" />
+              </div>
+              <span className="club-title">{club.clubName}</span>
+              <button className="btn unfollow-btn" type="button">
+                Unfollow
+              </button>
             </div>
-            <span className="club-title">ENSIAS IT CLUB</span>
-            <button className="btn unfollow-btn" type="button">
-              Unfollow
-            </button>
-          </div>
-          <div className="club-item">
-            <div className="club-logo">
-              <img src={logo} alt="club logo" />
-            </div>
-            <span className="club-title">ENSIAS IT CLUB</span>
-            <button className="btn unfollow-btn" type="button">
-              Unfollow
-            </button>
-          </div>
-          <div className="club-item">
-            <div className="club-logo">
-              <img src={logo} alt="club logo" />
-            </div>
-            <span className="club-title">ENSIAS IT CLUB</span>
-            <button className="btn unfollow-btn" type="button">
-              Unfollow
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </Container>

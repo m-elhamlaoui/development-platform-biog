@@ -22,4 +22,8 @@ public interface StudentService {
         School getSchoolByStudent(UUID id);
 
         List<Club> getClubsByFollower(UUID id, UUID... schoolId) throws AccessDeniedException;
+
+        Student updateStudentEmail(UUID id, String email);
+
+        Student updateStudentProfileImage(UUID id, String profileImage);
 }

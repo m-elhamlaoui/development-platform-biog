@@ -68,7 +68,7 @@ function StudentProfilePage() {
       ) : (
         <>
           <HomeNavbar loggedin={isLogged} student={student!} />
-          <StudentProfileComponent />
+          <StudentProfileComponent student={student!} />
           <Footer />
           <ScrollToTop
             smooth

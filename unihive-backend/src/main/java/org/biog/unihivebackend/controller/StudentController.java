@@ -1,6 +1,10 @@
 package org.biog.unihivebackend.controller;
 
 import lombok.AllArgsConstructor;
+
+import org.biog.unihivebackend.auth.AuthenticationRequest;
+import org.biog.unihivebackend.auth.AuthenticationResponse;
+import org.biog.unihivebackend.auth.AuthenticationService;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.Student;
@@ -22,6 +26,7 @@ public class StudentController {
     private final EventService eventService;
     private final ClubService clubService;
     private final StudentService studentService;
+    private final AuthenticationService authenticationService;
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/{id}")
@@ -51,6 +56,24 @@ public class StudentController {
     @GetMapping("/club/{id}/events")
     List<Event> getAllEventsByClub(@PathVariable UUID id) {
         return clubService.getAllEventsByClub(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PutMapping("/upemail/{id}")
+    Student updateStudentByEmail(@PathVariable UUID id, @RequestBody String email) {
+        return studentService.updateStudentEmail(id, email);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PutMapping("/upprofileimage/{id}")
+    Student updateStudentProfileImage(@PathVariable UUID id, @RequestBody String profileImage) {
+        return studentService.updateStudentProfileImage(id, profileImage);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PutMapping("/uppassword")
+    AuthenticationResponse updateStudentPassword(@RequestBody AuthenticationRequest password) {
+        return authenticationService.changePassword(password);
     }
 
     @PreAuthorize("hasRole('STUDENT')")
