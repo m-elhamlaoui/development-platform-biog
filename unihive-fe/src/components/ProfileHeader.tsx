@@ -22,39 +22,59 @@ function ProfileHeader() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isMyTokenExpired) {
-      localStorage.removeItem("user");
-      navigate("/login");
-    }
     if (id) {
-        StudentService.getClub(token, id)
-          .then((response) => {
-            setClub(response.data);
-            console.log(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-    }, [id]); 
-  
-    if (!club) {
-      return null;
+      StudentService.getClub(token, id)
+        .then((response) => {
+          setClub(response.data);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  
-     return (
-   <div className="container" style={{ marginLeft:'200px'}}  >
-        <div style={{ position: 'relative',  height: '350px', width:'900px',borderRadius:'20px' }} >
+  }, [id]);
+
+  if (!club) {
+    return null;
+  }
+
+  return (
+    <div className="container" style={{ marginLeft: "200px" }}>
+      <div
+        style={{
+          position: "relative",
+          height: "350px",
+          width: "900px",
+          borderRadius: "20px",
+        }}
+      >
         <img
-            src={club.clubBanner}
-            className="background-image"
-            style={{  width: '100%', height: '100%',objectFit: 'cover', position: 'absolute', top: 0, left: 0 ,borderRadius:'20px'}}
+          src={club.clubBanner}
+          className="background-image"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            borderRadius: "20px",
+          }}
         />
         <img
-            src={club.clubLogo}
-            alt="Profile"
-            className="profile-image"
-            style={{ width: '150px', height: '150px', borderRadius: '50%', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-400px, 80px)', zIndex: '2' }}
+          src={club.clubLogo}
+          alt="Profile"
+          className="profile-image"
+          style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-400px, 80px)",
+            zIndex: "2",
+          }}
         />
         
   </div>

@@ -1,28 +1,20 @@
 import HomeNavbar from "../components/HomeNavbarComponent";
-import Trending from "../components/TrendingComponent";
-import ClubsRankings from "../components/ClubsRankingsComponent";
-import EventsRankings from "../components/EventsRankingsComponent";
-import UpcomingEvents from "../components/UpcomingEventsComponent";
-import TryCalendar from "../components/TryCalendarComponent";
 import Footer from "../components/FooterComponent";
 import { decodeToken, isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import Student from "../models/Student";
 import StudentService from "../services/StudentService";
 import { InfinitySpin } from "react-loader-spinner";
-import ClubService from "../services/ClubService";
-import Club from "../models/Club";
-import EventService from "../services/EventService";
-import Event from "../models/Event";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowUpIcon } from "@heroicons/react/24/solid";
+import StudentProfileComponent from "../components/StudentProfileComponent";
+import { useNavigate } from "react-router-dom";
 
-function HomePage() {
+function StudentProfilePage() {
   const [isLogged, setIsLogged] = useState(false);
   const [student, setStudent] = useState<Student>();
-  const [clubs, setClubs] = useState<Club[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     var token: string = "";
@@ -41,7 +33,9 @@ function HomePage() {
       setIsLogged(false);
       if (token) {
         localStorage.removeItem("student");
-        window.location.reload();
+        navigate("/home");
+      } else {
+        navigate("/home");
       }
     }
 
@@ -57,10 +51,6 @@ function HomePage() {
           );
           setStudent(studentResponse.data);
         }
-        const clubsResponse = await ClubService.getClubs();
-        setClubs(clubsResponse.data);
-        const eventsResponse = await EventService.getEvents();
-        setEvents(eventsResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -77,12 +67,8 @@ function HomePage() {
         </div>
       ) : (
         <>
-          <HomeNavbar loggedin={isLogged} student={student!} home />
-          <Trending events={events} />
-          <ClubsRankings clubs={clubs} />
-          <UpcomingEvents events={events} />
-          <EventsRankings events={events} />
-          <TryCalendar />
+          <HomeNavbar loggedin={isLogged} student={student!} />
+          <StudentProfileComponent student={student!} />
           <Footer />
           <ScrollToTop
             smooth
@@ -117,4 +103,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default StudentProfilePage;

@@ -138,4 +138,25 @@ public class StudentServiceImpl implements StudentService {
                                 .getClubsBySchool(schoolId[0]);
         }
 
+        @Override
+        public Student getStudentByEmail(String email) {
+                return studentRepository.findByEmail(email).orElseThrow(
+                                () -> new NotFoundException("Student with email " + email + " not found"));
+        }
+
+        @Override
+        public Student updateStudentEmail(UUID id, String email) {
+                Student student = studentRepository.findById(id).orElseThrow(
+                                () -> new NotFoundException("Student with id " + id + " not found"));
+                student.setEmail(email);
+                return studentRepository.save(student);
+        }
+
+        @Override
+        public Student updateStudentProfileImage(UUID id, String profileImage) {
+                Student student = studentRepository.findById(id).orElseThrow(
+                                () -> new NotFoundException("Student with id " + id + " not found"));
+                student.setProfileImage(profileImage);
+                return studentRepository.save(student);
+        }
 }

@@ -110,6 +110,7 @@
 .desc {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 0.3rem;
 }
 
@@ -141,12 +142,17 @@
 }
 
 .slide-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 750px;
+  height: 350px;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.slide-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .see-event-btn {
@@ -337,6 +343,9 @@
   font-size: 1.1rem;
   font-weight: 400;
   margin-right: 0.6rem;
+}
+
+.see-more-upcomings span {
   cursor: pointer;
   user-select: none;
 }
@@ -384,8 +393,10 @@
 }
 
 .up-event-card-title .title {
+  width: 90%;
   font-size: 2rem;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .up-event-card-title .date {
@@ -405,6 +416,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: -20px 0 60px 0 rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .up-event-card-banner img {
@@ -416,6 +428,7 @@
 .cont5 {
   margin-top: 2rem;
   margin-left: 6.5rem !important;
+  margin-bottom: 5rem;
 }
 
 .calendar-img {
@@ -459,7 +472,6 @@
 .footer {
   width: 100%;
   height: 15rem;
-  margin-top: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -490,4 +502,91 @@
   display: flex;
   flex-direction: row;
   gap: 0.8rem;
+}
+
+.profile-dropdown {
+  width: fit-content !important;
+  min-width: 8rem !important;
+  height: 2.5rem !important;
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-radius: 2.5rem !important;
+  background-color: #46bfff;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  gap: 0.5rem !important;
+  color: black !important;
+  padding: 0 !important;
+  font-weight: 500;
+  border: 0 !important;
+}
+
+.profile-pic-small {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: white;
+  overflow: hidden;
+}
+
+.profile-pic-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropdown-toggle {
+  background-color: #46bfff !important;
+  color: white !important;
+}
+
+.dropdown-toggle:hover {
+  background-color: #21b1ff !important;
+  color: white !important;
+}
+
+.dropdown-toggle:active {
+  background-color: #0eabff !important;
+  color: white !important;
+}
+
+.dropdown-toggle::after {
+  content: none !important;
+}
+.dropdown-menu {
+  min-width: 8rem !important;
+  border-radius: 0.5rem !important;
+  border: 2px solid #c5c5c5 !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  padding: 0 !important;
+  padding-top: 0.3rem !important;
+  padding-bottom: 0.3rem !important;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  font-size: 1rem;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+.dropdown-item:active {
+  background-color: #e0e0e0;
+  color: black;
+}
+
+.load {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -8,6 +8,7 @@ import About from "./pages/AboutPage";
 import ForgottenPassword from "./auth/ForgottenPassword";
 import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
+import StudentProfilePage from "./pages/StudentProfilePage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             element={<SuperAdminDashboardPage />}
           />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/user/profile" element={<StudentProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgottenpassword" element={<ForgottenPassword />} />
