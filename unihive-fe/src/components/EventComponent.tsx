@@ -6,11 +6,30 @@ import { useNavigate } from "react-router-dom";
 import StudentService from "../services/StudentService";
 import Event from "../models/Event";
 import { Form } from "react-bootstrap";
+import { Cities } from "../models/Cities";
+import { Schools } from "../models/Schools";
+import { Categories } from "../models/Categories";
+
 
 function EventComponent() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filterEvent, setFilterEvent] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState({
+    sport: false,
+    music: false,
+    art: false,
+    technology: false,
+    social: false,
+    culture: false,
+  });
+  const [filterCity, setFilterCity] = useState("");
+  const [filterSchool, setFilterSchool] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
+
+
+
+  
 
   var token: string = "";
   const navigate = useNavigate();
@@ -45,16 +64,50 @@ function EventComponent() {
       });
   });
 
-  const filteredEvents = events.filter(
-    (event) =>
+  const filteredEvents = events.filter((event) => {
+    return (
       event.eventName.toLowerCase().includes(filterEvent.toLowerCase()) &&
-      event.eventCategory.toLowerCase().includes(filterCategory.toLowerCase())
-  );
+      (filterCity==="Choose" || event.eventLocation.toLowerCase().includes(filterCity.toLowerCase())) &&
+      (filterSchool === "Choose" || event.club.clubName.toLowerCase().includes(filterSchool.toLowerCase())) &&
+      (filterStartDate === "" || new Date(event.startTime) >= new Date(filterStartDate)) &&
+      (filterEndDate === "" || new Date(event.endTime) <= new Date(filterEndDate)) &&
+      (Object.keys(filterCategory).every((key) => !filterCategory[key]) || filterCategory[event.eventCategory])
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+
+    );
+  });
+  
+
+
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilterEvent(e.target.value);
-    setFilterCategory(e.target.value);
   };
+  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterCity(e.target.value);
+  };
+  const handleSchoolChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterSchool(e.target.value);
+    console.log("Selected School:", e.target.value);
+
+  };
+  const handleStartDateChange= (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterStartDate(e.target.value);
+  };
+  const handleEndDateChange= (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterEndDate(e.target.value);
+  };
+  const handleCategoryChange = (event, category) => {
+    const { checked } = event.target;
+    setFilterCategory(prevState => ({ ...prevState, [category]: checked }));
+    console.log("Selected category:", category);
+
+  };
+  
+  
+  
+  
 
   return (
     <>
@@ -76,89 +129,60 @@ function EventComponent() {
               type="search"
               placeholder="Search"
               value={filterEvent}
-              onChange={handleFilterChange}
+              onChange={handleNameChange}
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="select1">
+          <Form.Group className="mb-3" controlId="select1" >
             <Form.Label>City</Form.Label>
-            <Form.Select aria-label="Default select example">
-              <option>Choose</option>
-              <option value="1">Rabat</option>
-              <option value="2">Casablanca</option>
-              <option value="3">Mohammadia</option>
-              <option value="3">Marrakech</option>
-              <option value="3">Agadir</option>
-              <option value="3">Meknes</option>
-              <option value="3">Kenitra</option>
-              <option value="3">Tanger</option>
-              <option value="3">Benguerir</option>
-              <option value="3">Jadida</option>
-              <option value="3">Safi</option>
-              <option value="3">Salé</option>
+            
+            <Form.Select aria-label="Default select example"
+            value={filterCity} 
+            onChange={handleCityChange}>
+            <option>Choose</option>
+            {Object.values(Cities).map(city => (
+    <option key={city} value={city}>{city}</option>
+  ))}
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-3" controlId="select2">
             <Form.Label>School</Form.Label>
-            <Form.Select aria-label="Default select example">
+            <Form.Select aria-label="Default select example"
+             value={filterSchool} 
+             onChange={handleSchoolChange}>
               <option>Choose</option>
-              <option value="1">ENSIAS</option>
-              <option value="2">INPT</option>
-              <option value="3">EMI</option>
-              <option value="3">ENSEM</option>
-              <option value="3">ESITH</option>
-              <option value="3">ENSAM</option>
-              <option value="3">ENSA</option>
-              <option value="3">IAV</option>
-              <option value="3">ENSETH</option>
-              <option value="3">FST</option>
-              <option value="3">EHTP</option>
-              <option value="3">INSEA</option>
+              {Object.values(Schools).map(school => (
+    <option key={school} value={school}>{school}</option>
+  ))}
+              
             </Form.Select>
           </Form.Group>
           <Form.Group className="mb-3" controlId="dateStart">
             <Form.Label>From</Form.Label>
-            <Form.Control type="Date" />
-          </Form.Group>
+            <Form.Control type="date" value={filterStartDate} onChange={handleStartDateChange} />
+            </Form.Group>
+
           <Form.Group className="mb-3" controlId="dateEnd">
             <Form.Label>To</Form.Label>
-            <Form.Control type="Date" />
+            <Form.Control type="Date" value={filterEndDate} onChange={handleEndDateChange} />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Types </Form.Label>
             <div className="mb-3">
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox-sport"
-                label="Sport"
-              />
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox-music"
-                label="Music"
-              />
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox-art"
-                label="Technologie"
-              />
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox-social"
-                label="Social"
-              />
-              <Form.Check
-                type="checkbox"
-                id="default-checkbox-culture"
-                label="Culture"
-              />
+              {Object.values(Categories).map(category => (
+                <Form.Check
+                  key={category}
+                  type="checkbox"
+                  id={`default-checkbox-${category}`}
+                  label={category.charAt(0).toUpperCase() + category.slice(1)}
+                  onChange={(e) => handleCategoryChange(e, category)} 
+                  checked={filterCategory[category]} 
+                  
+                />
+              ))}
             </div>
-            <Form.Control
-              type="checkbox"
-              value={filterEvent}
-              onChange={handleFilterChange}
-            />
+            
           </Form.Group>
         </Form>
       </div>

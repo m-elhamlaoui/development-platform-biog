@@ -37,7 +37,7 @@
   border: 1px solid black;
   position: absolute;
   left: 50%;
-  margin-top: 0px;
+  margin-top: 90px;
   transform: translate( -50%); /* Center the banner horizontally and vertically */
   z-index: 1;
   display: flex;
