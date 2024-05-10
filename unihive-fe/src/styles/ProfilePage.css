@@ -1,0 +1,311 @@
+.cont6 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem !important;
+}
+
+.student-profile {
+  width: 75%;
+  height: 27rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.profile-dash-1 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1.8px solid #46bfff;
+  border-radius: 0.5rem;
+  color: black;
+  gap: 0.5rem;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.profile-dash-2 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0 !important;
+}
+
+.panel {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1.8px solid #46bfff;
+  border-radius: 0.5rem;
+  gap: 0.8rem;
+  padding-left: 1.8rem;
+}
+
+.profile-info {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1.8px solid #46bfff;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: black;
+  padding: 2rem;
+  gap: 0.6rem;
+}
+
+.profile-info-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10rem;
+}
+
+.profile-info-row input {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 0.7rem 0.4rem 0.7rem;
+  width: 16rem;
+}
+
+.profile-info-row input:focus {
+  outline: none;
+  border-color: #46bfff;
+}
+
+.col-custom {
+  flex: 0 1 29% !important;
+}
+
+.pfp {
+  width: 12rem;
+  height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #46bfff;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+
+.pfp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.username {
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.school-city {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titles {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.sc-info {
+  font-size: 1.1rem;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.logout {
+  width: 100%;
+  height: 11%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-color: #46bfff;
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.file-input-2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding-left: 0.7rem;
+  width: 16rem;
+  height: 2.65rem;
+}
+
+.file-input-2 label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  background-color: #d5d5d5;
+  cursor: pointer;
+}
+
+.profile-info-btn {
+  width: 100%;
+  height: 2.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 14rem;
+}
+
+.save-save-2 {
+  --btn-save: #46bfff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 7.9rem;
+}
+.save-save-2:hover {
+  --btn-save: #21b1ff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+.save-save-2:active {
+  --btn-save: #0eabff;
+  background-color: var(--btn-save) !important;
+  border-color: var(--btn-save) !important;
+}
+
+.panel-title {
+  font-size: 1rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  gap: 0.2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.atv {
+  color: #46bfff;
+}
+
+.followers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 1.2rem;
+  margin-left: 18.5rem;
+  color: black;
+}
+
+.follow-title {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.clubs {
+  width: 44rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  color: black;
+  gap: 0.2rem;
+}
+
+.club-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 6.5rem;
+  border: 2.5px solid #c5c5c5;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.club-logo {
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-right: 2.5px solid #46bfff;
+  border-top: 2.5px solid #46bfff;
+  border-bottom: 2.5px solid #46bfff;
+  padding-right: 0.5rem;
+}
+
+.club-logo img {
+  width: 70%;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
+}
+
+.club-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: black;
+  margin-left: 2rem;
+}
+
+.unfollow-btn {
+  background-color: white !important;
+  border-color: white !important;
+  color: black !important;
+  border-radius: 0.8rem !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  height: 2.5rem !important;
+  margin-left: 11rem;
+}
+
+.unfollow-btn:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+}
+
+.unfollow-btn:active {
+  background-color: #e5e5e5 !important;
+  border-color: #e5e5e5 !important;
+}

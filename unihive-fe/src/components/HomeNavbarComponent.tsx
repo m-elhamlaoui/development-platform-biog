@@ -1,18 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/uh-logo.png";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import AuthService from "../services/AuthService";
 import Student from "../models/Student";
 
-function HomeNavbarComponent(props: { loggedin: boolean; student: Student }) {
+function HomeNavbarComponent(props: {
+  loggedin: boolean;
+  student: Student | null;
+  home?: boolean | false;
+  about?: boolean | false;
+  contact?: boolean | false;
+  events?: boolean | false;
+}) {
   const navigate = useNavigate();
   const student = props.student;
 
   function logout() {
     AuthService.logout();
-    navigate("/login");
+    window.location.reload();
   }
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -21,16 +27,24 @@ function HomeNavbarComponent(props: { loggedin: boolean; student: Student }) {
           <img src={logo} alt="UniHive Logo" width="80%" />
         </a>
         <div className="navbar-nav">
-          <a className="nav-link active" aria-current="page" href="#">
+          <a
+            className={"nav-link" + (props.home ? " active" : "")}
+            aria-current="page"
+            href="/home"
+            style={{ cursor: "pointer" }}
+          >
             Home
           </a>
-          <a className="nav-link" href="#">
+          <a className={"nav-link" + (props.events ? " active" : "")} href="#">
             Events
           </a>
-          <a className="nav-link" href="#">
+          <a className={"nav-link" + (props.contact ? " active" : "")} href="#">
             Contact
           </a>
-          <a className="nav-link me-md-3" href="#">
+          <a
+            className={"nav-link me-md-3" + (props.about ? " active" : "")}
+            href="#"
+          >
             About
           </a>
           <div className="d-grid gap-4 d-md-block">
@@ -41,7 +55,7 @@ function HomeNavbarComponent(props: { loggedin: boolean; student: Student }) {
                   id="dropdown-basic"
                 >
                   <div className="profile-pic-small">
-                    <img src={student.profileImage} alt="" />
+                    <img src={student?.profileImage} alt="" />
                   </div>
                   <span>Ilyass</span>
                   <ChevronDownIcon
@@ -55,7 +69,7 @@ function HomeNavbarComponent(props: { loggedin: boolean; student: Student }) {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                  <Dropdown.Item href="/user/profile">Profile</Dropdown.Item>
                   <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
                   <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
                 </Dropdown.Menu>
@@ -65,10 +79,15 @@ function HomeNavbarComponent(props: { loggedin: boolean; student: Student }) {
                 <button
                   className="btn btn-outline-primary me-md-1"
                   type="button"
+                  onClick={() => navigate("/signup")}
                 >
                   Sign Up
                 </button>
-                <button className="btn btn-primary" type="button">
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={() => navigate("/login")}
+                >
                   Log In
                 </button>
               </>

@@ -1,80 +1,112 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import Event from "../models/Event";
+import { Month } from "../models/Month";
 
-function UpcomingEventsComponent() {
+function UpcomingEventsComponent(props: { events: Event[] }) {
+  const events = props.events;
+  events.sort(
+    (a, b) =>
+      new Date(a.startTime ?? new Date()).getTime() -
+      new Date(b.startTime ?? new Date()).getTime()
+  );
+  const MonthsArray = Object.values(Month);
   return (
     <div className="container cont4">
       <div className="upcomings-title">Upcoming Events</div>
       <div className="upcomings">
         <div className="see-more-upcomings">
-          See More
-          <ChevronRightIcon
-            style={{
-              width: "20px",
-              height: "20px",
-              strokeWidth: "2.5",
-            }}
-          />
+          <span>
+            See More
+            <ChevronRightIcon
+              style={{
+                width: "20px",
+                height: "20px",
+                strokeWidth: "2.5",
+              }}
+            />
+          </span>
         </div>
-        <div className="up-event-card">
-          <div className="up-event-card-date">
-            <span className="num">01</span>
-            <span className="mon">Mar</span>
-          </div>
-          <div className="up-event-card-title">
-            <span className="title">
-              ITHOLIC Version 3.0: The Future of ITOps
-            </span>
-            <div className="date">
-              <span>From 01 March 2024 To 03 March 2024</span>
-              <span style={{ fontWeight: 600, fontSize: "1.2rem" }}>
-                ENSIAS IT CLUB
+        {events.slice(0, 3).map((event) => (
+          <div className="up-event-card" key={event.id}>
+            <div className="up-event-card-date">
+              <span className="num">
+                {new Date(event.startTime ?? new Date()).getDate()}
+              </span>
+              <span className="mon">
+                {new Date(event.startTime ?? new Date()).toLocaleString(
+                  "default",
+                  { month: "short" }
+                )}
               </span>
             </div>
-          </div>
-          <div className="up-event-card-banner">
-            <img src="https://picsum.photos/750/350?random=1" alt="" />
-          </div>
-        </div>
-        <div className="up-event-card">
-          <div className="up-event-card-date">
-            <span className="num">01</span>
-            <span className="mon">Mar</span>
-          </div>
-          <div className="up-event-card-title">
-            <span className="title">
-              ITHOLIC Version 3.0: The Future of ITOps
-            </span>
-            <div className="date">
-              <span>From 01 March 2024 To 03 March 2024</span>
-              <span style={{ fontWeight: 600, fontSize: "1.2rem" }}>
-                ENSIAS IT CLUB
+            <div className="up-event-card-title">
+              <span className="title">
+                {event.eventName.length > 48
+                  ? event.eventName.slice(0, 45) + "..."
+                  : event.eventName}
               </span>
+              <div className="date">
+                <span>
+                  {(() => {
+                    const startDate = new Date(event.startTime ?? new Date());
+                    const endDate = new Date(event.endTime ?? new Date());
+                    if (
+                      startDate.getUTCDate() === endDate.getUTCDate() &&
+                      startDate.getUTCMonth() === endDate.getUTCMonth() &&
+                      startDate.getUTCFullYear() === endDate.getUTCFullYear()
+                    ) {
+                      const day = startDate.getUTCDate();
+                      let daySuffix;
+                      if (day === 1 || day === 21 || day === 31) {
+                        daySuffix = "st";
+                      } else if (day === 2 || day === 22) {
+                        daySuffix = "nd";
+                      } else if (day === 3 || day === 23) {
+                        daySuffix = "rd";
+                      } else {
+                        daySuffix = "th";
+                      }
+                      return (
+                        <span>
+                          {MonthsArray[startDate.getUTCMonth()]}{" "}
+                          {startDate.getUTCDate()}
+                          {daySuffix} {startDate.getUTCFullYear()}
+                        </span>
+                      );
+                    }
+                    return (
+                      <span>
+                        From{" "}
+                        {startDate.getUTCDate() < 10
+                          ? "0" + startDate.getUTCDate()
+                          : startDate.getUTCDate()}{" "}
+                        {MonthsArray[startDate.getUTCMonth()]}{" "}
+                        {startDate.getUTCFullYear()} To{" "}
+                        {endDate.getUTCDate() < 10
+                          ? "0" + endDate.getUTCDate()
+                          : endDate.getUTCDate()}{" "}
+                        {MonthsArray[endDate.getUTCMonth()]}{" "}
+                        {endDate.getUTCFullYear()}
+                      </span>
+                    );
+                  })()}
+                </span>
+                <span
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "1.2rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  {event.club.clubName}
+                </span>
+              </div>
+            </div>
+            <div className="up-event-card-banner">
+              <img src={event.eventBanner} alt="" />
             </div>
           </div>
-          <div className="up-event-card-banner">
-            <img src="https://picsum.photos/750/350?random=1" alt="" />
-          </div>
-        </div>
-        <div className="up-event-card">
-          <div className="up-event-card-date">
-            <span className="num">01</span>
-            <span className="mon">Mar</span>
-          </div>
-          <div className="up-event-card-title">
-            <span className="title">
-              ITHOLIC Version 3.0: The Future of ITOps
-            </span>
-            <div className="date">
-              <span>From 01 March 2024 To 03 March 2024</span>
-              <span style={{ fontWeight: 600, fontSize: "1.2rem" }}>
-                ENSIAS IT CLUB
-              </span>
-            </div>
-          </div>
-          <div className="up-event-card-banner">
-            <img src="https://picsum.photos/750/350?random=1" alt="" />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
