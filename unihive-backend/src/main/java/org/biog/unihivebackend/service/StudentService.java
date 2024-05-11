@@ -27,4 +27,6 @@ public interface StudentService {
         AuthenticationResponse updateStudentEmail(UUID id, String email);
 
         Student updateStudentProfileImage(UUID id, String profileImage);
+
+        void unfollowClub(UUID studentId, UUID clubId);
 }

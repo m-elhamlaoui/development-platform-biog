@@ -151,7 +151,9 @@ function SuperAdminRequestsComponent() {
                       <th>SCHOOL CARD</th>
                       <th>SCHOOL</th>
                       <th>EMAIL</th>
-                      <th>VIEW/ACCEPT/REJECT</th>
+                      <th>
+                        <span>VIEW/ACCEPT/REJECT</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

@@ -82,6 +82,18 @@ public class StudentController {
         return clubService.getClubsByStudent(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @DeleteMapping("/delete/{id}")
+    void deleteStudent(@PathVariable UUID id) throws AccessDeniedException {
+        studentService.deleteStudent(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @DeleteMapping("/unfollow/{studentId}/{clubId}")
+    void unfollowClub(@PathVariable UUID studentId, @PathVariable UUID clubId) {
+        studentService.unfollowClub(studentId, clubId);
+    }
+
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/test")
     void test() {

@@ -31,7 +31,21 @@ export const updateStudentProfileImage = (
   });
 
 export const updateStudentPassword = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_STUDENT_UPDATE + "uppassword/", data, {
+  axios.put(REST_API_URL_STUDENT_UPDATE + "uppassword", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const deleteStudent = (token: string | null, id: string) =>
+  axios.delete(REST_API_URL_STUDENT_UPDATE + "delete/" + id, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const unfollowClub = (
+  token: string | null,
+  id: string,
+  clubId: string
+) =>
+  axios.delete(REST_API_URL_STUDENT_UPDATE + "unfollow/" + id + "/" + clubId, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -62,5 +76,7 @@ const StudentService = {
   updateStudentProfileImage,
   getClubs,
   updateStudentPassword,
+  deleteStudent,
+  unfollowClub,
 };
 export default StudentService;

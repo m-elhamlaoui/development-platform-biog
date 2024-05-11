@@ -13,7 +13,7 @@ import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import ModelsService from "../services/SuperAdminModelsService";
 import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import { InfinitySpin } from "react-loader-spinner";
+import FollowingsComponent from "./FollowingsComponent";
 
 function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
   const [filetext, setFiletext] = useState("Choose Image...");
@@ -23,10 +23,17 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
   const [email, setEmail] = useState(props.student.email);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [empty, setEmpty] = useState(true);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("student");
   const student = props.student;
+
+  useEffect(() => {
+    if (props.clubs.length === 0) {
+      setEmpty(false);
+    }
+  });
 
   const handleUpdate1 = async () => {
     setIsDisabled1(true);
@@ -263,6 +270,7 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
           },
         });
         setIsDisabled2(false);
+        window.location.reload();
       },
       () => {
         enqueueSnackbar("Error updating password", {
@@ -321,7 +329,10 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
           </Col>
           <Col className="profile-dash-2">
             <div className="panel">
-              <div className="panel-title atv">
+              <div
+                className="panel-title atv"
+                onClick={() => navigate("/user/profile")}
+              >
                 <UserCircleIcon
                   style={{
                     width: "25px",
@@ -331,7 +342,10 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
                 />
                 Profile
               </div>
-              <div className="panel-title">
+              <div
+                className="panel-title"
+                onClick={() => navigate("/user/settings")}
+              >
                 <Cog6ToothIcon
                   style={{
                     width: "25px",
@@ -420,6 +434,7 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
                   className="btn save-save-2"
                   type="button"
                   onClick={handleUpdate2}
+                  disabled={isDisabled2}
                 >
                   Update
                 </button>
@@ -427,22 +442,9 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
             </div>
           </Col>
         </Row>
-        <div className="followers">
-          <span className="follow-title">Clubs you're following</span>
-          <div className="clubs">
-            {props.clubs.map((club) => (
-              <div className="club-item" key={club.id}>
-                <div className="club-logo">
-                  <img src={club.clubLogo} alt="club logo" />
-                </div>
-                <span className="club-title">{club.clubName}</span>
-                <button className="btn unfollow-btn" type="button">
-                  Unfollow
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+        {empty && (
+          <FollowingsComponent studentId={student.id} clubs={props.clubs} />
+        )}
       </Container>
     </>
   );

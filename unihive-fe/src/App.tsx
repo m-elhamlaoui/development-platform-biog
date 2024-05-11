@@ -24,7 +24,7 @@ function App() {
             element={<SuperAdminDashboardPage />}
           />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/user/profile" element={<StudentProfilePage />} />
+          <Route path="/user/:option" element={<StudentProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgottenpassword" element={<ForgottenPassword />} />

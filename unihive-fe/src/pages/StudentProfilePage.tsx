@@ -8,10 +8,12 @@ import { InfinitySpin } from "react-loader-spinner";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowUpIcon } from "@heroicons/react/24/solid";
 import StudentProfileComponent from "../components/StudentProfileComponent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Club from "../models/Club";
+import StudentSettingsComponent from "../components/StudentSettingsComponent";
 
 function StudentProfilePage() {
+  const { option } = useParams();
   const [isLogged, setIsLogged] = useState(false);
   const [student, setStudent] = useState<Student>();
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +79,12 @@ function StudentProfilePage() {
       ) : (
         <>
           <HomeNavbar loggedin={isLogged} student={student!} />
-          <StudentProfileComponent student={student!} clubs={clubs} />
+          {option === "profile" && (
+            <StudentProfileComponent student={student!} clubs={clubs} />
+          )}
+          {option === "settings" && (
+            <StudentSettingsComponent student={student!} clubs={clubs} />
+          )}
           <Footer />
           <ScrollToTop
             smooth
