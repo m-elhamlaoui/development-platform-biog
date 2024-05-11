@@ -13,8 +13,6 @@ import org.biog.unihivebackend.service.EventService;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.biog.unihivebackend.model.Student;
-
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
