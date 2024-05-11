@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
-import StudentService from "../services/StudentService";
-import { useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
-import Club from "../models/Club";
-import Button from "react-bootstrap/Button";
+import React, { useState, useEffect } from 'react';
+import StudentService from '../services/StudentService';
+import { useNavigate, useParams } from 'react-router-dom';
+import { isExpired } from 'react-jwt';
+import Club from '../models/Club';
+import Button from 'react-bootstrap/Button';
+import Rating from "./RatingComponent";
+
 
 function ProfileHeader() {
-  let { id } = useParams();
-  var token: string = "";
+    let { id } = useParams();
+    var token: string = "";
 
-  const [club, setClub] = useState<Club | undefined>();
-  if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
-  } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
-  } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
-  }
+    const [club, setClub] = useState<Club| undefined>();
+    if (localStorage.getItem("superadmin")) {
+      token = localStorage.getItem("superadmin") as string;
+    } else if (localStorage.getItem("admin")) {
+      token = localStorage.getItem("admin") as string;
+    } else if (localStorage.getItem("student")) {
+      token = localStorage.getItem("student") as string;
+    }  const isMyTokenExpired = isExpired(token);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -73,43 +76,26 @@ function ProfileHeader() {
             zIndex: "2",
           }}
         />
-      </div>
-      <div
-        style={{
-          marginTop: "0px",
-          transform: "translate(200px,10px)",
-          width: "500px",
-        }}
-      >
-        <h2
-          style={{
-            color: "black",
-            zIndex: "2",
-            textAlign: "left",
-            display: "inlineBlock",
-          }}
-        >
-          {club.clubName}
-        </h2>
-        <Button
-          variant="primary"
-          style={{ transform: "translate(600px,-40px)" }}
-        >
-          Follow
-        </Button>{" "}
-        <p
-          style={{
-            color: "black",
-            zIndex: "2",
-            textAlign: "left",
-            transform: "translate(0px,-40px)",
-          }}
-        >
-          {club.clubDescription}
-        </p>
-      </div>
-    </div>
-  );
+        
+  </div>
+  <div style={{marginTop:'0px',transform: 'translate(200px,10px)', width:'500px'}}>
+  <div style={{ display: 'flex', flexDirection: 'inline' }}>
+        <h2 style={{    color: 'black', zIndex: '2', textAlign: 'left', display: 'inlineBlock' }}>{club.clubName}</h2>
+        <div className="rating" style={{marginLeft:'20px',backgroundColor:'white'}} >
+                      <Rating value={club.clubRating} max={5} />
+                      
+                    </div>
+        <Button variant="primary" style={{ transform: 'translate(160px,0px)',height: '50px'}}>Follow</Button>{' '}
+        </div> 
+        <p style={{  color: 'black', zIndex: '2', textAlign: 'left',transform: 'translate(0px,-40px)', marginTop:'40px' }}>
+
+        {club.clubDescription}</p>
+        </div>
+        </div>
+        
+
+
+    );
 }
 
 export default ProfileHeader;
