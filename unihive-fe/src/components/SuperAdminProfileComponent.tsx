@@ -131,7 +131,30 @@ function SuperAdminProfileComponent() {
             return;
           }
           setIsDisabled(false);
-          enqueueSnackbar("Profile Updated Successfully", {
+          enqueueSnackbar("Password Updated Successfully", {
+            variant: "success",
+            autoHideDuration: 5000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    } else if (superadmin!.email && (!oldPassword || !newPassword)) {
+      ModelsService.updateSuperAdminEmail(token, superadmin!.email).then(
+        (response) => {
+          localStorage.removeItem("superadmin");
+          localStorage.setItem("superadmin", response.data.token);
+          setIsDisabled(false);
+          enqueueSnackbar("Email Updated Successfully", {
             variant: "success",
             autoHideDuration: 5000,
             transitionDuration: 300,
