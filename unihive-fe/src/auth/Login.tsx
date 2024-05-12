@@ -150,7 +150,7 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <div className="remember-me">
+              <div className="show-pass">
                 <input
                   type="checkbox"
                   id="check"
