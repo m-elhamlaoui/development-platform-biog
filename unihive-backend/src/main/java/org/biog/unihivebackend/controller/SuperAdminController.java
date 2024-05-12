@@ -4,18 +4,23 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
+import org.biog.unihivebackend.auth.AuthenticationRequest;
+import org.biog.unihivebackend.auth.AuthenticationResponse;
+import org.biog.unihivebackend.auth.AuthenticationService;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.Request;
 import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.model.Student;
+import org.biog.unihivebackend.model.SuperAdmin;
 import org.biog.unihivebackend.service.AdminService;
 import org.biog.unihivebackend.service.ClubService;
 import org.biog.unihivebackend.service.EventService;
 import org.biog.unihivebackend.service.RequestService;
 import org.biog.unihivebackend.service.SchoolService;
 import org.biog.unihivebackend.service.StudentService;
+import org.biog.unihivebackend.service.SuperAdminService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +37,8 @@ public class SuperAdminController {
     private final EventService eventService;
     private final SchoolService schoolService;
     private final RequestService requestService;
+    private final SuperAdminService superAdminService;
+    private final AuthenticationService authenticationService;
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @GetMapping("/admins")
@@ -207,5 +214,23 @@ public class SuperAdminController {
     List<Integer> getAllCounts() throws AccessDeniedException {
         return List.of(adminService.getAll().size(), studentService.getAll().size(), clubService.getAll().size(),
                 eventService.getAll().size(), schoolService.getAll().size(), requestService.getAll().size());
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/all")
+    List<SuperAdmin> getAll() {
+        return superAdminService.getAll();
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PutMapping("/upemail")
+    AuthenticationResponse updateSuperAdminEmail(@RequestParam String email) {
+        return superAdminService.updateSuperAdminEmail(email);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PutMapping("/uppassword")
+    AuthenticationResponse updateSuperAdminPassword(@RequestBody AuthenticationRequest password) {
+        return authenticationService.changePassword(password);
     }
 }

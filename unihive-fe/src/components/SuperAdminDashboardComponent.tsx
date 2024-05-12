@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminDashboardComponent() {
   const [allCounts, setAllCounts] = useState([]);
@@ -57,7 +58,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Admins Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
@@ -76,7 +77,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Clubs Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
@@ -95,7 +96,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Events Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
@@ -114,7 +115,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Schools Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
@@ -133,7 +134,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Students Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
@@ -152,7 +153,7 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Pending Sign Up Requests</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>

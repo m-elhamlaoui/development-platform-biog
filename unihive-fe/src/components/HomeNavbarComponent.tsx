@@ -71,7 +71,9 @@ function HomeNavbarComponent(props: {
                 <Dropdown.Menu>
                   <Dropdown.Item href="/user/profile">Profile</Dropdown.Item>
                   <Dropdown.Item href="/user/settings">Settings</Dropdown.Item>
-                  <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
+                  <Dropdown.Item onClick={logout} href="/">
+                    Log out
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             ) : (

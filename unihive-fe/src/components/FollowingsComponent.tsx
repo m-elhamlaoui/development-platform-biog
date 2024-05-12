@@ -53,45 +53,42 @@ function FollowingsComponent(props: { studentId: string; clubs: Club[] }) {
   return (
     <div className="followers">
       <span className="follow-title">Clubs you're following</span>
-
-      <div className="clubs">
-        {clubs.length != 0 ? (
-          <div>
-            {clubsToShow.map((club) => (
-              <div className="club-item" key={club.id}>
-                <div className="club-logo">
-                  <img src={club.clubLogo} alt="club logo" />
-                </div>
-                <span className="club-title">{club.clubName}</span>
-                <button
-                  className="btn unfollow-btn"
-                  type="button"
-                  onClick={() => handleUnfollow(club.id)}
-                  disabled={isDisabled && club.id === selectedClubId}
-                >
-                  Unfollow
-                </button>
+      {clubs.length != 0 ? (
+        <div className="clubs">
+          {clubsToShow.map((club) => (
+            <div className="club-item" key={club.id}>
+              <div className="club-logo">
+                <img src={club.clubLogo} alt="club logo" />
               </div>
-            ))}
-            {show && (
+              <span className="club-title">{club.clubName}</span>
               <button
-                className="btn save-save"
-                style={{
-                  justifySelf: "center",
-                  alignSelf: "center",
-                  marginTop: "0.5rem",
-                }}
+                className="btn unfollow-btn"
                 type="button"
-                onClick={handleShowMoreClubs}
+                onClick={() => handleUnfollow(club.id)}
+                disabled={isDisabled && club.id === selectedClubId}
               >
-                Show More
+                Unfollow
               </button>
-            )}
-          </div>
-        ) : (
-          <div className="no-followers">You are not following any clubs</div>
-        )}
-      </div>
+            </div>
+          ))}
+          {show && (
+            <button
+              className="btn save-save"
+              style={{
+                justifySelf: "center",
+                alignSelf: "center",
+                marginTop: "0.5rem",
+              }}
+              type="button"
+              onClick={handleShowMoreClubs}
+            >
+              Show More
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="no-followers">You are not following any clubs</div>
+      )}
     </div>
   );
 }

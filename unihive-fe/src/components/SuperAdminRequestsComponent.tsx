@@ -5,6 +5,7 @@ import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Request from "../models/Request";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminRequestsComponent() {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -136,7 +137,9 @@ function SuperAdminRequestsComponent() {
               />
             </div>
             {isLoading ? (
-              <div className="no-data">Loading...</div>
+              <div className="no-data">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : requestsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (

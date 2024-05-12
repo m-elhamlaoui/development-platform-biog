@@ -10,7 +10,6 @@ import Sidebar from "../components/sideBar";
 import FooterComponent from "../components/FooterComponent";
 
 function Event() {
-  
   return (
     <>
       <NavBar />
@@ -18,11 +17,10 @@ function Event() {
         <h1>Events</h1>
       </div>
       <div className="hr-lines"></div>
-      <div style={{display:'flex', flexDirection:'row'}}>
-      <EventComponent />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <EventComponent />
       </div>
-      <FooterComponent/>
-
+      <FooterComponent />
     </>
   );
 }

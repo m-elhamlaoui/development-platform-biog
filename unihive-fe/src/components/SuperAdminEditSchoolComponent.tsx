@@ -7,6 +7,7 @@ import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import { Schools } from "../models/Schools";
 import { Cities } from "../models/Cities";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminEditSchoolComponent() {
   const { id } = useParams();
@@ -98,7 +99,9 @@ function SuperAdminEditSchoolComponent() {
               <span style={{ fontSize: "1.5rem" }}>{strId + " Row"}</span>
             </div>
             {isLoading ? (
-              <div className="is-loading">Loading...</div>
+              <div className="is-loading">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : (
               <form onSubmit={handleSave}>
                 <div className="info">

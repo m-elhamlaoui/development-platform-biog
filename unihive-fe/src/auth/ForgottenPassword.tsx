@@ -72,6 +72,9 @@ function Login() {
           },
           preventDuplicate: true,
         });
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
       },
       () => {
         enqueueSnackbar("Email not found", {
