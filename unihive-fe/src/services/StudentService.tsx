@@ -5,8 +5,8 @@ const REST_API_URL_STUDENT_GET = "http://localhost:8080/student/email/";
 const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/";
 const REST_API_URL_STUDENT_CLUBS = "http://localhost:8080/student/clubs/";
 
-export const getStudent = (token: string | null, id: string) =>
-  axios.get(REST_API_URL_STUDENT_GET + id, {
+export const getStudent = (token: string | null, email: string) =>
+  axios.get(REST_API_URL_STUDENT_GET + email, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
