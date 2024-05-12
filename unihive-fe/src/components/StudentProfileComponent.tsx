@@ -23,17 +23,10 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
   const [email, setEmail] = useState(props.student.email);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [empty, setEmpty] = useState(true);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("student");
   const student = props.student;
-
-  useEffect(() => {
-    if (props.clubs.length === 0) {
-      setEmpty(false);
-    }
-  });
 
   const handleUpdate1 = async () => {
     setIsDisabled1(true);
@@ -442,9 +435,7 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
             </div>
           </Col>
         </Row>
-        {empty && (
-          <FollowingsComponent studentId={student.id} clubs={props.clubs} />
-        )}
+        <FollowingsComponent studentId={student.id} clubs={props.clubs} />
       </Container>
     </>
   );

@@ -13,6 +13,7 @@ const REST_API_URL_EVENT_GET = "http://localhost:8080/superadmin/event";
 const REST_API_URL_SCHOOL_GET = "http://localhost:8080/superadmin/school";
 const REST_API_URL_STUDENT_GET = "http://localhost:8080/superadmin/student";
 const REST_API_URL_REQUEST_GET = "http://localhost:8080/superadmin/request";
+const REST_API_URL_ALLCOUNTS_GET = "http://localhost:8080/superadmin/allcounts";
 
 // POST_APIS
 const REST_API_URL_CLUB_POST = "http://localhost:8080/auth/register/club";
@@ -211,6 +212,11 @@ const uploadFile = (file: any) =>
     },
   });
 
+const getAllCounts = (token: string | null) =>
+  axios.get(REST_API_URL_ALLCOUNTS_GET, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
 const ModelsService = {
   listClubs,
   listAdmins,
@@ -244,6 +250,7 @@ const ModelsService = {
   deleteRequest,
   acceptRequest,
   uploadFile,
+  getAllCounts,
 };
 
 export default ModelsService;

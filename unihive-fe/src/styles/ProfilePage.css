@@ -396,3 +396,12 @@
   background-color: var(--btn-delete) !important;
   border-color: var(--btn-delete) !important;
 }
+
+.no-followers {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: black;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}

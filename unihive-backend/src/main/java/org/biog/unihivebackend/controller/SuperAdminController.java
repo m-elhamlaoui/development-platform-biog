@@ -201,4 +201,11 @@ public class SuperAdminController {
     Request getRequest(@PathVariable UUID id) throws AccessDeniedException {
         return requestService.getRequest(id);
     }
+
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/allcounts")
+    List<Integer> getAllCounts() throws AccessDeniedException {
+        return List.of(adminService.getAll().size(), studentService.getAll().size(), clubService.getAll().size(),
+                eventService.getAll().size(), schoolService.getAll().size(), requestService.getAll().size());
+    }
 }
