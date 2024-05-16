@@ -13,6 +13,8 @@ import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import FollowingsComponent from "./FollowingsComponent";
 import { useState } from "react";
+import { Month } from "../models/Month";
+import { Day } from "../models/Day";
 
 function StudentSettingsComponent(props: { student: Student; clubs: Club[] }) {
   const navigate = useNavigate();
@@ -20,6 +22,10 @@ function StudentSettingsComponent(props: { student: Student; clubs: Club[] }) {
   const token = localStorage.getItem("student");
   const student = props.student;
   const [show, setShow] = useState(false);
+
+  const MonthsArray = Object.values(Month);
+  const DaysArray = Object.values(Day);
+  const createdAt = new Date(student.createdAt ?? new Date());
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -106,6 +112,23 @@ function StudentSettingsComponent(props: { student: Student; clubs: Club[] }) {
               </div>
             </div>
             <div className="profile-info2">
+              <div className="profile-info-row2">
+                Join Date
+                <input
+                  type="text"
+                  placeholder="join date"
+                  value={
+                    MonthsArray[createdAt.getUTCMonth()] +
+                    " " +
+                    (createdAt.getUTCDate() < 10
+                      ? "0" + createdAt.getUTCDate()
+                      : createdAt.getUTCDate()) +
+                    ", " +
+                    createdAt.getUTCFullYear()
+                  }
+                  disabled
+                />
+              </div>
               <div className="profile-info-row2">
                 Language
                 <div
