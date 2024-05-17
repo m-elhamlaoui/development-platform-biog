@@ -9,6 +9,7 @@ import ForgottenPassword from "./auth/ForgottenPassword";
 import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
 import StudentProfilePage from "./pages/StudentProfilePage";
+import EventPage from "./pages/EventPage";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/club/:id" element={<Profile />} />
+          <Route path="/events/:id" element={<EventPage/>} />
+
         </Routes>
       </BrowserRouter>
     </>

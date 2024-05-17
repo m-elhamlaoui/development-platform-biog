@@ -215,7 +215,7 @@ function EventComponent() {
               <Card.Subtitle>{`From ${formatDate(
                 event.startTime
               )} to ${formatDate(event.endTime)}`}</Card.Subtitle>
-              <Button variant="primary" style={{ bottom: "10px" }}>
+              <Button variant="primary" style={{ bottom: "10px" }} onClick={() => navigate(`/events/${event.id}`)}>
                 Learn More
               </Button>
             </Card.Body>
