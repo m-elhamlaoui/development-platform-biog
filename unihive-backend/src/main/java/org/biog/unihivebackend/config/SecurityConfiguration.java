@@ -25,13 +25,8 @@ public class SecurityConfiguration {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(requests -> requests
-            .requestMatchers("/auth/authenticate", "/auth/signup", "/auth/forgotPassword", "/auth/register/**",
-                "/auth/acceptrequest/**", "/admin/**", "/auth/register/admin", "/auth/register/student",
-                "/auth/register/club", "/auth/changePassword", "/auth/logout", "/superadmin/**", "/upload/**",
-                "/download/**", "/delete/**", "/list/**", "/file/**", "/club/**", "/event/**", "/student/**",
-                "/student/events", "/student/club/**", "/student/**")
+            .requestMatchers("/**")
             .permitAll()
-
             .anyRequest()
             .authenticated())
 
