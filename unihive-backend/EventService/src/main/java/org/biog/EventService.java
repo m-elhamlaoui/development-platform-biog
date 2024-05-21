@@ -1,14 +1,14 @@
-package org.biog.unihivebackend;
+package org.biog;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class UnihiveBackendApplication {
+public class EventService {
 
     public static void main(String[] args) {
-        SpringApplication.run(UnihiveBackendApplication.class, args);
+        SpringApplication.run(EventService.class, args);
     }
 
 }
