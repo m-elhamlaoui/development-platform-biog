@@ -39,6 +39,7 @@ function SuperAdminDashboardPage() {
   const isMyTokenExpired = isExpired(token);
 
   useEffect(() => {
+    document.title = "UniHive - Super Admin Dashboard";
     if (isMyTokenExpired) {
       if (localStorage.getItem("superadmin")) {
         localStorage.removeItem("superadmin");

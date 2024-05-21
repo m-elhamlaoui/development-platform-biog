@@ -25,6 +25,7 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "UniHive - Home";
     var token: string = "";
 
     if (localStorage.getItem("student")) {

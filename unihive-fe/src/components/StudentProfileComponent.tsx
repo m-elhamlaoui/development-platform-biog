@@ -28,6 +28,10 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
   const token = localStorage.getItem("student");
   const student = props.student;
 
+  useEffect(() => {
+    document.title = "UniHive - Profile";
+  });
+
   const handleUpdate1 = async () => {
     setIsDisabled1(true);
     if (email && !file) {

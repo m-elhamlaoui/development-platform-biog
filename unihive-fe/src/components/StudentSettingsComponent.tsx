@@ -12,7 +12,7 @@ import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import AuthService from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import FollowingsComponent from "./FollowingsComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Month } from "../models/Month";
 import { Day } from "../models/Day";
 
@@ -29,6 +29,10 @@ function StudentSettingsComponent(props: { student: Student; clubs: Club[] }) {
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
+
+  useEffect(() => {
+    document.title = "UniHive - Settings";
+  });
 
   const handleDeleteAccount = async () => {
     try {

@@ -16,6 +16,7 @@ import AuthService from "../services/AuthService";
 import CalendarService from "../services/CalendarService";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { ScrollShadow } from "@nextui-org/scroll-shadow";
 
 function CalendarPage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -25,6 +26,7 @@ function CalendarPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "UniHive - Calendar";
     var token: string = "";
 
     if (localStorage.getItem("student")) {
@@ -141,7 +143,7 @@ function CalendarPage() {
                 <div className="calendar-body">
                   <Row className="cal-body">
                     <Col className="cal-cards">
-                      <div className="calendar-cards">
+                      <ScrollShadow className="calendar-cards">
                         <div className="calendar-cards-header">
                           <span>Upcoming events</span>
                           <button className="btn btn-primary add-event-btn">
@@ -211,7 +213,7 @@ function CalendarPage() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </ScrollShadow>
                     </Col>
                     <Col className="cal-sep"></Col>
                     <Col className="cal-details"></Col>
