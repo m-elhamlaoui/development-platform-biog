@@ -57,7 +57,8 @@ public class CalendarServiceImpl implements CalendarService {
         calendar.events().delete("primary", eventId).execute();
     }
 
-    private Calendar getCalendarService(UUID studentId) throws IOException {
+    @Override
+    public Calendar getCalendarService(UUID studentId) throws IOException {
         return calendarConfig.buildCalendarService(httpTransport, flow, studentId);
     }
 

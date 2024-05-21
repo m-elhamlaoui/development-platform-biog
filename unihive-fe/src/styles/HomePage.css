@@ -590,3 +590,288 @@
   justify-content: center;
   align-items: center;
 }
+
+.title-fluid {
+  width: 100%;
+  height: 5.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.line {
+  width: 25%;
+  height: 2px;
+  background-color: #c5c5c5;
+}
+
+.page-title {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: 500;
+  color: black;
+  border: 2.5px solid #c5c5c5;
+  border-radius: 2.2rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.calendar {
+  width: 100%;
+  height: 30rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.google-auth {
+  width: 25%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border: 2px solid #c5c5c5;
+  border-radius: 1rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  color: black;
+}
+
+.google-auth-imgs {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.collab-x {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.google-auth-desc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 3.5rem;
+}
+
+.google-auth-btn {
+  width: 17rem;
+  height: 2.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  background-color: white !important;
+  color: black !important;
+  border: 2px solid #c5c5c5 !important;
+  margin-top: 3.5rem !important;
+}
+
+.google-auth-btn:hover {
+  background-color: #f0f0f0 !important;
+  border: 2px solid #c5c5c5 !important;
+  color: black !important;
+}
+
+.google-auth-btn:active {
+  background-color: #e0e0e0 !important;
+  border: 2px solid #c5c5c5 !important;
+  color: black !important;
+}
+
+.calendar-img2 {
+  width: 62%;
+  height: 30rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://storage.googleapis.com/unihive-files/calendar.png");
+  background-size: cover;
+}
+
+.calendar2 {
+  width: 100%;
+  height: 35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.calendar-body {
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #d5d5d5;
+  border-radius: 2rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+.cal-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.calendar-cards {
+  width: 100%;
+  height: 35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.calendar-cards-header {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.calendar-cards-header span {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black;
+}
+
+.add-event-btn {
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 0.5rem !important;
+  background-color: white !important;
+  color: #46bfff !important;
+  border: white;
+}
+
+.add-event-btn:hover {
+  background-color: #f0f0f0 !important;
+  color: #46bfff !important;
+}
+
+.add-event-btn:active {
+  background-color: #e0e0e0 !important;
+  color: #46bfff !important;
+}
+
+.calendar-cards-separator {
+  width: 100%;
+  height: 2px;
+  background-color: #d5d5d5;
+}
+
+.calendar-cards-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+  padding-right: 0.5rem;
+  overflow-y: auto;
+}
+
+.calendar-cards-body-item {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3.5rem 1.5rem 3.5rem 1.5rem;
+  border-radius: 1rem;
+  background-color: #ededed;
+  color: black;
+  gap: 1.5rem;
+}
+
+.calendar-cards-body-item-date {
+  margin-left: 0.3rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.calendar-cards-body-item-date .num {
+  font-size: 1.8rem;
+}
+
+.calendar-cards-body-item-date .mon {
+  font-size: 1.3rem;
+}
+
+.calendar-cards-body-item-separator {
+  width: 2px;
+  height: 4rem;
+  background-color: black;
+}
+
+.calendar-cards-body-item-desc {
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
+.calendar-cards-body-item-desc .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.calendar-cards-body-item-desc .date {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.cal-sep {
+  max-width: 2px;
+  min-width: 2px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d5d5d5;
+  padding: 0 !important;
+}

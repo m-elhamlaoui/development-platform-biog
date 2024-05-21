@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const REST_API_URL = "http://localhost:8080/auth/";
+const REST_API_GOOGLE_URL = "http://localhost:8080/calendar/authorize/";
 
 function register(data: any) {
   return axios.post(REST_API_URL + "signup", {
@@ -38,11 +39,16 @@ function forgottenPassword(email: string) {
   });
 }
 
+function googleCalendarAuth(id: string) {
+  return axios.get(REST_API_GOOGLE_URL + id);
+}
+
 const AuthService = {
   register,
   login,
   logout,
   forgottenPassword,
+  googleCalendarAuth,
 };
 
 export default AuthService;

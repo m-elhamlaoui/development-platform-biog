@@ -13,6 +13,7 @@ import org.biog.unihivebackend.service.implementation.EventRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import com.google.api.services.calendar.model.Event;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,17 +57,28 @@ public class CalendarController {
         return calendarService.getEvent(id, studentId);
     }
 
-    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/authorize/{studentId}")
     public ResponseEntity<String> authorize(HttpServletRequest request, @PathVariable UUID studentId)
             throws IOException, GeneralSecurityException {
         return calendarAuthService.authorize(request, studentId);
     }
 
-    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/oauth2callback")
     public ResponseEntity<String> oauth2Callback(@RequestParam String code, HttpServletRequest request)
             throws IOException, GeneralSecurityException {
         return calendarAuthService.oauth2Callback(code, request);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @DeleteMapping("/revoke/{studentId}")
+    public ResponseEntity<String> revoke(@PathVariable UUID studentId) throws IOException {
+        return calendarAuthService.revoke(studentId);
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @GetMapping("/get/{studentId}")
+    public ResponseEntity<String> get(@PathVariable UUID studentId) throws IOException {
+        calendarService.getCalendarService(studentId);
+        return ResponseEntity.ok("Calendar service created");
     }
 }

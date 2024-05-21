@@ -12,6 +12,8 @@ import org.biog.unihivebackend.model.GoogleUser;
 import org.biog.unihivebackend.repository.GoogleUserRepository;
 import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.service.CalendarAuthService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -43,7 +45,13 @@ public class CalendarAuthServiceImpl implements CalendarAuthService {
         String redirectUri = getRedirectUri(request);
         AuthorizationCodeRequestUrl authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUri);
         studId = studentId;
-        return ResponseEntity.ok(authorizationUrl.build());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cross-Origin-Opener-Policy", "same-origin");
+        headers.add("Cross-Origin-Embedder-Policy", "require-corp");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(authorizationUrl.build());
     }
 
     @Override
@@ -62,12 +70,40 @@ public class CalendarAuthServiceImpl implements CalendarAuthService {
 
         calendarConfig.buildCalendarService(httpTransport, flow, studId);
 
-        return ResponseEntity.ok("Successfully authenticated");
+        String successHtml = "<!DOCTYPE html>" +
+                "<html lang='en'>" +
+                "<head><title>Authorization Success</title></head>" +
+                "<body>" +
+                "<script>" +
+                "  window.opener.postMessage({ type: 'oauth2callback', url: '" + redirectUri
+                + "' }, window.location.origin);" +
+                "  window.close();" +
+                "</script>" +
+                "</body>" +
+                "</html>";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "text/html");
+        return new ResponseEntity<>(successHtml, headers, HttpStatus.OK);
     }
 
     private String getRedirectUri(HttpServletRequest request) {
         return UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString())
                 .replacePath("/calendar/oauth2callback")
                 .toUriString();
+    }
+
+    @Override
+    public ResponseEntity<String> revoke(UUID studentId) throws IOException {
+        GoogleUser userCredentials = googleUserRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new IOException("Student with id " + studentId + " not found"));
+        if (userCredentials == null) {
+            return new ResponseEntity<>("No credentials found", HttpStatus.NOT_FOUND);
+        }
+
+        googleUserRepository.delete(userCredentials);
+        ;
+
+        return new ResponseEntity<>("Credentials revoked", HttpStatus.OK);
     }
 }

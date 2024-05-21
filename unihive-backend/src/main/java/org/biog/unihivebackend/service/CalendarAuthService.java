@@ -15,4 +15,6 @@ public interface CalendarAuthService {
 
     ResponseEntity<String> oauth2Callback(String code, HttpServletRequest request)
             throws IOException, GeneralSecurityException;
+
+    ResponseEntity<String> revoke(UUID studentId) throws IOException;
 }
