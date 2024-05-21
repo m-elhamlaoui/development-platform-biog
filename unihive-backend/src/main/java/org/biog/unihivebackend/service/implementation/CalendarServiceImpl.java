@@ -1,6 +1,7 @@
 package org.biog.unihivebackend.service.implementation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,15 +41,37 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public Event getEvent(String eventId, UUID studentId) throws IOException {
+    public EventRequest getEvent(String eventId, UUID studentId) throws IOException {
         Calendar calendar = getCalendarService(studentId);
-        return calendar.events().get("primary", eventId).execute();
+        Event event = calendar.events().get("primary", eventId).execute();
+        EventRequest eventRequest = new EventRequest();
+        eventRequest.setTitle(event.getSummary());
+        eventRequest.setLocation(event.getLocation());
+        eventRequest.setDescription(event.getDescription());
+        eventRequest.setStartTime(event.getStart().getDateTime().toString());
+        eventRequest.setEndTime(event.getEnd().getDateTime().toString());
+        eventRequest.setColor(event.getColorId());
+        eventRequest.setReminder(event.getReminders().getUseDefault().toString());
+        return eventRequest;
     }
 
     @Override
-    public List<Event> getEvents(UUID studentId) throws IOException {
+    public List<EventRequest> getEvents(UUID studentId) throws IOException {
         Calendar calendar = getCalendarService(studentId);
-        return calendar.events().list("primary").execute().getItems();
+        List<Event> events = calendar.events().list("primary").execute().getItems();
+        List<EventRequest> eventRequests = new ArrayList<EventRequest>();
+        for (Event event : events) {
+            EventRequest eventRequest = new EventRequest();
+            eventRequest.setTitle(event.getSummary());
+            eventRequest.setLocation(event.getLocation());
+            eventRequest.setDescription(event.getDescription());
+            eventRequest.setStartTime(event.getStart().getDateTime().toString());
+            eventRequest.setEndTime(event.getEnd().getDateTime().toString());
+            eventRequest.setColor(event.getColorId());
+            eventRequest.setReminder(event.getReminders().getUseDefault().toString());
+            eventRequests.add(eventRequest);
+        }
+        return eventRequests;
     }
 
     @Override

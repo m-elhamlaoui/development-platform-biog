@@ -12,9 +12,9 @@ import com.google.api.services.calendar.model.Event;
 public interface CalendarService {
     Event createEvent(EventRequest event, UUID studentId) throws IOException;
 
-    Event getEvent(String eventId, UUID studentId) throws IOException;
+    EventRequest getEvent(String eventId, UUID studentId) throws IOException;
 
-    List<Event> getEvents(UUID studentId) throws IOException;
+    List<EventRequest> getEvents(UUID studentId) throws IOException;
 
     void deleteEvent(String eventId, UUID studentId) throws IOException;
 

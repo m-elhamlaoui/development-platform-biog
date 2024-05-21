@@ -749,7 +749,7 @@
   height: 35rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
   padding-top: 2rem;

@@ -29,7 +29,7 @@ public class CalendarController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/events/{studentId}")
-    public List<Event> getEvents(@PathVariable UUID studentId) throws IOException {
+    public List<EventRequest> getEvents(@PathVariable UUID studentId) throws IOException {
         return calendarService.getEvents(studentId);
     }
 
@@ -51,7 +51,7 @@ public class CalendarController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/event/{studentId}/{id}")
-    public Event getEvent(
+    public EventRequest getEvent(
             @PathVariable String id, @PathVariable UUID studentId) throws IOException {
 
         return calendarService.getEvent(id, studentId);

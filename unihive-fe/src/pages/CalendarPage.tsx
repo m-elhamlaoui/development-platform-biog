@@ -16,14 +16,16 @@ import AuthService from "../services/AuthService";
 import CalendarService from "../services/CalendarService";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { ScrollShadow } from "@nextui-org/scroll-shadow";
+import EventRequest from "../models/EventRequest";
 
 function CalendarPage() {
   const [isLogged, setIsLogged] = useState(false);
   const [student, setStudent] = useState<Student>();
+  const [eventRequest, setEventRequest] = useState<EventRequest>();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const navigate = useNavigate();
+  const currentWindow = window.location;
 
   useEffect(() => {
     document.title = "UniHive - Calendar";
@@ -64,7 +66,16 @@ function CalendarPage() {
             .then((response) => {
               console.log(response.data);
               setIsAuthorized(true);
-              setIsLoading(false);
+              CalendarService.getEvents(token, studentResponse.data.id).then(
+                (response) => {
+                  console.log(response.data);
+                  setEventRequest(response.data);
+                  setIsLoading(false);
+                },
+                (error) => {
+                  console.error(error);
+                }
+              );
             })
             .catch(() => {
               setIsAuthorized(false);
@@ -101,7 +112,6 @@ function CalendarPage() {
           window.removeEventListener("message", messageListener);
           if (authWindow) {
             authWindow.close();
-            window.location.reload();
           }
           resolve(event.data.url);
         }
@@ -113,6 +123,7 @@ function CalendarPage() {
         if (!authWindow || authWindow.closed !== false) {
           clearInterval(popupTick);
           window.removeEventListener("message", messageListener);
+          currentWindow.reload();
           reject(new Error("Popup was closed by user"));
         }
       }, 1000);
@@ -127,6 +138,10 @@ function CalendarPage() {
       console.error("Authorization Error:", error);
     }
   };
+
+  const Events = Object.values(eventRequest ?? {});
+  console.log(Events);
+
   return (
     <>
       {isLoading ? (
@@ -143,7 +158,7 @@ function CalendarPage() {
                 <div className="calendar-body">
                   <Row className="cal-body">
                     <Col className="cal-cards">
-                      <ScrollShadow className="calendar-cards">
+                      <div className="calendar-cards">
                         <div className="calendar-cards-header">
                           <span>Upcoming events</span>
                           <button className="btn btn-primary add-event-btn">
@@ -152,68 +167,28 @@ function CalendarPage() {
                         </div>
                         <div className="calendar-cards-separator"></div>
                         <div className="calendar-cards-body">
-                          <div className="calendar-cards-body-item">
-                            <div className="calendar-cards-body-item-date">
-                              <span className="num">12</span>
-                              <span className="mon">Dec</span>
-                            </div>
-                            <div className="calendar-cards-body-item-separator"></div>
-                            <div className="calendar-cards-body-item-desc">
-                              <span className="title">
-                                ITHOLIC Version 3.0: The Future of ITOps
-                              </span>
-                              <div className="date">
-                                <span>From 01 March 2024 To 03 March 2024</span>
+                          {Events!.map((event, index) => (
+                            <div
+                              key={index}
+                              className="calendar-cards-body-item"
+                            >
+                              <div className="calendar-cards-body-item-date">
+                                <span className="num">{event}</span>
+                                <span className="mon">{event.month}</span>
+                              </div>
+                              <div className="calendar-cards-body-item-separator"></div>
+                              <div className="calendar-cards-body-item-desc">
+                                <span className="title">{event.title}</span>
+                                <div className="date">
+                                  <span>
+                                    From {event.startDate} To {event.endDate}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="calendar-cards-body-item">
-                            <div className="calendar-cards-body-item-date">
-                              <span className="num">12</span>
-                              <span className="mon">Dec</span>
-                            </div>
-                            <div className="calendar-cards-body-item-separator"></div>
-                            <div className="calendar-cards-body-item-desc">
-                              <span className="title">
-                                ITHOLIC Version 3.0: The Future of ITOps
-                              </span>
-                              <div className="date">
-                                <span>From 01 March 2024 To 03 March 2024</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="calendar-cards-body-item">
-                            <div className="calendar-cards-body-item-date">
-                              <span className="num">12</span>
-                              <span className="mon">Dec</span>
-                            </div>
-                            <div className="calendar-cards-body-item-separator"></div>
-                            <div className="calendar-cards-body-item-desc">
-                              <span className="title">
-                                ITHOLIC Version 3.0: The Future of ITOps
-                              </span>
-                              <div className="date">
-                                <span>From 01 March 2024 To 03 March 2024</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="calendar-cards-body-item">
-                            <div className="calendar-cards-body-item-date">
-                              <span className="num">12</span>
-                              <span className="mon">Dec</span>
-                            </div>
-                            <div className="calendar-cards-body-item-separator"></div>
-                            <div className="calendar-cards-body-item-desc">
-                              <span className="title">
-                                ITHOLIC Version 3.0: The Future of ITOps
-                              </span>
-                              <div className="date">
-                                <span>From 01 March 2024 To 03 March 2024</span>
-                              </div>
-                            </div>
-                          </div>
+                          ))}
                         </div>
-                      </ScrollShadow>
+                      </div>
                     </Col>
                     <Col className="cal-sep"></Col>
                     <Col className="cal-details"></Col>

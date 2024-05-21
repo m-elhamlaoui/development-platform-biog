@@ -9,7 +9,7 @@ function getCalendar(token: string | null, id: string | null) {
 }
 
 function getEvents(token: string | null, id: string | null) {
-  return axios.get(REST_API_URL + "events" + id, {
+  return axios.get(REST_API_URL + "events/" + id, {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
