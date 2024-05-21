@@ -8,7 +8,7 @@ import {
 
 function FooterComponent() {
   return (
-    <div className="container-fluid footer">
+    <div className="container-fluid footer mt-auto">
       <div className="footer-about-contact">
         <span>About Us</span>
         <span>Contact Us</span>

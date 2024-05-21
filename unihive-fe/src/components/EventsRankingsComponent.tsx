@@ -1,11 +1,13 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Table } from "react-bootstrap";
-import eitcLogo from "../assets/eitc-logo.png";
-import cjeLogo from "../assets/cje-logo.png";
-import eaicLogo from "../assets/eaic-logo.png";
 import Rating from "./RatingComponent";
+import Event from "../models/Event";
+import { Month } from "../models/Month";
 
-function EventsRankingsComponent() {
+function EventsRankingsComponent(props: { events: Event[] }) {
+  const events = props.events;
+  events.sort((a, b) => (b.eventRating || 0) - (a.eventRating || 0));
+  const MonthsArray = Object.values(Month);
   return (
     <div className="container">
       <div className="row">
@@ -14,36 +16,22 @@ function EventsRankingsComponent() {
           <div className="tb">
             <Table borderless>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>ITHOLIC Version 3.0: The Future of ITOps</td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={5.0} max={5} />
-                      5.0
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>ITHOLIC Version 3.0: The Future of ITOps</td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={4.5} max={5} />
-                      4.5
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>ITHOLIC Version 3.0: The Future of ITOps</td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={4.0} max={5} />
-                      4.0
-                    </div>
-                  </td>
-                </tr>
+                {events.slice(0, 3).map((event, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {event.eventName.length > 48
+                        ? event.eventName.slice(0, 45) + "..."
+                        : event.eventName}
+                    </td>
+                    <td>
+                      <div className="rating">
+                        <Rating value={event.eventRating || 0} max={5} />
+                        {event.eventRating?.toFixed(1) || 0}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>

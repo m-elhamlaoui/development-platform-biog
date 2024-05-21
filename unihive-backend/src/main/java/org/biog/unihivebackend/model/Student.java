@@ -53,7 +53,7 @@ public class Student implements UserDetails {
 
   @Builder.Default
   @Column(name = "profile_image")
-  private String profileImage = "https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg";
+  private String profileImage = "https://storage.googleapis.com/unihive-files/pfp-placeholder.png";
 
   @ManyToMany
   @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "club_id"))
@@ -63,6 +63,10 @@ public class Student implements UserDetails {
   @ManyToOne
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
+
+  @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+  @JsonIgnore
+  private GoogleUser googleUser;
 
   @Builder.Default
   @Enumerated(EnumType.STRING)

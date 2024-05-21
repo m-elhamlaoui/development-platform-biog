@@ -7,9 +7,9 @@ import EventService from "../services/StudentService";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import Sidebar from "../components/sideBar";
+import FooterComponent from "../components/FooterComponent";
 
 function Event() {
-  
   return (
     <>
       <NavBar />
@@ -17,9 +17,10 @@ function Event() {
         <h1>Events</h1>
       </div>
       <div className="hr-lines"></div>
-      <div style={{display:'flex', flexDirection:'row'}}>
-      <EventComponent />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <EventComponent />
       </div>
+      <FooterComponent />
     </>
   );
 }

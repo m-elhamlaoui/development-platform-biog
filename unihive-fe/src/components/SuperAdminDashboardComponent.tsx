@@ -3,19 +3,11 @@ import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import Club from "../models/Club";
 import ModelsService from "../services/SuperAdminModelsService";
-import Admin from "../models/Admin";
-import School from "../models/School";
-import Student from "../models/Student";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminDashboardComponent() {
-  const [clubs, setClubs] = useState<Club[]>([]);
-  const [admins, setAdmins] = useState<Admin[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [schools, setSchools] = useState<School[]>([]);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [requests, setRequests] = useState<Request[]>([]);
+  const [allCounts, setAllCounts] = useState([]);
   var token: string = "";
   const navigate = useNavigate();
 
@@ -33,24 +25,8 @@ function SuperAdminDashboardComponent() {
 
   const fetchData = async () => {
     try {
-      const responseClubs = await ModelsService.listClubs(token);
-      setClubs(responseClubs.data);
-
-      const responseAdmins = await ModelsService.listAdmins(token);
-      setAdmins(responseAdmins.data);
-
-      const responseEvents = await ModelsService.listEvents(token);
-      setEvents(responseEvents.data);
-
-      const responseSchools = await ModelsService.listSchools(token);
-      setSchools(responseSchools.data);
-
-      const responseStudents = await ModelsService.listStudents(token);
-      setStudents(responseStudents.data);
-
-      const responseRequests = await ModelsService.listRequests(token);
-      setRequests(responseRequests.data);
-
+      const allCountsResponse = await ModelsService.getAllCounts(token);
+      setAllCounts(allCountsResponse.data);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -72,13 +48,7 @@ function SuperAdminDashboardComponent() {
     fetchData();
   }, []);
 
-  const clubsCount = clubs.length;
-  const adminsCount = admins.length;
-  const eventsCount = events.length;
-  const schoolsCount = schools.length;
-  const studentsCount = students.length;
-  const requestsCount = requests.length;
-
+  console.log(allCounts);
   return (
     <Row className="row2">
       <Col className="col-md-2">
@@ -88,11 +58,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Admins Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {adminsCount} {adminsCount > 1 ? "rows" : "row"}
+                {allCounts[0]} {allCounts[0] > 1 ? "rows" : "row"}
               </span>
               <button
                 className="btn btn-pr2"
@@ -107,11 +77,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Clubs Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {clubsCount} {clubsCount > 1 ? "rows" : "row"}
+                {allCounts[2]} {allCounts[2] > 1 ? "rows" : "row"}
               </span>
               <button
                 className="btn btn-pr2"
@@ -126,11 +96,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Events Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {eventsCount} {eventsCount > 1 ? "rows" : "row"}
+                {allCounts[3]} {allCounts[3] > 1 ? "rows" : "row"}
               </span>
               <button
                 className="btn btn-pr2"
@@ -145,11 +115,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Schools Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {schoolsCount} {schoolsCount > 1 ? "rows" : "row"}
+                {allCounts[4]} {allCounts[4] > 1 ? "rows" : "row"}
               </span>
               <button
                 className="btn btn-pr2"
@@ -164,11 +134,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Students Table</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {studentsCount} {studentsCount > 1 ? "rows" : "row"}
+                {allCounts[1]} {allCounts[1] > 1 ? "rows" : "row"}
               </span>
               <button
                 className="btn btn-pr2"
@@ -183,11 +153,11 @@ function SuperAdminDashboardComponent() {
         <div className="entity">
           <span>Pending Sign Up Requests</span>
           {isLoading ? (
-            <div>Loading...</div>
+            <CircularSpinner color="#000" size={38} speed={2} weight={3} />
           ) : (
             <div className="rb">
               <span>
-                {requestsCount} {requestsCount > 1 ? "requests" : "request"}
+                {allCounts[5]} {allCounts[5] > 1 ? "requests" : "request"}
               </span>
               <button
                 className="btn btn-pr2"

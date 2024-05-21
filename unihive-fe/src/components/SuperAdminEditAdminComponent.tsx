@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import Admin from "../models/Admin";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminEditAdminComponent() {
   const { id } = useParams();
@@ -96,7 +97,9 @@ function SuperAdminEditAdminComponent() {
               <span style={{ fontSize: "1.5rem" }}>{strId + " Row"}</span>
             </div>
             {isLoading ? (
-              <div className="is-loading">Loading...</div>
+              <div className="is-loading">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : (
               <form onSubmit={handleSave}>
                 <div className="info">

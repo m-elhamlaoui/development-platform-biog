@@ -32,7 +32,7 @@ export enum Schools {
   ENSA_KHOURIBGA = "ENSA KHOURIBGA",
   ERA = "ERA",
   ENSA_MARRAKECH = "ENSA MARRAKECH",
-  E21M_UPM = "E21M - UPM",
+  E2IM_UPM = "E2IM - UPM",
   FST_MARRAKECH = "FST Marrakech",
   ISGA_MARRAKECH = "ISGA Marrakech",
   ENAM = "ENAM",

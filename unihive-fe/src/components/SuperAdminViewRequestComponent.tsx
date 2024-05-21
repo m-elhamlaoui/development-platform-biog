@@ -7,6 +7,7 @@ import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import Request from "../models/Request";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminViewRequestComponent() {
   const { id } = useParams();
@@ -115,7 +116,9 @@ function SuperAdminViewRequestComponent() {
               <span style={{ fontSize: "1.5rem" }}>{strId + " Row"}</span>
             </div>
             {isLoading ? (
-              <div className="is-loading">Loading...</div>
+              <div className="is-loading">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : (
               <div className="req-entity">
                 <form>

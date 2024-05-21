@@ -1,11 +1,11 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Table } from "react-bootstrap";
-import eitcLogo from "../assets/eitc-logo.png";
-import cjeLogo from "../assets/cje-logo.png";
-import eaicLogo from "../assets/eaic-logo.png";
 import Rating from "./RatingComponent";
+import Club from "../models/Club";
 
-function ClubsRankingsComponent() {
+function ClubsRankingsComponent(props: { clubs: Club[] }) {
+  const clubs = props.clubs;
+  clubs.sort((a, b) => b.clubRating - a.clubRating);
   return (
     <div className="container">
       <div className="row">
@@ -14,52 +14,21 @@ function ClubsRankingsComponent() {
           <div className="tb">
             <Table borderless>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <img src={eitcLogo} width={60} alt="EITC" />
-                    ENSIAS IT CLUB
-                  </td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={5.0} max={5} />
-                      5.0
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>
-                    <img src={cjeLogo} width={60} alt="CJE" />
-                    Club Japonais ENSIAS
-                  </td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={4.5} max={5} />
-                      4.5
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>
-                    <img
-                      src={eaicLogo}
-                      width={60}
-                      style={{
-                        marginRight: "2.5rem",
-                      }}
-                      alt="EAIC"
-                    />
-                    ENSIAS AI CLUB
-                  </td>
-                  <td>
-                    <div className="rating">
-                      <Rating value={4.0} max={5} />
-                      4.0
-                    </div>
-                  </td>
-                </tr>
+                {clubs.slice(0, 3).map((club, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <img src={club.clubLogo} width={60} alt={club.clubName} />
+                      {club.clubName}
+                    </td>
+                    <td>
+                      <div className="rating">
+                        <Rating value={club.clubRating} max={5} />
+                        {club.clubRating.toFixed(1)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>

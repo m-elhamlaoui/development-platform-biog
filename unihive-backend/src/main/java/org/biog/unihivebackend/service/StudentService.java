@@ -1,5 +1,6 @@
 package org.biog.unihivebackend.service;
 
+import org.biog.unihivebackend.auth.AuthenticationResponse;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.model.Student;
@@ -17,7 +18,15 @@ public interface StudentService {
 
         Student getStudent(UUID id, UUID... schoolId) throws AccessDeniedException;
 
+        Student getStudentByEmail(String email);
+
         School getSchoolByStudent(UUID id);
 
         List<Club> getClubsByFollower(UUID id, UUID... schoolId) throws AccessDeniedException;
+
+        AuthenticationResponse updateStudentEmail(UUID id, String email);
+
+        Student updateStudentProfileImage(UUID id, String profileImage);
+
+        void unfollowClub(UUID studentId, UUID clubId);
 }

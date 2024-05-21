@@ -21,6 +21,7 @@ import SuperAdminEditStudentComponent from "../components/SuperAdminEditStudentC
 import SuperAdminViewRequestComponent from "../components/SuperAdminViewRequestComponent";
 import { isExpired } from "react-jwt";
 import { useEffect } from "react";
+import SuperAdminProfileComponent from "../components/SuperAdminProfileComponent";
 
 function SuperAdminDashboardPage() {
   const { option } = useParams();
@@ -71,6 +72,7 @@ function SuperAdminDashboardPage() {
       {option === "addstudent" && <SuperAdminAddStudentComponent />}
       {option === "upstudent" && <SuperAdminEditStudentComponent />}
       {option === "viewrequest" && <SuperAdminViewRequestComponent />}
+      {option === "profile" && <SuperAdminProfileComponent />}
     </>
   );
 }
