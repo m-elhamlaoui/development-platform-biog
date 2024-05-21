@@ -30,7 +30,10 @@ function UpcomingEventsComponent(props: { events: Event[] }) {
           <div className="up-event-card" key={event.id}>
             <div className="up-event-card-date">
               <span className="num">
-                {new Date(event.startTime ?? new Date()).getDate()}
+                {new Date(event.startTime ?? new Date())
+                  .getDate()
+                  .toString()
+                  .padStart(2, "0")}
               </span>
               <span className="mon">
                 {new Date(event.startTime ?? new Date()).toLocaleString(
@@ -77,14 +80,10 @@ function UpcomingEventsComponent(props: { events: Event[] }) {
                     return (
                       <span>
                         From{" "}
-                        {startDate.getUTCDate() < 10
-                          ? "0" + startDate.getUTCDate()
-                          : startDate.getUTCDate()}{" "}
+                        {startDate.getUTCDate().toString().padStart(2, "0")}{" "}
                         {MonthsArray[startDate.getUTCMonth()]}{" "}
                         {startDate.getUTCFullYear()} To{" "}
-                        {endDate.getUTCDate() < 10
-                          ? "0" + endDate.getUTCDate()
-                          : endDate.getUTCDate()}{" "}
+                        {endDate.getUTCDate().toString().padStart(2, "0")}{" "}
                         {MonthsArray[endDate.getUTCMonth()]}{" "}
                         {endDate.getUTCFullYear()}
                       </span>

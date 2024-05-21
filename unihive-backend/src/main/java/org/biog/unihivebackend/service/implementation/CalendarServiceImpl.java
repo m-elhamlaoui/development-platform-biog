@@ -61,15 +61,17 @@ public class CalendarServiceImpl implements CalendarService {
         List<Event> events = calendar.events().list("primary").execute().getItems();
         List<EventRequest> eventRequests = new ArrayList<EventRequest>();
         for (Event event : events) {
-            EventRequest eventRequest = new EventRequest();
-            eventRequest.setTitle(event.getSummary());
-            eventRequest.setLocation(event.getLocation());
-            eventRequest.setDescription(event.getDescription());
-            eventRequest.setStartTime(event.getStart().getDateTime().toString());
-            eventRequest.setEndTime(event.getEnd().getDateTime().toString());
-            eventRequest.setColor(event.getColorId());
-            eventRequest.setReminder(event.getReminders().getUseDefault().toString());
-            eventRequests.add(eventRequest);
+            if (event.getSummary().startsWith("UniHive:")) {
+                EventRequest eventRequest = new EventRequest();
+                eventRequest.setTitle(event.getSummary().replace("UniHive:", ""));
+                eventRequest.setLocation(event.getLocation());
+                eventRequest.setDescription(event.getDescription());
+                eventRequest.setStartTime(event.getStart().getDateTime().toString());
+                eventRequest.setEndTime(event.getEnd().getDateTime().toString());
+                eventRequest.setColor(event.getColorId());
+                eventRequest.setReminder(event.getReminders().getUseDefault().toString());
+                eventRequests.add(eventRequest);
+            }
         }
         return eventRequests;
     }
