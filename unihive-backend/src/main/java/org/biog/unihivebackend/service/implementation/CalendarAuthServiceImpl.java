@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.biog.unihivebackend.config.CalendarConfig;
 import org.biog.unihivebackend.model.GoogleUser;
+import org.biog.unihivebackend.model.Student;
 import org.biog.unihivebackend.repository.GoogleUserRepository;
 import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.service.CalendarAuthService;
@@ -95,14 +96,21 @@ public class CalendarAuthServiceImpl implements CalendarAuthService {
 
     @Override
     public ResponseEntity<String> revoke(UUID studentId) throws IOException {
+
         GoogleUser userCredentials = googleUserRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new IOException("Student with id " + studentId + " not found"));
-        if (userCredentials == null) {
-            return new ResponseEntity<>("No credentials found", HttpStatus.NOT_FOUND);
+
+        Student student = userCredentials.getStudent();
+        if (student != null) {
+            student.setGoogleUser(null);
         }
 
         googleUserRepository.delete(userCredentials);
-        ;
+
+        boolean exists = googleUserRepository.existsById(userCredentials.getId());
+        if (exists) {
+            return new ResponseEntity<>("Failed to revoke credentials", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         return new ResponseEntity<>("Credentials revoked", HttpStatus.OK);
     }
