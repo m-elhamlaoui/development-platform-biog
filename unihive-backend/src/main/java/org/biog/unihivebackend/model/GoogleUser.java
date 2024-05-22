@@ -32,7 +32,7 @@ public class GoogleUser {
   @Column(name = "token_expiry", nullable = false)
   private Date tokenExpiry;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne
   @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false, unique = true)
   private Student student;
 

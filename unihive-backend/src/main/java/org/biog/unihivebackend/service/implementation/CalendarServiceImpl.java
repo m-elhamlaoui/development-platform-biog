@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.biog.unihivebackend.config.CalendarConfig;
 import org.biog.unihivebackend.service.CalendarService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -45,6 +46,7 @@ public class CalendarServiceImpl implements CalendarService {
         Calendar calendar = getCalendarService(studentId);
         Event event = calendar.events().get("primary", eventId).execute();
         EventRequest eventRequest = new EventRequest();
+        eventRequest.setId(event.getId());
         eventRequest.setTitle(event.getSummary());
         eventRequest.setLocation(event.getLocation());
         eventRequest.setDescription(event.getDescription());
@@ -63,6 +65,7 @@ public class CalendarServiceImpl implements CalendarService {
         for (Event event : events) {
             if (event.getSummary().startsWith("UniHive:")) {
                 EventRequest eventRequest = new EventRequest();
+                eventRequest.setId(event.getId());
                 eventRequest.setTitle(event.getSummary().replace("UniHive:", ""));
                 eventRequest.setLocation(event.getLocation());
                 eventRequest.setDescription(event.getDescription());
@@ -85,6 +88,16 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public Calendar getCalendarService(UUID studentId) throws IOException {
         return calendarConfig.buildCalendarService(httpTransport, flow, studentId);
+    }
+
+    @Override
+    public ResponseEntity<String> updateDescription(String eventId, String description, UUID studentId)
+            throws IOException {
+        Calendar calendar = getCalendarService(studentId);
+        Event event = calendar.events().get("primary", eventId).execute();
+        event.setDescription(description);
+        calendar.events().update("primary", eventId, event).execute();
+        return ResponseEntity.ok("Description updated successfully");
     }
 
 }

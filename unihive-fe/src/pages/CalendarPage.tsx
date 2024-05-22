@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import Student from "../models/Student";
 import Footer from "../components/FooterComponent";
 import ScrollToTop from "react-scroll-to-top";
-import { ArrowUpIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowUpIcon,
+  ClockIcon,
+  MapPinIcon,
+  PowerIcon,
+} from "@heroicons/react/24/solid";
 import { InfinitySpin } from "react-loader-spinner";
 import PageTitleComponent from "../components/PageTitleComponent";
 import logo1 from "../assets/uh-logo.png";
@@ -18,6 +23,7 @@ import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventRequest from "../models/EventRequest";
 import { Month } from "../models/Month";
+import { event } from "jquery";
 
 function CalendarPage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -25,8 +31,50 @@ function CalendarPage() {
   const [eventRequest, setEventRequest] = useState<EventRequest>();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled2, setIsDisabled2] = useState(false);
+  const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const currentWindow = window.location;
+  const [selectedCard, setSelectedCard] = useState<number>(-1);
+  const [selectedEvent, setSelectedEvent] = useState<EventRequest>();
+
+  const handleCardClick = (index: number) => {
+    if (selectedCard === index) {
+      setSelectedCard(-1);
+      setSelectedEvent(undefined);
+    } else {
+      setSelectedCard(index);
+      setSelectedEvent(Events[index]);
+      setDescription(Events[index].description);
+    }
+  };
+
+  const handleEdit = () => {
+    if (isEditing === false) {
+      setIsEditing(true);
+      setIsDisabled(false);
+    } else {
+      setIsDisabled2(true);
+      CalendarService.updateDescription(
+        localStorage.getItem("student") as string,
+        student!.id,
+        selectedEvent!.id,
+        description
+      ).then(
+        (response) => {
+          console.log(response.data);
+          setIsEditing(false);
+          setIsDisabled(true);
+          setIsDisabled2(false);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    }
+  };
 
   useEffect(() => {
     document.title = "UniHive - Calendar";
@@ -140,7 +188,28 @@ function CalendarPage() {
     }
   };
 
+  function handleLogout() {
+    CalendarService.logout(
+      localStorage.getItem("student") as string,
+      student!.id
+    ).then(
+      (response) => {
+        console.log(response.data);
+        window.location.reload();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
   const Events = Object.values(eventRequest ?? {});
+  Events.sort((a, b) => {
+    return (
+      new Date(a.startTime ?? new Date()).getTime() -
+      new Date(b.startTime ?? new Date()).getTime()
+    );
+  });
   const MonthsArray = Object.values(Month);
 
   return (
@@ -162,16 +231,27 @@ function CalendarPage() {
                       <div className="calendar-cards">
                         <div className="calendar-cards-header">
                           <span>Upcoming events</span>
-                          <button className="btn btn-primary add-event-btn">
-                            Add event
-                          </button>
+                          <div>
+                            <button className="btn btn-primary add-event-btn">
+                              Add event
+                            </button>
+                            <button
+                              className="btn btn-primary logout-btn"
+                              onClick={handleLogout}
+                            >
+                              <PowerIcon width={20} height={20} />
+                            </button>
+                          </div>
                         </div>
                         <div className="calendar-cards-separator"></div>
                         <div className="calendar-cards-body">
                           {Events.map((event, index) => (
                             <div
                               key={index}
-                              className="calendar-cards-body-item"
+                              className={`calendar-cards-body-item ${
+                                selectedCard === index ? "selected" : ""
+                              }`}
+                              onClick={() => handleCardClick(index)}
                             >
                               <div className="calendar-cards-body-item-date">
                                 <span className="num">
@@ -188,7 +268,14 @@ function CalendarPage() {
                                   })}
                                 </span>
                               </div>
-                              <div className="calendar-cards-body-item-separator"></div>
+                              <div
+                                className="calendar-cards-body-item-separator"
+                                style={
+                                  selectedCard === index
+                                    ? { backgroundColor: "white" }
+                                    : { backgroundColor: "black" }
+                                }
+                              ></div>
                               <div className="calendar-cards-body-item-desc">
                                 <span className="title">
                                   {event.title.length > 48
@@ -267,7 +354,112 @@ function CalendarPage() {
                       </div>
                     </Col>
                     <Col className="cal-sep"></Col>
-                    <Col className="cal-details"></Col>
+                    <Col className="cal-details">
+                      {selectedEvent === undefined ? (
+                        <div className="nothing-here">No event selected.</div>
+                      ) : (
+                        <div className="calendar-event">
+                          <div className="calendar-event-title">
+                            {selectedEvent!.title}
+                          </div>
+                          <div className="calendar-event-details">
+                            <span>
+                              <ClockIcon
+                                width={20}
+                                height={20}
+                                color="#46bfff"
+                                style={{
+                                  marginRight: "0.3rem",
+                                  transform: "translateY(-0.1rem)",
+                                }}
+                              />
+                              {new Date(
+                                selectedEvent!.startTime ?? new Date()
+                              ).toLocaleString("default", {
+                                month: "long",
+                                day: "numeric",
+                              })}
+                              {(() => {
+                                if (
+                                  new Date(
+                                    selectedEvent!.startTime ?? new Date()
+                                  ).getDate() === 1
+                                )
+                                  return "st";
+                                else if (
+                                  new Date(
+                                    selectedEvent!.startTime ?? new Date()
+                                  ).getDate() === 2
+                                )
+                                  return "nd";
+                                else if (
+                                  new Date(
+                                    selectedEvent!.startTime ?? new Date()
+                                  ).getDate() === 3
+                                )
+                                  return "rd";
+                                else return "th";
+                              })()}{" "}
+                              -{" "}
+                              {new Date(
+                                selectedEvent!.startTime ?? new Date()
+                              ).toLocaleTimeString("default", {
+                                hour: "numeric",
+                                minute: "numeric",
+                              })}
+                            </span>
+                            <div
+                              style={{
+                                display: "flex",
+                              }}
+                            >
+                              <span>
+                                <MapPinIcon
+                                  width={20}
+                                  height={20}
+                                  color="#46bfff"
+                                  style={{
+                                    marginRight: "0.3rem",
+                                    transform: "translateY(-0.1rem)",
+                                  }}
+                                />
+                              </span>
+                              <span>{selectedEvent.location}</span>
+                            </div>
+                          </div>
+                          <div className="calendar-cards-separator"></div>
+                          <div className="calendar-event-see">
+                            <span>Event Details</span>
+                            <button
+                              className="btn btn-primary see-calendar-event-btn"
+                              type="button"
+                            >
+                              See Event
+                            </button>
+                          </div>
+                          <div className="calendar-event-desc">
+                            <div className="my-desc">
+                              <span>My description</span>
+                              <button
+                                className="btn btn-primary add-event-btn"
+                                onClick={handleEdit}
+                                disabled={isDisabled2}
+                              >
+                                {isEditing ? "Save" : "Edit"}
+                              </button>
+                            </div>
+                            <textarea
+                              className="desc"
+                              value={description}
+                              onChange={(e) => {
+                                setDescription(e.target.value);
+                              }}
+                              disabled={isDisabled}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </Col>
                   </Row>
                 </div>
               </div>

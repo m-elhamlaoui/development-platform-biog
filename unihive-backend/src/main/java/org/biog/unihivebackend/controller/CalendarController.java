@@ -81,4 +81,11 @@ public class CalendarController {
         calendarService.getCalendarService(studentId);
         return ResponseEntity.ok("Calendar service created");
     }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PutMapping("/updescription/{studentId}/{id}")
+    public ResponseEntity<String> updateDescription(@PathVariable String id, @RequestParam String description,
+            @PathVariable UUID studentId) throws IOException {
+        return calendarService.updateDescription(id, description, studentId);
+    }
 }

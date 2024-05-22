@@ -20,8 +20,14 @@ function addEvent(token: string | null, id: string | null, data: any) {
   });
 }
 
-function updateEvent(token: string | null, id: string | null, data: any) {
-  return axios.put(REST_API_URL + "upevent/" + id, data, {
+function updateDescription(
+  token: string | null,
+  id: string | null,
+  eventId: string | null,
+  description: string
+) {
+  return axios.put(REST_API_URL + "updescription/" + id + "/" + eventId, null, {
+    params: { description: description },
     headers: { Authorization: `Bearer ${token}` },
   });
 }
@@ -32,12 +38,19 @@ function deleteEvent(token: string | null, id: string | null) {
   });
 }
 
+function logout(token: string | null, id: string | null) {
+  return axios.delete(REST_API_URL + "revoke/" + id, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
 const CalendarService = {
   getCalendar,
   getEvents,
   addEvent,
-  updateEvent,
+  updateDescription,
   deleteEvent,
+  logout,
 };
 
 export default CalendarService;

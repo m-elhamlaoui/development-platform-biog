@@ -1,4 +1,5 @@
 interface EventRequest {
+  id: string;
   title: string;
   description: string;
   location: string;

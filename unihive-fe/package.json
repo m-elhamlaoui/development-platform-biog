@@ -29,6 +29,7 @@
     "react-scroll-to-top": "^3.0.0",
     "react-shadow-scroll": "^2.1.1",
     "react-social-media-icons": "^10.0.4",
+    "react-tabs": "^6.0.2",
     "react-validation": "^3.0.7",
     "use-scroll-shadow": "^1.0.5",
     "validator": "^13.11.0"

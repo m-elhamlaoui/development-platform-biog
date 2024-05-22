@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.biog.unihivebackend.service.implementation.EventRequest;
+import org.springframework.http.ResponseEntity;
 
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
@@ -19,4 +20,6 @@ public interface CalendarService {
     void deleteEvent(String eventId, UUID studentId) throws IOException;
 
     Calendar getCalendarService(UUID studentId) throws IOException;
+
+    ResponseEntity<String> updateDescription(String eventId, String description, UUID studentId) throws IOException;
 }
