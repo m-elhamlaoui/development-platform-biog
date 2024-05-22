@@ -184,7 +184,7 @@ public class AuthenticationService {
         .school(schoolRepository.findBySchoolName(requestModel.getSchoolName()).orElseThrow(
             () -> new NotFoundException(
                 "School not found with name " + requestModel.getSchoolName())))
-        .profileImage("https://storage.googleapis.com/unihive-files/pfp-plaveholder.jpg")
+        .profileImage("https://storage.googleapis.com/unihive-files/pfp-placeholder.jpg")
         .build();
     studentRepository.save(student);
     requestRepository.delete(requestModel);

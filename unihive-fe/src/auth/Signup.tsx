@@ -34,6 +34,7 @@ function Signup() {
 
   function signup(event: any) {
     event.preventDefault();
+    setIsSubmitted(true);
     for (let i = 0; i < 8; i++) {
       if (!event.target[i].value && i !== 4) {
         enqueueSnackbar("All fields are required", {
@@ -46,6 +47,7 @@ function Signup() {
           },
           preventDuplicate: true,
         });
+        setIsSubmitted(false);
         return;
       }
     }
@@ -61,6 +63,7 @@ function Signup() {
         },
         preventDuplicate: true,
       });
+      setIsSubmitted(false);
       return;
     }
     const file = event.target[4].files[0];
@@ -75,6 +78,7 @@ function Signup() {
         },
         preventDuplicate: true,
       });
+      setIsSubmitted(false);
       return;
     }
     const password = event.target[7].value;
@@ -91,6 +95,7 @@ function Signup() {
         },
         preventDuplicate: true,
       });
+      setIsSubmitted(false);
       return;
     }
 
@@ -112,6 +117,7 @@ function Signup() {
           },
           preventDuplicate: true,
         });
+        setIsSubmitted(false);
       }
     );
 
@@ -128,7 +134,6 @@ function Signup() {
 
     AuthService.register(data).then(
       () => {
-        setIsSubmitted(true);
         enqueueSnackbar("Signed up successfully, check your Email", {
           variant: "success",
           autoHideDuration: 2000,
@@ -142,6 +147,7 @@ function Signup() {
             navigate("/login");
           },
         });
+        setIsSubmitted(false);
       },
       () => {
         enqueueSnackbar("Something wrong occured", {
@@ -154,6 +160,7 @@ function Signup() {
           },
           preventDuplicate: true,
         });
+        setIsSubmitted(false);
       }
     );
   }
