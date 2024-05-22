@@ -188,20 +188,17 @@ function CalendarPage() {
     }
   };
 
-  function handleLogout() {
-    CalendarService.logout(
-      localStorage.getItem("student") as string,
-      student!.id
-    ).then(
-      (response) => {
-        console.log(response.data);
-        window.location.reload();
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+  const handleLogout = async () => {
+    try {
+      const response = await CalendarService.logout(
+        localStorage.getItem("student") as string,
+        student!.id
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
+  };
 
   const Events = Object.values(eventRequest ?? {});
   Events.sort((a, b) => {
