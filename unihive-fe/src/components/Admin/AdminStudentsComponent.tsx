@@ -208,7 +208,7 @@ function AdminStudentsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upstudent/${
+                                  `/admin/upstudent/${
                                     students.indexOf(student) + 1
                                   }`,
                                   { state: { student } }
@@ -241,7 +241,7 @@ function AdminStudentsComponent() {
           <button
             className="btn btn-add3"
             type="button"
-            onClick={() => navigate("/superadmin/addstudent")}
+            onClick={() => navigate("/admin/addstudent")}
           >
             Add Student
           </button>

@@ -115,7 +115,7 @@ function AdminEditStudentComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/students");
+            navigate("/admin/students");
           },
         });
       })
@@ -289,7 +289,7 @@ function AdminEditStudentComponent() {
                     <button
                       className="btn cancel-update"
                       type="button"
-                      onClick={() => navigate("/superadmin/students")}
+                      onClick={() => navigate("/admin/students")}
                     >
                       Cancel
                     </button>

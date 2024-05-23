@@ -199,9 +199,7 @@ function AdminClubsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upclub/${
-                                    clubs.indexOf(club) + 1
-                                  }`,
+                                  `/admin/upclub/${clubs.indexOf(club) + 1}`,
                                   { state: { club } }
                                 )
                               }
@@ -226,7 +224,7 @@ function AdminClubsComponent() {
           </div>
           <button
             className="btn btn-add1"
-            onClick={() => navigate("/superadmin/addclub")}
+            onClick={() => navigate("/admin/addclub")}
             type="button"
           >
             Add Club

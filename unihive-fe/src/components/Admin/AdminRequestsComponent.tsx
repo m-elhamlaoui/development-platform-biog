@@ -264,7 +264,7 @@ function AdminRequestsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/viewrequest/${
+                                  `/admin/viewrequest/${
                                     requests.indexOf(request) + 1
                                   }`,
                                   { state: { request } }

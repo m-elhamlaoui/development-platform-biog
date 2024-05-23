@@ -31,14 +31,14 @@ function AdminAddEventComponent() {
     ModelsService.School(token, decodedToken.sub)
       .then((response) => {
         setSchool(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    ModelsService.listClubs(token, decodedToken.sub)
-      .then((response) => {
-        setClubs(response.data);
-        setIsLoading(false);
+        ModelsService.listClubs(token, response.data.id)
+          .then((response) => {
+            setClubs(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -74,7 +74,7 @@ function AdminAddEventComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/events");
+            navigate("/admin/events");
           },
         });
       })
@@ -162,7 +162,7 @@ function AdminAddEventComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/events")}
+                      onClick={() => navigate("/admin/events")}
                     >
                       Cancel
                     </button>

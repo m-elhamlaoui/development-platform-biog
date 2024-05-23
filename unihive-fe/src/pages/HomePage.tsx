@@ -32,6 +32,8 @@ function HomePage() {
 
     if (localStorage.getItem("student")) {
       token = localStorage.getItem("student") as string;
+    } else if (localStorage.getItem("admin")) {
+      navigate("/admin/dashboard");
     } else if (localStorage.getItem("superadmin")) {
       navigate("/superadmin/dashboard");
     }

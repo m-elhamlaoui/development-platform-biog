@@ -47,8 +47,8 @@ function AdminAddClubComponent() {
         clubDescription: event.target[2].value,
         clubBanner: event.target[3].value,
         school: school!.id,
-        email: event.target[5].value,
-        password: event.target[6].value,
+        email: event.target[4].value,
+        password: event.target[5].value,
       },
       school!.id
     )

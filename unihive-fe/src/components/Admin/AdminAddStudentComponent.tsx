@@ -3,7 +3,7 @@ import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { decodeToken, isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
@@ -39,15 +39,19 @@ function AdminAddStudentComponent() {
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addStudent(token, {
-      firstName: event.target[0].value,
-      lastName: event.target[1].value,
-      cne: event.target[2].value,
-      numApogee: event.target[3].value,
-      school: school!.id,
-      email: event.target[5].value,
-      password: event.target[6].value,
-    })
+    ModelsService.addStudent(
+      token,
+      {
+        firstName: event.target[0].value,
+        lastName: event.target[1].value,
+        cne: event.target[2].value,
+        numApogee: event.target[3].value,
+        school: school!.id,
+        email: event.target[4].value,
+        password: event.target[5].value,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("School added successfully", {
@@ -60,7 +64,7 @@ function AdminAddStudentComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/students");
+            navigate("/admin/students");
           },
         });
       })
@@ -144,7 +148,7 @@ function AdminAddStudentComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/students")}
+                      onClick={() => navigate("/admin/students")}
                     >
                       Cancel
                     </button>

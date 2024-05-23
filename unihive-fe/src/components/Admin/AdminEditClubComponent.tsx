@@ -76,7 +76,7 @@ function AdminEditClubComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/clubs");
+            navigate("/admin/clubs");
           },
         });
       })
@@ -129,7 +129,7 @@ function AdminEditClubComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/clubs");
+            navigate("/admin/clubs");
           },
         });
       })
@@ -439,7 +439,7 @@ function AdminEditClubComponent() {
                     <button
                       className="btn cancel-update"
                       type="button"
-                      onClick={() => navigate("/superadmin/clubs")}
+                      onClick={() => navigate("/admin/clubs")}
                     >
                       Cancel
                     </button>

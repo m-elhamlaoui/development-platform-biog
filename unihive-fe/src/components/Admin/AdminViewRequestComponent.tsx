@@ -74,7 +74,7 @@ function AdminViewRequestComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/requests");
+            navigate("/admin/requests");
           },
         });
       })
@@ -110,7 +110,7 @@ function AdminViewRequestComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/requests");
+            navigate("/admin/requests");
           },
         });
       })
@@ -238,7 +238,7 @@ function AdminViewRequestComponent() {
                       <button
                         className="btn cancel-update"
                         type="button"
-                        onClick={() => navigate("/superadmin/requests")}
+                        onClick={() => navigate("/admin/requests")}
                       >
                         Cancel
                       </button>

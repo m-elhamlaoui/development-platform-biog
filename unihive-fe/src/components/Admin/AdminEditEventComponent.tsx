@@ -74,7 +74,7 @@ function AdminEditEventComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/events");
+            navigate("/admin/events");
           },
         });
       })
@@ -126,7 +126,7 @@ function AdminEditEventComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/events");
+            navigate("/admin/events");
           },
         });
       })
@@ -367,7 +367,7 @@ function AdminEditEventComponent() {
                     <button
                       className="btn cancel-update"
                       type="button"
-                      onClick={() => navigate("/superadmin/events")}
+                      onClick={() => navigate("/admin/events")}
                     >
                       Cancel
                     </button>

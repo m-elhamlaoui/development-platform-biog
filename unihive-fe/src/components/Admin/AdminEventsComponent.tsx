@@ -215,9 +215,7 @@ function AdminEventsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upevent/${
-                                    events.indexOf(event) + 1
-                                  }`,
+                                  `/admin/upevent/${events.indexOf(event) + 1}`,
                                   { state: { event } }
                                 )
                               }
@@ -245,7 +243,7 @@ function AdminEventsComponent() {
           <button
             className="btn btn-add1"
             type="button"
-            onClick={() => navigate("/superadmin/addevent")}
+            onClick={() => navigate("/admin/addevent")}
           >
             Add Event
           </button>
