@@ -28,7 +28,7 @@ public class CalendarServiceImpl implements CalendarService {
     private final GoogleAuthorizationCodeFlow flow;
 
     @Override
-    public Event createEvent(EventRequest event, UUID studentId) throws IOException {
+    public EventRequest createEvent(EventRequest event, UUID studentId) throws IOException {
         Calendar calendar = getCalendarService(studentId);
         Event newevent = new Event()
                 .setSummary(event.getTitle())
@@ -38,7 +38,17 @@ public class CalendarServiceImpl implements CalendarService {
                 .setEnd(new EventDateTime().setDateTime(new DateTime(event.getEndTime())))
                 .setColorId(event.getColor())
                 .setReminders(event.getReminder() == "True" ? new Event.Reminders().setUseDefault(true) : null);
-        return calendar.events().insert("primary", newevent).execute();
+        calendar.events().insert("primary", newevent).execute();
+
+        EventRequest eventRequest = new EventRequest();
+        eventRequest.setTitle(event.getTitle());
+        eventRequest.setLocation(event.getLocation());
+        eventRequest.setDescription(event.getDescription());
+        eventRequest.setStartTime(event.getStartTime());
+        eventRequest.setEndTime(event.getEndTime());
+        eventRequest.setColor(event.getColor());
+        eventRequest.setReminder(event.getReminder());
+        return eventRequest;
     }
 
     @Override

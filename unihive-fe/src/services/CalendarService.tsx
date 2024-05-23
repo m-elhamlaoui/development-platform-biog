@@ -32,8 +32,12 @@ function updateDescription(
   });
 }
 
-function deleteEvent(token: string | null, id: string | null) {
-  return axios.delete(REST_API_URL + "delevent/" + id, {
+function deleteEvent(
+  token: string | null,
+  id: string | null,
+  eventId: string | null
+) {
+  return axios.delete(REST_API_URL + "delevent/" + id + "/" + eventId, {
     headers: { Authorization: `Bearer ${token}` },
   });
 }

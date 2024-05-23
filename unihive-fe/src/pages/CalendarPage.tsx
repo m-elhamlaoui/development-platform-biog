@@ -10,6 +10,7 @@ import {
   ClockIcon,
   MapPinIcon,
   PowerIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import { InfinitySpin } from "react-loader-spinner";
 import PageTitleComponent from "../components/PageTitleComponent";
@@ -24,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import EventRequest from "../models/EventRequest";
 import { Month } from "../models/Month";
 import { event } from "jquery";
+import Event from "../models/Event";
 
 function CalendarPage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -34,11 +36,29 @@ function CalendarPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isDisabled2, setIsDisabled2] = useState(false);
+  const [isDisabled3, setIsDisabled3] = useState(false);
+  const [isDisabled4, setIsDisabled4] = useState(false);
+  const [isDisabled5, setIsDisabled5] = useState(false);
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const currentWindow = window.location;
   const [selectedCard, setSelectedCard] = useState<number>(-1);
   const [selectedEvent, setSelectedEvent] = useState<EventRequest>();
+  const [isAdding, setIsAdding] = useState(false);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [newDescription, setNewDescription] = useState("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
+
+  const handleAdding = () => {
+    if (isAdding === false) {
+      setIsAdding(true);
+      setIsDisabled3(true);
+      setSelectedCard(-1);
+      setSelectedEvent(undefined);
+    } else {
+      setIsDisabled3(false);
+    }
+  };
 
   const handleCardClick = (index: number) => {
     if (selectedCard === index) {
@@ -48,6 +68,8 @@ function CalendarPage() {
       setSelectedCard(index);
       setSelectedEvent(Events[index]);
       setDescription(Events[index].description);
+      setIsAdding(false);
+      setIsDisabled3(false);
     }
   };
 
@@ -130,6 +152,8 @@ function CalendarPage() {
               setIsAuthorized(false);
               setIsLoading(false);
             });
+          const eventsResponse = await StudentService.getEvents(token);
+          setEvents(eventsResponse.data);
         }
       } catch (error) {
         console.error(error);
@@ -188,20 +212,149 @@ function CalendarPage() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      const response = await CalendarService.logout(
-        localStorage.getItem("student") as string,
-        student!.id
+  function handleLogout() {
+    CalendarService.logout(
+      localStorage.getItem("student") as string,
+      student!.id
+    ).then(
+      (response) => {
+        console.log(response.data);
+        window.location.reload();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  const handleSave = async () => {
+    setIsDisabled4(true);
+    if (selectedEventId === "") {
+      const selectedEvent2 = Events2.find(
+        (event) => event.id === Events2[0].id
       );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Logout Error:", error);
+      CalendarService.addEvent(
+        localStorage.getItem("student") as string,
+        student!.id,
+        {
+          title: "UniHive:" + selectedEvent2?.eventName,
+          description: newDescription === "" ? "None" : newDescription,
+          startTime: selectedEvent2?.startTime?.toString(),
+          endTime: selectedEvent2?.endTime?.toString(),
+          location: selectedEvent2?.eventLocation,
+          reminder: "True",
+          color: "7",
+        }
+      ).then(
+        (response) => {
+          console.log(response.data);
+          setIsAdding(false);
+          setIsDisabled3(false);
+          setIsDisabled4(false);
+          handleAdding();
+          CalendarService.getEvents(
+            localStorage.getItem("student") as string,
+            student!.id
+          ).then(
+            (response) => {
+              console.log(response.data);
+              setSelectedEvent(undefined);
+              setEventRequest(response.data);
+              Events = Object.values(eventRequest ?? {});
+              Events.sort((a, b) => {
+                return (
+                  new Date(a.startTime ?? new Date()).getTime() -
+                  new Date(b.startTime ?? new Date()).getTime()
+                );
+              });
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    } else {
+      const selectedEvent2 = Events2.find(
+        (event) => event.id === selectedEventId
+      );
+
+      CalendarService.addEvent(
+        localStorage.getItem("student") as string,
+        student!.id,
+        {
+          title: selectedEvent2?.eventName,
+          description: newDescription === "" ? "None" : newDescription,
+          startTime: selectedEvent2?.startTime?.toString(),
+          endTime: selectedEvent2?.endTime?.toString(),
+          location: selectedEvent2?.eventLocation,
+          reminder: "True",
+          color: "7",
+        }
+      ).then(
+        (response) => {
+          console.log(response.data);
+          setIsAdding(false);
+          setIsDisabled3(false);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
     }
   };
 
-  const Events = Object.values(eventRequest ?? {});
+  const handleDelete = () => {
+    setIsDisabled5(true);
+    CalendarService.deleteEvent(
+      localStorage.getItem("student") as string,
+      student!.id,
+      selectedEvent!.id
+    ).then(
+      (response) => {
+        console.log(response.data);
+        CalendarService.getEvents(
+          localStorage.getItem("student") as string,
+          student!.id
+        ).then(
+          (response) => {
+            console.log(response.data);
+            setSelectedEvent(undefined);
+            setEventRequest(response.data);
+            Events = Object.values(eventRequest ?? {});
+            Events.sort((a, b) => {
+              return (
+                new Date(a.startTime ?? new Date()).getTime() -
+                new Date(b.startTime ?? new Date()).getTime()
+              );
+            });
+            setIsDisabled5(false);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
+
+  var Events = Object.values(eventRequest ?? {});
+  const Events2 = Object.values(events ?? {}).filter(
+    (event) => !Events.map((event2) => event2.title).includes(event.eventName)
+  );
   Events.sort((a, b) => {
+    return (
+      new Date(a.startTime ?? new Date()).getTime() -
+      new Date(b.startTime ?? new Date()).getTime()
+    );
+  });
+  Events2.sort((a, b) => {
     return (
       new Date(a.startTime ?? new Date()).getTime() -
       new Date(b.startTime ?? new Date()).getTime()
@@ -229,7 +382,13 @@ function CalendarPage() {
                         <div className="calendar-cards-header">
                           <span>Upcoming events</span>
                           <div>
-                            <button className="btn btn-primary add-event-btn">
+                            <button
+                              className="btn btn-primary add-event-btn"
+                              onClick={() => {
+                                Events2.length != 0 && handleAdding();
+                              }}
+                              disabled={isDisabled3}
+                            >
                               Add event
                             </button>
                             <button
@@ -352,66 +511,17 @@ function CalendarPage() {
                     </Col>
                     <Col className="cal-sep"></Col>
                     <Col className="cal-details">
-                      {selectedEvent === undefined ? (
-                        <div className="nothing-here">No event selected.</div>
-                      ) : (
-                        <div className="calendar-event">
-                          <div className="calendar-event-title">
-                            {selectedEvent!.title}
-                          </div>
-                          <div className="calendar-event-details">
-                            <span>
-                              <ClockIcon
-                                width={20}
-                                height={20}
-                                color="#46bfff"
-                                style={{
-                                  marginRight: "0.3rem",
-                                  transform: "translateY(-0.1rem)",
-                                }}
-                              />
-                              {new Date(
-                                selectedEvent!.startTime ?? new Date()
-                              ).toLocaleString("default", {
-                                month: "long",
-                                day: "numeric",
-                              })}
-                              {(() => {
-                                if (
-                                  new Date(
-                                    selectedEvent!.startTime ?? new Date()
-                                  ).getDate() === 1
-                                )
-                                  return "st";
-                                else if (
-                                  new Date(
-                                    selectedEvent!.startTime ?? new Date()
-                                  ).getDate() === 2
-                                )
-                                  return "nd";
-                                else if (
-                                  new Date(
-                                    selectedEvent!.startTime ?? new Date()
-                                  ).getDate() === 3
-                                )
-                                  return "rd";
-                                else return "th";
-                              })()}{" "}
-                              -{" "}
-                              {new Date(
-                                selectedEvent!.startTime ?? new Date()
-                              ).toLocaleTimeString("default", {
-                                hour: "numeric",
-                                minute: "numeric",
-                              })}
-                            </span>
-                            <div
-                              style={{
-                                display: "flex",
-                              }}
-                            >
+                      {!isAdding ? (
+                        selectedEvent === undefined ? (
+                          <div className="nothing-here">No event selected</div>
+                        ) : (
+                          <div className="calendar-event">
+                            <div className="calendar-event-title">
+                              {selectedEvent!.title}
+                            </div>
+                            <div className="calendar-event-details">
                               <span>
-                                <MapPinIcon
+                                <ClockIcon
                                   width={20}
                                   height={20}
                                   color="#46bfff"
@@ -420,39 +530,138 @@ function CalendarPage() {
                                     transform: "translateY(-0.1rem)",
                                   }}
                                 />
+                                {new Date(
+                                  selectedEvent!.startTime ?? new Date()
+                                ).toLocaleString("default", {
+                                  month: "long",
+                                  day: "numeric",
+                                })}
+                                {(() => {
+                                  if (
+                                    new Date(
+                                      selectedEvent!.startTime ?? new Date()
+                                    ).getDate() === 1
+                                  )
+                                    return "st";
+                                  else if (
+                                    new Date(
+                                      selectedEvent!.startTime ?? new Date()
+                                    ).getDate() === 2
+                                  )
+                                    return "nd";
+                                  else if (
+                                    new Date(
+                                      selectedEvent!.startTime ?? new Date()
+                                    ).getDate() === 3
+                                  )
+                                    return "rd";
+                                  else return "th";
+                                })()}{" "}
+                                -{" "}
+                                {new Date(
+                                  selectedEvent!.startTime ?? new Date()
+                                ).toLocaleTimeString("default", {
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                })}
                               </span>
-                              <span>{selectedEvent.location}</span>
-                            </div>
-                          </div>
-                          <div className="calendar-cards-separator"></div>
-                          <div className="calendar-event-see">
-                            <span>Event Details</span>
-                            <button
-                              className="btn btn-primary see-calendar-event-btn"
-                              type="button"
-                            >
-                              See Event
-                            </button>
-                          </div>
-                          <div className="calendar-event-desc">
-                            <div className="my-desc">
-                              <span>My description</span>
-                              <button
-                                className="btn btn-primary add-event-btn"
-                                onClick={handleEdit}
-                                disabled={isDisabled2}
+                              <div
+                                style={{
+                                  display: "flex",
+                                }}
                               >
-                                {isEditing ? "Save" : "Edit"}
+                                <span>
+                                  <MapPinIcon
+                                    width={20}
+                                    height={20}
+                                    color="#46bfff"
+                                    style={{
+                                      marginRight: "0.3rem",
+                                      transform: "translateY(-0.1rem)",
+                                    }}
+                                  />
+                                </span>
+                                <span>{selectedEvent!.location}</span>
+                              </div>
+                            </div>
+                            <div className="calendar-cards-separator"></div>
+                            <div className="calendar-event-see">
+                              <span>Event Details</span>
+                              <button
+                                className="btn btn-primary see-calendar-event-btn"
+                                type="button"
+                              >
+                                See Event
                               </button>
                             </div>
-                            <textarea
-                              className="desc"
-                              value={description}
-                              onChange={(e) => {
-                                setDescription(e.target.value);
-                              }}
-                              disabled={isDisabled}
-                            />
+                            <div className="calendar-event-desc">
+                              <div className="my-desc">
+                                <span>My description</span>
+                                <button
+                                  className="btn btn-primary add-event-btn"
+                                  onClick={handleEdit}
+                                  disabled={isDisabled2}
+                                >
+                                  {isEditing ? "Save" : "Edit"}
+                                </button>
+                              </div>
+                              <textarea
+                                className="desc"
+                                value={description}
+                                onChange={(e) => {
+                                  setDescription(e.target.value);
+                                }}
+                                disabled={isDisabled}
+                              />
+                            </div>
+                            <div className="delete-event">
+                              <button
+                                className="btn bnt-primary delete-event-btn"
+                                onClick={handleDelete}
+                                disabled={isDisabled5}
+                              >
+                                <TrashIcon width={20} height={20} color="red" />
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        <div className="calendar-addevent">
+                          <span>Add event</span>
+                          <div className="event-fields">
+                            <div className="event-field">
+                              <label>Event</label>
+                              <select
+                                name=""
+                                id=""
+                                onChange={(e) => {
+                                  setSelectedEventId(e.target.value);
+                                }}
+                              >
+                                {Events2.map((event) => (
+                                  <option key={event.id} value={event.id}>
+                                    {event.eventName}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="event-field">
+                              <label>Description</label>
+                              <textarea
+                                value={newDescription}
+                                onChange={(e) => {
+                                  setNewDescription(e.target.value);
+                                }}
+                              />
+                            </div>
+                            <button
+                              className="btn btn-primary add-event-save-btn"
+                              type="button"
+                              onClick={handleSave}
+                              disabled={isDisabled4}
+                            >
+                              Save
+                            </button>
                           </div>
                         </div>
                       )}

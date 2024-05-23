@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.google.api.services.calendar.model.Event;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -35,7 +33,7 @@ public class CalendarController {
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @PostMapping("/addevent/{studentId}")
-    public Event createEvent(
+    public EventRequest createEvent(
             @RequestBody EventRequest event, @PathVariable UUID studentId) throws IOException {
 
         return calendarService.createEvent(event, studentId);

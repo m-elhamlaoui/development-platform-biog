@@ -8,10 +8,9 @@ import org.biog.unihivebackend.service.implementation.EventRequest;
 import org.springframework.http.ResponseEntity;
 
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.Event;
 
 public interface CalendarService {
-    Event createEvent(EventRequest event, UUID studentId) throws IOException;
+    EventRequest createEvent(EventRequest event, UUID studentId) throws IOException;
 
     EventRequest getEvent(String eventId, UUID studentId) throws IOException;
 
