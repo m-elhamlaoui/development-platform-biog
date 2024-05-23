@@ -60,7 +60,7 @@ function SuperAdminAddEventComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/superadmin/events");
           },
         });
       })

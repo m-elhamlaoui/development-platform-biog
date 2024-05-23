@@ -7,6 +7,7 @@ import ModelsService from "../services/SuperAdminModelsService";
 import Club from "../models/Club";
 import Event from "../models/Event";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminEditEventComponent() {
   const { id } = useParams();
@@ -15,6 +16,8 @@ function SuperAdminEditEventComponent() {
   const [event, setEvent] = useState<Event>(state.event);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -45,18 +48,43 @@ function SuperAdminEditEventComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
+    setIsDisabled1(true);
     ModelsService.deleteEvent(token, event.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/events");
+        enqueueSnackbar("Event deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/events");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete event", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (e: any) => {
+    setIsDisabled2(true);
     e.preventDefault();
     ModelsService.updateEvent(token, event.id, {
       eventName: e.target[1].value,
@@ -72,10 +100,33 @@ function SuperAdminEditEventComponent() {
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/events");
+        enqueueSnackbar("Event updated successfully", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/events");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update event", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -93,6 +144,7 @@ function SuperAdminEditEventComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upevent"} />
@@ -282,7 +334,11 @@ function SuperAdminEditEventComponent() {
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -323,6 +379,7 @@ function SuperAdminEditEventComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>

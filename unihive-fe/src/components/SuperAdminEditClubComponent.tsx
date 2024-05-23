@@ -9,6 +9,7 @@ import Club from "../models/Club";
 import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Student from "../models/Student";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminEditClubComponent() {
   const { id } = useParams();
@@ -18,6 +19,8 @@ function SuperAdminEditClubComponent() {
   const [students, setStudents] = useState<Student[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -51,18 +54,43 @@ function SuperAdminEditClubComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
+    setIsDisabled1(true);
     ModelsService.deleteClub(token, club.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/clubs");
+        enqueueSnackbar("Club deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/clubs");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
     const updatedStudentsArray = club.students.map((student) => ({
       id: student.id,
@@ -80,10 +108,33 @@ function SuperAdminEditClubComponent() {
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/clubs");
+        enqueueSnackbar("Club updated successfully", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/clubs");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update club", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -102,6 +153,7 @@ function SuperAdminEditClubComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upclub"} />
@@ -380,7 +432,11 @@ function SuperAdminEditClubComponent() {
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -408,7 +464,10 @@ function SuperAdminEditClubComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete Club with name {club.clubName}?</Modal.Body>
+        <Modal.Body>
+          Delete Club with name {club.clubName}? <br />
+          This will affect the table: Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -421,6 +480,7 @@ function SuperAdminEditClubComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>

@@ -59,7 +59,7 @@ function SuperAdminAddClubComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/superadmin/clubs");
           },
         });
       })

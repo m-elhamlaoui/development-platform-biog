@@ -59,7 +59,7 @@ function SuperAdminAddStudentComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/superadmin/students");
           },
         });
       })

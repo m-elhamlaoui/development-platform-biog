@@ -1,12 +1,12 @@
 import { Col, Modal, Row } from "react-bootstrap";
 import DashboardSidebarComponent from "./DashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import Student from "../models/Student";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminEditStudentComponent() {
   const { id } = useParams();
@@ -15,6 +15,8 @@ function SuperAdminEditStudentComponent() {
   const [student, setStudent] = useState<Student>(state.student);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -45,18 +47,43 @@ function SuperAdminEditStudentComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
+    setIsDisabled1(true);
     ModelsService.deleteStudent(token, student.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/students");
+        enqueueSnackbar("Student deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/students");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete student", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
     ModelsService.updateStudent(token, student.id, {
       firstName: event.target[1].value,
@@ -69,10 +96,33 @@ function SuperAdminEditStudentComponent() {
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/students");
+        enqueueSnackbar("Student updated successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/students");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update student", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -90,6 +140,7 @@ function SuperAdminEditStudentComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upstudent"} />
@@ -233,7 +284,11 @@ function SuperAdminEditStudentComponent() {
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -276,6 +331,7 @@ function SuperAdminEditStudentComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>

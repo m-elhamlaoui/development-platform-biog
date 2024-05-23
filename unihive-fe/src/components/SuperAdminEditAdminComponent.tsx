@@ -6,6 +6,7 @@ import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import Admin from "../models/Admin";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminEditAdminComponent() {
   const { id } = useParams();
@@ -14,6 +15,8 @@ function SuperAdminEditAdminComponent() {
   const [admin, setAdmin] = useState<Admin>(state.admin);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -44,18 +47,43 @@ function SuperAdminEditAdminComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
+    setIsDisabled1(true);
     ModelsService.deleteAdmin(token, admin.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/admins");
+        enqueueSnackbar("Admin deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/admins");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
     ModelsService.updateAdmin(token, admin.id, {
       firstName: event.target[1].value,
@@ -65,10 +93,33 @@ function SuperAdminEditAdminComponent() {
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/admins");
+        enqueueSnackbar("Admin updated successfully", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/admins");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -86,6 +137,7 @@ function SuperAdminEditAdminComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upadmin"} />
@@ -182,7 +234,11 @@ function SuperAdminEditAdminComponent() {
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -211,7 +267,8 @@ function SuperAdminEditAdminComponent() {
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Delete Admin with name {admin.firstName} {admin.lastName}?
+          Delete Admin with name {admin.firstName} {admin.lastName}? <br />
+          This will affect the tables: Schools, Students, Clubs, and Events.
         </Modal.Body>
         <Modal.Footer>
           <button
@@ -225,6 +282,7 @@ function SuperAdminEditAdminComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>

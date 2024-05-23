@@ -48,7 +48,7 @@ function SuperAdminAddSchoolComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/superadmin/schools");
           },
         });
       })
