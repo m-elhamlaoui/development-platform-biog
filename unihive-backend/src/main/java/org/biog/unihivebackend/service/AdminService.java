@@ -1,5 +1,6 @@
 package org.biog.unihivebackend.service;
 
+import org.biog.unihivebackend.auth.AuthenticationResponse;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.School;
 
@@ -16,4 +17,6 @@ public interface AdminService {
     Admin getAdmin(UUID id);
 
     School getSchoolByAdmin(UUID id);
+
+    AuthenticationResponse updateAdminEmail(UUID id, String email);
 }

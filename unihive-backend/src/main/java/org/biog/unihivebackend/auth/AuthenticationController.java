@@ -38,11 +38,25 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.registerStudent(request));
   }
 
+  @PostMapping("/register/student/{schoolId}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<AuthenticationResponse> registerStudent(
+      @RequestBody RegisterRequest request, @PathVariable UUID schoolId) {
+    return ResponseEntity.ok(service.registerStudent(request, schoolId));
+  }
+
   @PostMapping("/register/club")
   @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
   public ResponseEntity<AuthenticationResponse> registerClub(
       @RequestBody RegisterRequest request) {
     return ResponseEntity.ok(service.registerClub(request));
+  }
+
+  @PostMapping("/register/club/{schoolId}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<AuthenticationResponse> registerClub(
+      @RequestBody RegisterRequest request, @PathVariable UUID schoolId) {
+    return ResponseEntity.ok(service.registerClub(request, schoolId));
   }
 
   @PostMapping("/authenticate")

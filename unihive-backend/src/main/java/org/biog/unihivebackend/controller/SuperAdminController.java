@@ -49,7 +49,6 @@ public class SuperAdminController {
     }
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
-
     @PutMapping("/upadmin/{id}")
     Admin updateAdmin(@PathVariable UUID id, @RequestBody Admin newadmin) {
         return adminService.updateAdmin(id, newadmin);

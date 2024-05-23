@@ -8,14 +8,14 @@ import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminAddClubComponent() {
+function AdminAddClubComponent() {
   const [schools, setSchools] = useState<School[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   const navigate = useNavigate();
 
-  if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+  if (localStorage.getItem("admin")) {
+    token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
@@ -59,7 +59,7 @@ function SuperAdminAddClubComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/clubs");
+            navigate("/admin/clubs");
           },
         });
       })
@@ -148,7 +148,7 @@ function SuperAdminAddClubComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/clubs")}
+                      onClick={() => navigate("/admin/clubs")}
                     >
                       Cancel
                     </button>
@@ -163,4 +163,4 @@ function SuperAdminAddClubComponent() {
   );
 }
 
-export default SuperAdminAddClubComponent;
+export default AdminAddClubComponent;
