@@ -1,20 +1,20 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import School from "../../models/School";
 import Club from "../../models/Club";
 import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import Student from "../../models/Student";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminEditClubComponent() {
+function AdminEditClubComponent() {
   const { id } = useParams();
   const { state } = useLocation();
-  const [schools, setSchools] = useState<School[]>([]);
+  const [school, setSchool] = useState<School>();
   const [club, setClub] = useState<Club>(state.club);
   const [students, setStudents] = useState<Student[]>([]);
   var token: string = "";
@@ -37,9 +37,16 @@ function SuperAdminEditClubComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await ModelsService.listSchools(token);
-        setSchools(schoolsResponse.data);
-        const studentsResponse = await ModelsService.listStudents(token);
+        const decodedToken: any = decodeToken(token);
+        const schoolResponse = await ModelsService.School(
+          token,
+          decodedToken.sub
+        );
+        setSchool(schoolResponse.data);
+        const studentsResponse = await ModelsService.listStudents(
+          token,
+          schoolResponse.data.id
+        );
         setStudents(studentsResponse.data);
         setIsLoading(false);
       } catch (error) {
@@ -55,7 +62,7 @@ function SuperAdminEditClubComponent() {
 
   const handleDelete = () => {
     setIsDisabled1(true);
-    ModelsService.deleteClub(token, club.id)
+    ModelsService.deleteClub(token, club.id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
@@ -95,17 +102,21 @@ function SuperAdminEditClubComponent() {
     const updatedStudentsArray = club.students.map((student) => ({
       id: student.id,
     }));
-    ModelsService.updateClub(token, club.id, {
-      clubName: event.target[1].value,
-      clubLogo: event.target[2].value,
-      clubDescription: event.target[3].value,
-      clubBanner: event.target[4].value,
-      clubRating: event.target[5].value,
-      ratingCount: event.target[6].value,
-      school: schools.find((school) => school.id === event.target[7].value),
-      students: updatedStudentsArray,
-      email: club.email,
-    })
+    ModelsService.updateClub(
+      token,
+      club.id,
+      {
+        clubName: event.target[1].value,
+        clubLogo: event.target[2].value,
+        clubDescription: event.target[3].value,
+        clubBanner: event.target[4].value,
+        clubRating: event.target[5].value,
+        ratingCount: event.target[6].value,
+        students: updatedStudentsArray,
+        email: club.email,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("Club updated successfully", {
@@ -265,27 +276,6 @@ function SuperAdminEditClubComponent() {
                       }}
                       min={0}
                     />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL
-                    <select
-                      name=""
-                      id=""
-                      value={club.school.id}
-                      onChange={(event) => {
-                        const updatedClub = {
-                          ...club,
-                          school: { id: event.target.value },
-                        };
-                        setClub(updatedClub as Club);
-                      }}
-                    >
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                   <div className="info-row">
                     FOLLOWERS
@@ -490,4 +480,4 @@ function SuperAdminEditClubComponent() {
   );
 }
 
-export default SuperAdminEditClubComponent;
+export default AdminEditClubComponent;

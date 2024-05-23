@@ -1,5 +1,5 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModelsService from "../../services/SuperAdminModelsService";

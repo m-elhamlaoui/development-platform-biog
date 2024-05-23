@@ -1,17 +1,18 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import School from "../../models/School";
 import Student from "../../models/Student";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminEditStudentComponent() {
+function AdminEditStudentComponent() {
   const { id } = useParams();
   const { state } = useLocation();
-  const [schools, setSchools] = useState<School[]>([]);
+  const [school, setSchool] = useState<School>();
   const [student, setStudent] = useState<Student>(state.student);
   var token: string = "";
   const navigate = useNavigate();
@@ -32,8 +33,12 @@ function SuperAdminEditStudentComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await ModelsService.listSchools(token);
-        setSchools(schoolsResponse.data);
+        const decodedToken: any = decodeToken(token);
+        const schoolResponse = await ModelsService.School(
+          token,
+          decodedToken.sub
+        );
+        setSchool(schoolResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -48,7 +53,7 @@ function SuperAdminEditStudentComponent() {
 
   const handleDelete = () => {
     setIsDisabled1(true);
-    ModelsService.deleteStudent(token, student.id)
+    ModelsService.deleteStudent(token, student.id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
@@ -85,15 +90,19 @@ function SuperAdminEditStudentComponent() {
   const handleSave = (event: any) => {
     setIsDisabled2(true);
     event.preventDefault();
-    ModelsService.updateStudent(token, student.id, {
-      firstName: event.target[1].value,
-      lastName: event.target[2].value,
-      cne: event.target[3].value,
-      numApogee: event.target[4].value,
-      profileImage: event.target[5].value,
-      school: schools.find((school) => school.id === event.target[6].value),
-      email: event.target[7].value,
-    })
+    ModelsService.updateStudent(
+      token,
+      student.id,
+      {
+        firstName: event.target[1].value,
+        lastName: event.target[2].value,
+        cne: event.target[3].value,
+        numApogee: event.target[4].value,
+        profileImage: event.target[5].value,
+        email: event.target[7].value,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("Student updated successfully.", {
@@ -239,27 +248,6 @@ function SuperAdminEditStudentComponent() {
                     />
                   </div>
                   <div className="info-row">
-                    SCHOOL
-                    <select
-                      name=""
-                      id=""
-                      value={student.school.id}
-                      onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
-                          school: { id: event.target.value },
-                        };
-                        setStudent(updatedStudent as Student);
-                      }}
-                    >
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="info-row">
                     EMAIL
                     <input
                       type="text"
@@ -341,4 +329,4 @@ function SuperAdminEditStudentComponent() {
   );
 }
 
-export default SuperAdminEditStudentComponent;
+export default AdminEditStudentComponent;

@@ -1,15 +1,15 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
 function AdminAddClubComponent() {
-  const [schools, setSchools] = useState<School[]>([]);
+  const [school, setSchool] = useState<School>();
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   const navigate = useNavigate();
@@ -25,9 +25,10 @@ function AdminAddClubComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ModelsService.listSchools(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setSchools(response.data);
+        setSchool(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -38,15 +39,19 @@ function AdminAddClubComponent() {
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addClub(token, {
-      clubName: event.target[0].value,
-      clubLogo: event.target[1].value,
-      clubDescription: event.target[2].value,
-      clubBanner: event.target[3].value,
-      school: event.target[4].value,
-      email: event.target[5].value,
-      password: event.target[6].value,
-    })
+    ModelsService.addClub(
+      token,
+      {
+        clubName: event.target[0].value,
+        clubLogo: event.target[1].value,
+        clubDescription: event.target[2].value,
+        clubBanner: event.target[3].value,
+        school: school!.id,
+        email: event.target[5].value,
+        password: event.target[6].value,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("Club added successfully", {
@@ -113,16 +118,6 @@ function AdminAddClubComponent() {
                   <div className="info-row">
                     CLUB BANNER
                     <input type="text" placeholder="club banner" />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL
-                    <select name="" id="">
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                   <div className="info-row">
                     EMAIL

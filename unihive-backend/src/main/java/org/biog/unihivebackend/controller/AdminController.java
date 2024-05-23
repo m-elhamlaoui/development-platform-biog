@@ -13,6 +13,7 @@ import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Club;
 import org.biog.unihivebackend.model.Event;
 import org.biog.unihivebackend.model.Request;
+import org.biog.unihivebackend.model.School;
 import org.biog.unihivebackend.model.Student;
 import org.biog.unihivebackend.service.AdminService;
 import org.biog.unihivebackend.service.ClubService;
@@ -20,6 +21,7 @@ import org.biog.unihivebackend.service.EventService;
 import org.biog.unihivebackend.service.RequestService;
 import org.biog.unihivebackend.service.StudentService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.mail.MessagingException;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminController {
@@ -166,16 +169,16 @@ public class AdminController {
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @GetMapping("/allcounts")
-  List<Integer> getAllCounts() throws AccessDeniedException {
-    return List.of(studentService.getAll().size(), clubService.getAll().size(),
-        eventService.getAll().size(), requestService.getAll().size());
+  @GetMapping("/allcounts/{schoolId}")
+  List<Integer> getAllCounts(@PathVariable UUID schoolId) throws AccessDeniedException {
+    return List.of(studentService.getAll(schoolId).size(), clubService.getAll(schoolId).size(),
+        eventService.getAll(schoolId).size(), requestService.getAll(schoolId).size());
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @GetMapping("/{id}")
-  Admin getAll(@PathVariable UUID id) {
-    return AdminService.getAdmin(id);
+  @GetMapping("/{email}")
+  Admin getAdminByEmail(@PathVariable String email) {
+    return AdminService.getAdminByEmail(email);
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -190,4 +193,9 @@ public class AdminController {
     return authenticationService.changePassword(password);
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @GetMapping("/school/{email}")
+  School getSchoolByAdmin(@PathVariable String email) {
+    return AdminService.getSchoolByAdmin(email);
+  }
 }

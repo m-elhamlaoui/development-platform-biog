@@ -10,6 +10,7 @@ import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
 import StudentProfilePage from "./pages/StudentProfilePage";
 import CalendarPage from "./pages/CalendarPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
             path={"/superadmin/:option/:id"}
             element={<SuperAdminDashboardPage />}
           />
+          <Route path={"/admin/:option"} element={<AdminDashboardPage />} />
+          <Route path={"/admin/:option/:id"} element={<AdminDashboardPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/user/:option" element={<StudentProfilePage />} />
           <Route path="/login" element={<Login />} />

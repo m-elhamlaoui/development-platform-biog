@@ -1,5 +1,5 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
@@ -60,6 +60,7 @@ function SuperAdminRequestsComponent() {
       .then((response) => {
         console.log(response);
         handleClose1();
+        setIsDisabled2(false);
         enqueueSnackbar("Request rejected successfully.", {
           variant: "success",
           autoHideDuration: 2000,
@@ -102,6 +103,7 @@ function SuperAdminRequestsComponent() {
       .then((response) => {
         console.log(response);
         handleClose2();
+        setIsDisabled1(false);
         enqueueSnackbar("Request accepted successfully.", {
           variant: "success",
           autoHideDuration: 2000,

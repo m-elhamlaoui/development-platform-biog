@@ -1,15 +1,15 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
+import { decodeToken, isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../../services/SuperAdminModelsService";
 import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminAddStudentComponent() {
-  const [schools, setSchools] = useState<School[]>([]);
+function AdminAddStudentComponent() {
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -25,9 +25,10 @@ function SuperAdminAddStudentComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ModelsService.listSchools(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setSchools(response.data);
+        setSchool(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -43,7 +44,7 @@ function SuperAdminAddStudentComponent() {
       lastName: event.target[1].value,
       cne: event.target[2].value,
       numApogee: event.target[3].value,
-      school: event.target[4].value,
+      school: school!.id,
       email: event.target[5].value,
       password: event.target[6].value,
     })
@@ -120,16 +121,6 @@ function SuperAdminAddStudentComponent() {
                     />
                   </div>
                   <div className="info-row">
-                    SCHOOL
-                    <select name="" id="">
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="info-row">
                     EMAIL
                     <input type="text" placeholder="email" />
                   </div>
@@ -168,4 +159,4 @@ function SuperAdminAddStudentComponent() {
   );
 }
 
-export default SuperAdminAddStudentComponent;
+export default AdminAddStudentComponent;

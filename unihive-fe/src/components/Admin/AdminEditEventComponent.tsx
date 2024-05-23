@@ -1,19 +1,21 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import Club from "../../models/Club";
 import Event from "../../models/Event";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminEditEventComponent() {
+function AdminEditEventComponent() {
   const { id } = useParams();
   const { state } = useLocation();
   const [clubs, setClubs] = useState<Club[]>([]);
   const [event, setEvent] = useState<Event>(state.event);
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled1, setIsDisabled1] = useState(false);
@@ -33,7 +35,16 @@ function SuperAdminEditEventComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const clubsResponse = await ModelsService.listClubs(token);
+        const decodedToken: any = decodeToken(token);
+        const schoolResponse = await ModelsService.School(
+          token,
+          decodedToken.sub
+        );
+        setSchool(schoolResponse.data);
+        const clubsResponse = await ModelsService.listClubs(
+          token,
+          schoolResponse.data.id
+        );
         setClubs(clubsResponse.data);
         setIsLoading(false);
       } catch (error) {
@@ -49,7 +60,7 @@ function SuperAdminEditEventComponent() {
 
   const handleDelete = () => {
     setIsDisabled1(true);
-    ModelsService.deleteEvent(token, event.id)
+    ModelsService.deleteEvent(token, event.id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
@@ -86,18 +97,23 @@ function SuperAdminEditEventComponent() {
   const handleSave = (e: any) => {
     setIsDisabled2(true);
     e.preventDefault();
-    ModelsService.updateEvent(token, event.id, {
-      eventName: e.target[1].value,
-      eventCategory: e.target[2].value,
-      eventDescription: e.target[3].value,
-      eventLocation: e.target[4].value,
-      eventBanner: e.target[5].value,
-      eventRating: e.target[6].value,
-      ratingCount: e.target[7].value,
-      club: { id: e.target[8].value } as Club,
-      startTime: e.target[9].value + ":00Z",
-      endTime: e.target[10].value + ":00Z",
-    })
+    ModelsService.updateEvent(
+      token,
+      event.id,
+      {
+        eventName: e.target[1].value,
+        eventCategory: e.target[2].value,
+        eventDescription: e.target[3].value,
+        eventLocation: e.target[4].value,
+        eventBanner: e.target[5].value,
+        eventRating: e.target[6].value,
+        ratingCount: e.target[7].value,
+        club: { id: e.target[8].value } as Club,
+        startTime: e.target[9].value + ":00Z",
+        endTime: e.target[10].value + ":00Z",
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("Event updated successfully", {
@@ -389,4 +405,4 @@ function SuperAdminEditEventComponent() {
   );
 }
 
-export default SuperAdminEditEventComponent;
+export default AdminEditEventComponent;

@@ -1,14 +1,17 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import Student from "../../models/Student";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminStudentsComponent() {
+function AdminStudentsComponent() {
   const [students, setStudents] = useState<Student[]>([]);
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -27,10 +30,18 @@ function SuperAdminStudentsComponent() {
   const [studentName, setStudentName] = useState("");
 
   useEffect(() => {
-    ModelsService.listStudents(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setStudents(response.data);
-        setIsLoading(false);
+        setSchool(response.data);
+        ModelsService.listStudents(token, response.data.id)
+          .then((response) => {
+            setStudents(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -46,10 +57,11 @@ function SuperAdminStudentsComponent() {
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteStudent(token, id)
+    ModelsService.deleteStudent(token, id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
+        setIsDisabled(false);
         enqueueSnackbar("Student deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
@@ -60,7 +72,7 @@ function SuperAdminStudentsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listStudents(token)
+        ModelsService.listStudents(token, school!.id)
           .then((response) => {
             setStudents(response.data);
           })
@@ -262,4 +274,4 @@ function SuperAdminStudentsComponent() {
   );
 }
 
-export default SuperAdminStudentsComponent;
+export default AdminStudentsComponent;

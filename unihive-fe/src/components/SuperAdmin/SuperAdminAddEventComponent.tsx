@@ -1,5 +1,5 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";

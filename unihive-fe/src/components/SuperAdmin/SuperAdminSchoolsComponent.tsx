@@ -1,5 +1,5 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
@@ -51,6 +51,7 @@ function SuperAdminSchoolsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
+        setIsDisabled(false);
         enqueueSnackbar("School deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,

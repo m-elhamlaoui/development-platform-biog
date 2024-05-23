@@ -1,5 +1,5 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModelsService from "../../services/SuperAdminModelsService";
@@ -50,6 +50,7 @@ function SuperAdminClubsComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
+        setIsDisabled(false);
         enqueueSnackbar("Club deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,

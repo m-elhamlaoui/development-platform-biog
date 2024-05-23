@@ -1,15 +1,17 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import Club from "../../models/Club";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
+import School from "../../models/School";
 
-function SuperAdminAddEventComponent() {
+function AdminAddEventComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
+  const [school, setSchool] = useState<School>();
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   const navigate = useNavigate();
@@ -25,7 +27,15 @@ function SuperAdminAddEventComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ModelsService.listClubs(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
+      .then((response) => {
+        setSchool(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    ModelsService.listClubs(token, decodedToken.sub)
       .then((response) => {
         setClubs(response.data);
         setIsLoading(false);
@@ -38,16 +48,20 @@ function SuperAdminAddEventComponent() {
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addEvent(token, {
-      eventName: event.target[0].value,
-      eventCategory: event.target[1].value,
-      eventDescription: event.target[2].value,
-      eventLocation: event.target[3].value,
-      eventBanner: event.target[4].value,
-      club: { id: event.target[5].value } as Club,
-      startTime: event.target[6].value + ":00Z",
-      endTime: event.target[7].value + ":00Z",
-    })
+    ModelsService.addEvent(
+      token,
+      {
+        eventName: event.target[0].value,
+        eventCategory: event.target[1].value,
+        eventDescription: event.target[2].value,
+        eventLocation: event.target[3].value,
+        eventBanner: event.target[4].value,
+        club: { id: event.target[5].value } as Club,
+        startTime: event.target[6].value + ":00Z",
+        endTime: event.target[7].value + ":00Z",
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
         enqueueSnackbar("Event added successfully", {
@@ -163,4 +177,4 @@ function SuperAdminAddEventComponent() {
   );
 }
 
-export default SuperAdminAddEventComponent;
+export default AdminAddEventComponent;

@@ -1,14 +1,17 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import Club from "../../models/Club";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminClubsComponent() {
+function AdminClubsComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -27,10 +30,18 @@ function SuperAdminClubsComponent() {
   const [clubName, setClubName] = useState("");
 
   useEffect(() => {
-    ModelsService.listClubs(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setClubs(response.data);
-        setIsLoading(false);
+        setSchool(response.data);
+        ModelsService.listClubs(token, response.data.id)
+          .then((response) => {
+            setClubs(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -46,10 +57,11 @@ function SuperAdminClubsComponent() {
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteClub(token, id)
+    ModelsService.deleteClub(token, id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
+        setIsDisabled(false);
         enqueueSnackbar("Club deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
@@ -60,7 +72,7 @@ function SuperAdminClubsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listClubs(token)
+        ModelsService.listClubs(token, school!.id)
           .then((response) => {
             setClubs(response.data);
           })
@@ -251,4 +263,4 @@ function SuperAdminClubsComponent() {
   );
 }
 
-export default SuperAdminClubsComponent;
+export default AdminClubsComponent;

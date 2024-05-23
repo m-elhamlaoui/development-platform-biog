@@ -1,5 +1,5 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useEffect, useState } from "react";
 import ModelsService from "../../services/SuperAdminModelsService";
 import { CircularSpinner } from "infinity-spinners";

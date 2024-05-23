@@ -16,7 +16,9 @@ public interface AdminService {
 
     Admin getAdmin(UUID id);
 
-    School getSchoolByAdmin(UUID id);
+    School getSchoolByAdmin(String email);
 
     AuthenticationResponse updateAdminEmail(UUID id, String email);
+
+    Admin getAdminByEmail(String email);
 }

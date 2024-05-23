@@ -1,15 +1,17 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
+import { decodeToken } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import Event from "../../models/Event";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
 
-function SuperAdminEventsComponent() {
+function AdminEventsComponent() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -28,10 +30,18 @@ function SuperAdminEventsComponent() {
   const [eventName, setEventName] = useState("");
 
   useEffect(() => {
-    ModelsService.listEvents(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setEvents(response.data);
-        setIsLoading(false);
+        setSchool(response.data);
+        ModelsService.listEvents(token, response.data.id)
+          .then((response) => {
+            setEvents(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -47,10 +57,11 @@ function SuperAdminEventsComponent() {
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteEvent(token, id)
+    ModelsService.deleteEvent(token, id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
+        setIsDisabled(false);
         enqueueSnackbar("Event deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
@@ -61,7 +72,7 @@ function SuperAdminEventsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listEvents(token)
+        ModelsService.listEvents(token, school!.id)
           .then((response) => {
             setEvents(response.data);
           })
@@ -267,4 +278,4 @@ function SuperAdminEventsComponent() {
   );
 }
 
-export default SuperAdminEventsComponent;
+export default AdminEventsComponent;

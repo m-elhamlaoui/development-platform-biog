@@ -54,9 +54,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public School getSchoolByAdmin(UUID id) {
-        return adminRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Admin with id " + id + " not found")).getSchool();
+    public School getSchoolByAdmin(String email) {
+        return adminRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Admin with email " + email + " not found")).getSchool();
     }
 
     @Override
@@ -67,5 +67,11 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.save(admin);
         var jwtToken = jwtService.generateToken(admin);
         return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    @Override
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Admin with email " + email + " not found"));
     }
 }
