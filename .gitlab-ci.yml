@@ -1,15 +1,8 @@
 stages:
-  - deploy
+  - heroku_deploy
 
-deploy:
-  stage: deploy
-  environment:
-    name: production
-    url: https://tiny-tartufo-a6fa8e.netlify.app/
-  only:
-    - master
+heroku_deploy:
+  stage: production
   script:
-    - npm i
-    # your build command
-    - npm run build
-    - npx netlify-cli deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --prod
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
