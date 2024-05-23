@@ -259,7 +259,12 @@ function Signup() {
               <div className="field2">
                 <div className="field">
                   <label>Password</label>
-                  <input type="password" placeholder="Password" />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                    title="Password must contain at least one lowercase letter, one uppercase letter, one special character, one number, and be at least 8 characters"
+                  />
                 </div>
                 <div className="field">
                   <label>Confirm Password</label>

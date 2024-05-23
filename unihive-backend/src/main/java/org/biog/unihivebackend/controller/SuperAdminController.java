@@ -1,5 +1,6 @@
 package org.biog.unihivebackend.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ import org.biog.unihivebackend.service.SuperAdminService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -199,7 +201,8 @@ public class SuperAdminController {
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delrequest/{id}")
-    void deleteRequest(@PathVariable UUID id) throws AccessDeniedException {
+    void deleteRequest(@PathVariable UUID id)
+            throws AccessDeniedException, UnsupportedEncodingException, MessagingException {
         requestService.deleteRequest(id);
     }
 

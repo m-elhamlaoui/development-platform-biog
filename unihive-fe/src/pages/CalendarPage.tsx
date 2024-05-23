@@ -24,8 +24,8 @@ import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import EventRequest from "../models/EventRequest";
 import { Month } from "../models/Month";
-import { event } from "jquery";
 import Event from "../models/Event";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function CalendarPage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -39,6 +39,7 @@ function CalendarPage() {
   const [isDisabled3, setIsDisabled3] = useState(false);
   const [isDisabled4, setIsDisabled4] = useState(false);
   const [isDisabled5, setIsDisabled5] = useState(false);
+  const [isDisabled6, setIsDisabled6] = useState(false);
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const currentWindow = window.location;
@@ -90,6 +91,16 @@ function CalendarPage() {
           setIsEditing(false);
           setIsDisabled(true);
           setIsDisabled2(false);
+          enqueueSnackbar("Description updated successfully", {
+            variant: "success",
+            autoHideDuration: 2000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+          });
         },
         (error) => {
           console.error(error);
@@ -198,6 +209,16 @@ function CalendarPage() {
           window.removeEventListener("message", messageListener);
           currentWindow.reload();
           reject(new Error("Popup was closed by user"));
+          enqueueSnackbar("Authorization successful", {
+            variant: "success",
+            autoHideDuration: 2000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+          });
         }
       }, 1000);
     });
@@ -213,13 +234,26 @@ function CalendarPage() {
   };
 
   function handleLogout() {
+    setIsDisabled6(true);
     CalendarService.logout(
       localStorage.getItem("student") as string,
       student!.id
     ).then(
       (response) => {
         console.log(response.data);
-        window.location.reload();
+        enqueueSnackbar("Logged out successfully", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            window.location.reload();
+          },
+        });
       },
       (error) => {
         console.error(error);
@@ -239,8 +273,10 @@ function CalendarPage() {
         {
           title: "UniHive:" + selectedEvent2?.eventName,
           description: newDescription === "" ? "None" : newDescription,
-          startTime: selectedEvent2?.startTime?.toString(),
-          endTime: selectedEvent2?.endTime?.toString(),
+          startTime:
+            selectedEvent2?.startTime?.toString().slice(0, -1) + "+01:00",
+          endTime:
+            selectedEvent2?.startTime?.toString().slice(0, -1) + "+01:00",
           location: selectedEvent2?.eventLocation,
           reminder: "True",
           color: "7",
@@ -248,10 +284,21 @@ function CalendarPage() {
       ).then(
         (response) => {
           console.log(response.data);
+          setNewDescription("");
           setIsAdding(false);
           setIsDisabled3(false);
           setIsDisabled4(false);
           handleAdding();
+          enqueueSnackbar("Event added successfully", {
+            variant: "success",
+            autoHideDuration: 2000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+          });
           CalendarService.getEvents(
             localStorage.getItem("student") as string,
             student!.id
@@ -259,6 +306,7 @@ function CalendarPage() {
             (response) => {
               console.log(response.data);
               setSelectedEvent(undefined);
+              setSelectedCard(-1);
               setEventRequest(response.data);
               Events = Object.values(eventRequest ?? {});
               Events.sort((a, b) => {
@@ -286,10 +334,12 @@ function CalendarPage() {
         localStorage.getItem("student") as string,
         student!.id,
         {
-          title: selectedEvent2?.eventName,
+          title: "UniHive:" + selectedEvent2?.eventName,
           description: newDescription === "" ? "None" : newDescription,
-          startTime: selectedEvent2?.startTime?.toString(),
-          endTime: selectedEvent2?.endTime?.toString(),
+          startTime:
+            selectedEvent2?.startTime?.toString().slice(0, -1) + "+01:00",
+          endTime:
+            selectedEvent2?.startTime?.toString().slice(0, -1) + "+01:00",
           location: selectedEvent2?.eventLocation,
           reminder: "True",
           color: "7",
@@ -297,8 +347,42 @@ function CalendarPage() {
       ).then(
         (response) => {
           console.log(response.data);
+          setNewDescription("");
           setIsAdding(false);
           setIsDisabled3(false);
+          setIsDisabled4(false);
+          handleAdding();
+          enqueueSnackbar("Event added successfully", {
+            variant: "success",
+            autoHideDuration: 2000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+          });
+          CalendarService.getEvents(
+            localStorage.getItem("student") as string,
+            student!.id
+          ).then(
+            (response) => {
+              console.log(response.data);
+              setSelectedEvent(undefined);
+              setSelectedCard(-1);
+              setEventRequest(response.data);
+              Events = Object.values(eventRequest ?? {});
+              Events.sort((a, b) => {
+                return (
+                  new Date(a.startTime ?? new Date()).getTime() -
+                  new Date(b.startTime ?? new Date()).getTime()
+                );
+              });
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
         },
         (error) => {
           console.error(error);
@@ -323,7 +407,18 @@ function CalendarPage() {
           (response) => {
             console.log(response.data);
             setSelectedEvent(undefined);
+            setSelectedCard(-1);
             setEventRequest(response.data);
+            enqueueSnackbar("Event deleted successfully", {
+              variant: "success",
+              autoHideDuration: 2000,
+              transitionDuration: 300,
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+              preventDuplicate: true,
+            });
             Events = Object.values(eventRequest ?? {});
             Events.sort((a, b) => {
               return (
@@ -364,6 +459,7 @@ function CalendarPage() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       {isLoading ? (
         <div className="load">
           <InfinitySpin color="#46bfff" />
@@ -394,119 +490,128 @@ function CalendarPage() {
                             <button
                               className="btn btn-primary logout-btn"
                               onClick={handleLogout}
+                              disabled={isDisabled6}
                             >
                               <PowerIcon width={20} height={20} />
                             </button>
                           </div>
                         </div>
                         <div className="calendar-cards-separator"></div>
-                        <div className="calendar-cards-body">
-                          {Events.map((event, index) => (
-                            <div
-                              key={index}
-                              className={`calendar-cards-body-item ${
-                                selectedCard === index ? "selected" : ""
-                              }`}
-                              onClick={() => handleCardClick(index)}
-                            >
-                              <div className="calendar-cards-body-item-date">
-                                <span className="num">
-                                  {new Date(event.startTime ?? new Date())
-                                    .getDate()
-                                    .toString()
-                                    .padStart(2, "0")}
-                                </span>
-                                <span className="mon">
-                                  {new Date(
-                                    event.startTime ?? new Date()
-                                  ).toLocaleString("default", {
-                                    month: "short",
-                                  })}
-                                </span>
-                              </div>
+                        {Events.length !== 0 ? (
+                          <div className="calendar-cards-body">
+                            {Events.map((event, index) => (
                               <div
-                                className="calendar-cards-body-item-separator"
-                                style={
-                                  selectedCard === index
-                                    ? { backgroundColor: "white" }
-                                    : { backgroundColor: "black" }
-                                }
-                              ></div>
-                              <div className="calendar-cards-body-item-desc">
-                                <span className="title">
-                                  {event.title.length > 48
-                                    ? event.title.slice(0, 45) + "..."
-                                    : event.title}
-                                </span>
-                                <div className="date">
-                                  <span>
-                                    {(() => {
-                                      const startDate = new Date(
-                                        event.startTime ?? new Date()
-                                      );
-                                      const endDate = new Date(
-                                        event.endTime ?? new Date()
-                                      );
-                                      if (
-                                        startDate.getUTCDate() ===
-                                          endDate.getUTCDate() &&
-                                        startDate.getUTCMonth() ===
-                                          endDate.getUTCMonth() &&
-                                        startDate.getUTCFullYear() ===
-                                          endDate.getUTCFullYear()
-                                      ) {
-                                        const day = startDate.getUTCDate();
-                                        let daySuffix;
+                                key={index}
+                                className={`calendar-cards-body-item ${
+                                  selectedCard === index ? "selected" : ""
+                                }`}
+                                onClick={() => handleCardClick(index)}
+                              >
+                                <div className="calendar-cards-body-item-date">
+                                  <span className="num">
+                                    {new Date(event.startTime ?? new Date())
+                                      .getDate()
+                                      .toString()
+                                      .padStart(2, "0")}
+                                  </span>
+                                  <span className="mon">
+                                    {new Date(
+                                      event.startTime ?? new Date()
+                                    ).toLocaleString("default", {
+                                      month: "short",
+                                    })}
+                                  </span>
+                                </div>
+                                <div
+                                  className="calendar-cards-body-item-separator"
+                                  style={
+                                    selectedCard === index
+                                      ? { backgroundColor: "white" }
+                                      : { backgroundColor: "black" }
+                                  }
+                                ></div>
+                                <div className="calendar-cards-body-item-desc">
+                                  <span className="title">
+                                    {event.title.length > 48
+                                      ? event.title.slice(0, 45) + "..."
+                                      : event.title}
+                                  </span>
+                                  <div className="date">
+                                    <span>
+                                      {(() => {
+                                        const startDate = new Date(
+                                          event.startTime ?? new Date()
+                                        );
+                                        const endDate = new Date(
+                                          event.endTime ?? new Date()
+                                        );
                                         if (
-                                          day === 1 ||
-                                          day === 21 ||
-                                          day === 31
+                                          startDate.getUTCDate() ===
+                                            endDate.getUTCDate() &&
+                                          startDate.getUTCMonth() ===
+                                            endDate.getUTCMonth() &&
+                                          startDate.getUTCFullYear() ===
+                                            endDate.getUTCFullYear()
                                         ) {
-                                          daySuffix = "st";
-                                        } else if (day === 2 || day === 22) {
-                                          daySuffix = "nd";
-                                        } else if (day === 3 || day === 23) {
-                                          daySuffix = "rd";
-                                        } else {
-                                          daySuffix = "th";
+                                          const day = startDate.getUTCDate();
+                                          let daySuffix;
+                                          if (
+                                            day === 1 ||
+                                            day === 21 ||
+                                            day === 31
+                                          ) {
+                                            daySuffix = "st";
+                                          } else if (day === 2 || day === 22) {
+                                            daySuffix = "nd";
+                                          } else if (day === 3 || day === 23) {
+                                            daySuffix = "rd";
+                                          } else {
+                                            daySuffix = "th";
+                                          }
+                                          return (
+                                            <span>
+                                              {
+                                                MonthsArray[
+                                                  startDate.getUTCMonth()
+                                                ]
+                                              }{" "}
+                                              {startDate.getUTCDate()}
+                                              {daySuffix}{" "}
+                                              {startDate.getUTCFullYear()}
+                                            </span>
+                                          );
                                         }
                                         return (
                                           <span>
+                                            From{" "}
+                                            {startDate
+                                              .getUTCDate()
+                                              .toString()
+                                              .padStart(2, "0")}{" "}
                                             {
                                               MonthsArray[
                                                 startDate.getUTCMonth()
                                               ]
                                             }{" "}
-                                            {startDate.getUTCDate()}
-                                            {daySuffix}{" "}
-                                            {startDate.getUTCFullYear()}
+                                            {startDate.getUTCFullYear()} To{" "}
+                                            {endDate
+                                              .getUTCDate()
+                                              .toString()
+                                              .padStart(2, "0")}{" "}
+                                            {MonthsArray[endDate.getUTCMonth()]}{" "}
+                                            {endDate.getUTCFullYear()}
                                           </span>
                                         );
-                                      }
-                                      return (
-                                        <span>
-                                          From{" "}
-                                          {startDate
-                                            .getUTCDate()
-                                            .toString()
-                                            .padStart(2, "0")}{" "}
-                                          {MonthsArray[startDate.getUTCMonth()]}{" "}
-                                          {startDate.getUTCFullYear()} To{" "}
-                                          {endDate
-                                            .getUTCDate()
-                                            .toString()
-                                            .padStart(2, "0")}{" "}
-                                          {MonthsArray[endDate.getUTCMonth()]}{" "}
-                                          {endDate.getUTCFullYear()}
-                                        </span>
-                                      );
-                                    })()}
-                                  </span>
+                                      })()}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="nothing-here2">No events</div>
+                        )}
                       </div>
                     </Col>
                     <Col className="cal-sep"></Col>
