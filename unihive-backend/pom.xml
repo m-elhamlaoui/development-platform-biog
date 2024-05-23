@@ -16,8 +16,11 @@
     <name>unihive-backend</name>
     <description>unihive-backend</description>
     <modules>
+        <module>shared-library</module>
         <module>EventService</module>
         <module>API-Gateway</module>
+        <module>ClubService</module>
+        <module>Authentification</module>
     </modules>
     <properties>
         <java.version>17</java.version>
@@ -134,21 +137,7 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-            <version>4.1.3</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.1.1</version>
-        </dependency>
 
     </dependencies>
 	<dependencyManagement>
