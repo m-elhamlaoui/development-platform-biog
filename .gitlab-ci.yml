@@ -1,0 +1,55 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+  # Customize the following variables
+  APP_NAME: "your-spring-boot-app"
+  TARGET_DIR: "target"
+  DEPLOY_DIR: "/path/to/deploy"
+  DEPLOY_USER: "your-ssh-user"
+  DEPLOY_HOST: "your-server"
+  DEPLOY_SCRIPT: "deploy-script.sh"
+
+# Cache Maven local repository to speed up builds
+cache:
+  paths:
+    - .m2/repository
+
+# Build Job
+build-job:
+  stage: build
+  image: maven:3.8.1-jdk-11
+  script:
+    - echo "Building the project..."
+    - mvn $MAVEN_CLI_OPTS clean compile
+    - mvn $MAVEN_CLI_OPTS package
+  artifacts:
+    paths:
+      - $TARGET_DIR/
+
+# Test Job
+test-job:
+  stage: test
+  image: maven:3.8.1-jdk-11
+  script:
+    - echo "Running tests..."
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - $TARGET_DIR/surefire-reports/TEST-*.xml
+
+# Deploy Job
+deploy-job:
+  stage: deploy
+  image: maven:3.8.1-jdk-11
+  script:
+    - echo "Deploying the project..."
+    - scp $TARGET_DIR/${APP_NAME}.jar $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_DIR/
+    - ssh $DEPLOY_USER@$DEPLOY_HOST 'bash -s' < $DEPLOY_SCRIPT
+  only:
+    - main
