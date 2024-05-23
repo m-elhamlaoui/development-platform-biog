@@ -209,16 +209,6 @@ function CalendarPage() {
           window.removeEventListener("message", messageListener);
           currentWindow.reload();
           reject(new Error("Popup was closed by user"));
-          enqueueSnackbar("Authorization successful", {
-            variant: "success",
-            autoHideDuration: 2000,
-            transitionDuration: 300,
-            anchorOrigin: {
-              vertical: "top",
-              horizontal: "right",
-            },
-            preventDuplicate: true,
-          });
         }
       }, 1000);
     });

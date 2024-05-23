@@ -8,6 +8,7 @@ import School from "../models/School";
 import Request from "../models/Request";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminViewRequestComponent() {
   const { id } = useParams();
@@ -16,6 +17,8 @@ function SuperAdminViewRequestComponent() {
   const [request, setRequest] = useState<Request>(state.request);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -52,18 +55,43 @@ function SuperAdminViewRequestComponent() {
   const handleClose3 = () => setShow3(false);
 
   const handleReject = () => {
+    setIsDisabled1(true);
     ModelsService.deleteRequest(token, request.id)
       .then((response) => {
         console.log(response);
         handleClose1();
-        navigate("/superadmin/requests");
+        enqueueSnackbar("Request rejected successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/requests");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to reject request", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleAccept = () => {
+    setIsDisabled2(true);
     ModelsService.updateRequest(token, request.id, {
       firstName: request.firstName,
       lastName: request.lastName,
@@ -84,10 +112,33 @@ function SuperAdminViewRequestComponent() {
         .then((response) => {
           console.log(response);
           handleClose2();
-          navigate("/superadmin/requests");
+          enqueueSnackbar("Request accepted successfully.", {
+            variant: "success",
+            autoHideDuration: 1000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+            onClose: () => {
+              navigate("/superadmin/requests");
+            },
+          });
         })
         .catch((error) => {
           console.error(error);
+          setIsDisabled2(false);
+          enqueueSnackbar("Failed to update request", {
+            variant: "error",
+            autoHideDuration: 2000,
+            transitionDuration: 300,
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
+            },
+            preventDuplicate: true,
+          });
         });
     }, 1000);
   };
@@ -106,6 +157,7 @@ function SuperAdminViewRequestComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"viewrequest"} />
@@ -307,6 +359,7 @@ function SuperAdminViewRequestComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleReject}
+            disabled={isDisabled1}
           >
             Confirm
           </button>
@@ -332,6 +385,7 @@ function SuperAdminViewRequestComponent() {
             className="btn modal-confirm-2"
             type="button"
             onClick={handleAccept}
+            disabled={isDisabled2}
           >
             Confirm
           </button>

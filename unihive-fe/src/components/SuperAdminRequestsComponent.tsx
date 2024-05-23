@@ -60,7 +60,7 @@ function SuperAdminRequestsComponent() {
       .then((response) => {
         console.log(response);
         handleClose1();
-        enqueueSnackbar("Student rejected successfully.", {
+        enqueueSnackbar("Request rejected successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -83,7 +83,7 @@ function SuperAdminRequestsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled2(false);
-        enqueueSnackbar("Failed to reject student", {
+        enqueueSnackbar("Failed to reject request", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -102,7 +102,7 @@ function SuperAdminRequestsComponent() {
       .then((response) => {
         console.log(response);
         handleClose2();
-        enqueueSnackbar("Student accepted successfully.", {
+        enqueueSnackbar("Request accepted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -123,7 +123,7 @@ function SuperAdminRequestsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled2(false);
-        enqueueSnackbar("Failed to accept student", {
+        enqueueSnackbar("Request to accept student", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
