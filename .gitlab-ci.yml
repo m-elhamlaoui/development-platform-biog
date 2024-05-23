@@ -2,7 +2,7 @@ stages:
   - heroku_deploy
 
 heroku_deploy:
-  stage: production
+  stage: heroku_deploy
   script:
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
