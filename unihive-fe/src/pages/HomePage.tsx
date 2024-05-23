@@ -16,6 +16,7 @@ import EventService from "../services/EventService";
 import Event from "../models/Event";
 import ScrollToTop from "react-scroll-to-top";
 import { ArrowUpIcon } from "@heroicons/react/24/solid";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -23,6 +24,7 @@ function HomePage() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "UniHive - Home";
@@ -30,6 +32,8 @@ function HomePage() {
 
     if (localStorage.getItem("student")) {
       token = localStorage.getItem("student") as string;
+    } else if (localStorage.getItem("superadmin")) {
+      navigate("/superadmin/dashboard");
     }
 
     if (token !== "") {

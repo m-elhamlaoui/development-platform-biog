@@ -115,6 +115,8 @@ function CalendarPage() {
 
     if (localStorage.getItem("student")) {
       token = localStorage.getItem("student") as string;
+    } else if (localStorage.getItem("superadmin")) {
+      navigate("/superadmin/dashboard");
     } else {
       navigate("/home");
     }

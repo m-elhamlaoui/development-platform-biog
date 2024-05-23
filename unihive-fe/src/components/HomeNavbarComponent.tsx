@@ -57,7 +57,7 @@ function HomeNavbarComponent(props: {
                   <div className="profile-pic-small">
                     <img src={student?.profileImage} alt="" />
                   </div>
-                  <span>Ilyass</span>
+                  <span>{student?.firstName}</span>
                   <ChevronDownIcon
                     style={{
                       width: "20px",
@@ -70,6 +70,7 @@ function HomeNavbarComponent(props: {
 
                 <Dropdown.Menu>
                   <Dropdown.Item href="/user/profile">Profile</Dropdown.Item>
+                  <Dropdown.Item href="/calendar">Calendar</Dropdown.Item>
                   <Dropdown.Item href="/user/settings">Settings</Dropdown.Item>
                   <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
                 </Dropdown.Menu>
