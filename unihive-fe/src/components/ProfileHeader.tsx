@@ -18,7 +18,8 @@ function ProfileHeader() {
       token = localStorage.getItem("admin") as string;
     } else if (localStorage.getItem("student")) {
       token = localStorage.getItem("student") as string;
-    }  const isMyTokenExpired = isExpired(token);
+    } 
+     const isMyTokenExpired = isExpired(token);
   const navigate = useNavigate();
 
   useEffect(() => {

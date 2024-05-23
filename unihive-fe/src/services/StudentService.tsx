@@ -4,9 +4,10 @@ const REST_API_URL_CLUB = "http://localhost:8080/student/club";
 const REST_API_URL_STUDENT_GET = "http://localhost:8080/student/email/";
 const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/";
 const REST_API_URL_STUDENT_CLUBS = "http://localhost:8080/student/clubs/";
+const REST_API_URL_EVENT="http://localhost:8080/student/events";
 
-export const getStudent = (token: string | null, id: string) =>
-  axios.get(REST_API_URL_STUDENT_GET + id, {
+export const getStudent = (token: string | null, email: string) =>
+  axios.get(REST_API_URL_STUDENT_GET + email, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -31,7 +32,21 @@ export const updateStudentProfileImage = (
   });
 
 export const updateStudentPassword = (token: string | null, data: any) =>
-  axios.put(REST_API_URL_STUDENT_UPDATE + "uppassword/", data, {
+  axios.put(REST_API_URL_STUDENT_UPDATE + "uppassword", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const deleteStudent = (token: string | null, id: string) =>
+  axios.delete(REST_API_URL_STUDENT_UPDATE + "delete/" + id, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const unfollowClub = (
+  token: string | null,
+  id: string,
+  clubId: string
+) =>
+  axios.delete(REST_API_URL_STUDENT_UPDATE + "unfollow/" + id + "/" + clubId, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -44,6 +59,10 @@ export const getEvents = (token: string | null) =>
   axios.get(REST_API_URL_EVENTS, {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const getEvent = (token: string | null, id: string) =>
+    axios.get(`${REST_API_URL_EVENT}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 export const getClub = (token: string | null, id: string) =>
   axios.get(`${REST_API_URL_CLUB}/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -62,5 +81,8 @@ const StudentService = {
   updateStudentProfileImage,
   getClubs,
   updateStudentPassword,
+  deleteStudent,
+  unfollowClub,
+  getEvent,
 };
 export default StudentService;

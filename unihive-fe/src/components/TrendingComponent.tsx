@@ -110,7 +110,7 @@ function TrendingComponent(props: { events: Event[] }) {
                 </div>
               </div>
               <div className="col">
-                <div className="slide-image">
+              <div className="slide-image">
                   <img src={event.eventBanner} alt="image" />
                 </div>
               </div>

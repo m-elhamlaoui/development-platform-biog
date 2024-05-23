@@ -5,6 +5,7 @@ import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Event from "../models/Event";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminEventsComponent() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -105,7 +106,9 @@ function SuperAdminEventsComponent() {
               />
             </div>
             {isLoading ? (
-              <div className="no-data">Loading...</div>
+              <div className="no-data">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : eventsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (

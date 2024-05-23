@@ -2,6 +2,7 @@ package org.biog.unihivebackend.service.implementation;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.biog.unihivebackend.exception.NotFoundException;
@@ -30,6 +31,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAllByStudent() {
        return eventRepository.findAll();
+
+    }
+    @Override
+    public Optional<Event> getEventByStudent(UUID id) {
+        return eventRepository.findById(id);
 
     }
 

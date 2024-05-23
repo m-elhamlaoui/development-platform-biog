@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 2.5rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
 .student-profile {
@@ -13,6 +14,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .profile-dash-1 {
@@ -41,7 +43,7 @@
 
 .panel {
   width: 100%;
-  height: 10%;
+  height: 2.35rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -51,7 +53,8 @@
   padding-left: 1.8rem;
 }
 
-.profile-info {
+.profile-info,
+.profile-info2 {
   width: 100%;
   height: 90%;
   display: flex;
@@ -63,7 +66,14 @@
   font-weight: 400;
   color: black;
   padding: 2rem;
+}
+
+.profile-info {
   gap: 0.6rem;
+}
+
+.profile-info2 {
+  gap: 1.5rem;
 }
 
 .profile-info-row {
@@ -229,7 +239,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 1.2rem;
   margin-left: 18.5rem;
   color: black;
 }
@@ -245,8 +254,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1.2rem;
   color: black;
   gap: 0.2rem;
 }
@@ -310,4 +318,108 @@
 .unfollow-btn:active {
   background-color: #e5e5e5 !important;
   border-color: #e5e5e5 !important;
+}
+
+.profile-info-row2 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 5rem;
+  gap: 8.5rem;
+}
+
+.profile-info-row2 input[type="text"] {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 0.7rem 0.4rem 0.7rem;
+  margin-left: 0.8rem;
+  width: 18rem;
+}
+
+.profile-info-row2 input[type="text"]:hover {
+  cursor: text;
+}
+
+.profile-info-row2 input[type="text"]:disabled {
+  background-color: #d5d5d5;
+  color: black;
+}
+
+.radios {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.radio-item {
+  display: inline-block;
+  position: relative;
+  gap: 0.5rem;
+}
+
+.radio-item input[type="radio"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: none;
+}
+
+.radio-item label:before {
+  content: " ";
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin: 0 10px 0 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 11px;
+  border: 2px solid #c5c5c5;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.radio-item input[type="radio"]:checked + label:after {
+  border-radius: 11px;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 9px;
+  left: 4px;
+  content: " ";
+  display: block;
+  background: #c5c5c5;
+  cursor: pointer;
+}
+
+.delete-account {
+  --btn-delete: #ff2f2f;
+  background-color: var(--btn-delete) !important;
+  border-color: var(--btn-delete) !important;
+  color: white !important;
+  border-radius: 0.3rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 12rem;
+  margin-right: 2.8rem;
+}
+.delete-account:hover {
+  --btn-delete: #ff1919;
+  background-color: var(--btn-delete) !important;
+  border-color: var(--btn-delete) !important;
+}
+.delete-account:active {
+  --btn-delete: #ff0b0b;
+  background-color: var(--btn-delete) !important;
+  border-color: var(--btn-delete) !important;
+}
+
+.no-followers {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: black;
+  display: flex;
+  align-self: center;
+  justify-self: center;
 }

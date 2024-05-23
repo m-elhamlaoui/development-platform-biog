@@ -164,4 +164,15 @@ public class StudentServiceImpl implements StudentService {
                 student.setProfileImage(profileImage);
                 return studentRepository.save(student);
         }
+
+        @Override
+        public void unfollowClub(UUID studentId, UUID clubId) {
+                Student student = studentRepository.findById(studentId)
+                                .orElseThrow(() -> new NotFoundException(
+                                                "Student with id " + studentId + " not found"));
+                Club club = student.getClubs().stream().filter(c -> c.getId().equals(clubId)).findFirst()
+                                .orElseThrow(() -> new NotFoundException("Club with id " + clubId + " not found"));
+                student.getClubs().remove(club);
+                studentRepository.save(student);
+        }
 }

@@ -13,6 +13,8 @@ const REST_API_URL_EVENT_GET = "http://localhost:8080/superadmin/event";
 const REST_API_URL_SCHOOL_GET = "http://localhost:8080/superadmin/school";
 const REST_API_URL_STUDENT_GET = "http://localhost:8080/superadmin/student";
 const REST_API_URL_REQUEST_GET = "http://localhost:8080/superadmin/request";
+const REST_API_URL_ALLCOUNTS_GET = "http://localhost:8080/superadmin/allcounts";
+const REST_API_URL_ALL_GET = "http://localhost:8080/superadmin/all";
 
 // POST_APIS
 const REST_API_URL_CLUB_POST = "http://localhost:8080/auth/register/club";
@@ -29,6 +31,8 @@ const REST_API_URL_EVENT_PUT = "http://localhost:8080/superadmin/upevent/";
 const REST_API_URL_SCHOOL_PUT = "http://localhost:8080/superadmin/upschool/";
 const REST_API_URL_STUDENT_PUT = "http://localhost:8080/superadmin/upstudent/";
 const REST_API_URL_REQUEST_PUT = "http://localhost:8080/superadmin/uprequest/";
+const REST_API_URL_SA_PUT = "http://localhost:8080/superadmin/upemail";
+const REST_API_URL_SAPASS_PUT = "http://localhost:8080/superadmin/uppassword";
 
 // DELETE_APIS
 const REST_API_URL_CLUB_DELETE = "http://localhost:8080/superadmin/delclub/";
@@ -211,6 +215,27 @@ const uploadFile = (file: any) =>
     },
   });
 
+const getAllCounts = (token: string | null) =>
+  axios.get(REST_API_URL_ALLCOUNTS_GET, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+const getAll = (token: string | null) =>
+  axios.get(REST_API_URL_ALL_GET, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+const updateSuperAdminEmail = (token: string | null, email: string) =>
+  axios.put(REST_API_URL_SA_PUT, null, {
+    params: { email: email },
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+const updateSuperAdminPassword = (token: string, data: any) =>
+  axios.put(REST_API_URL_SAPASS_PUT, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
 const ModelsService = {
   listClubs,
   listAdmins,
@@ -244,6 +269,10 @@ const ModelsService = {
   deleteRequest,
   acceptRequest,
   uploadFile,
+  getAllCounts,
+  getAll,
+  updateSuperAdminEmail,
+  updateSuperAdminPassword,
 };
 
 export default ModelsService;

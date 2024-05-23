@@ -23,7 +23,7 @@ function HomeNavbarComponent(props: {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/home">
           <img src={logo} alt="UniHive Logo" width="80%" />
         </a>
         <div className="navbar-nav">
@@ -70,7 +70,7 @@ function HomeNavbarComponent(props: {
 
                 <Dropdown.Menu>
                   <Dropdown.Item href="/user/profile">Profile</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
+                  <Dropdown.Item href="/user/settings">Settings</Dropdown.Item>
                   <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

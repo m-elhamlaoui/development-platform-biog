@@ -5,6 +5,7 @@ import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Club from "../models/Club";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminAddEventComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -64,7 +65,9 @@ function SuperAdminAddEventComponent() {
             <span style={{ fontSize: "1.5rem" }}>Add Event</span>
           </div>
           {isLoading ? (
-            <div className="is-loading">Loading...</div>
+            <div className="is-loading">
+              <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+            </div>
           ) : (
             <form onSubmit={handleSave}>
               <div className="info">

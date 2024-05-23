@@ -3,39 +3,19 @@ import FooterComponent from "../components/FooterComponent";
 import HomeNavbarComponent from "../components/HomeNavbarComponent";
 import Student from "../models/Student";
 import { isExpired } from "react-jwt";
+import { useParams } from "react-router-dom";
+import EventPage from "../components/EventById";
+import StudentNavbar from "../components/StudentNavbar";
 
 
-function EventPage() {
-    const [isLogged, setIsLogged] = useState(false);
-    const [student, setStudent] = useState<Student>();
-    
-    useEffect(() => {
-        var token: string = "";
-    
-        if (localStorage.getItem("student")) {
-          token = localStorage.getItem("student") as string;
-        }
-    
-        if (token !== "") {
-          setIsLogged(true);
-        }
-    
-        const isMyTokenExpired = isExpired(token);
-    
-        if (isMyTokenExpired) {
-          setIsLogged(false);
-          if (token) {
-            localStorage.removeItem("student");
-            window.location.reload();
-          }
-        }
-    }, []);
-
-    return (<>
-    <HomeNavbarComponent loggedin={isLogged} student={student!}/> 
-
+function EventProfile() {
+  return (
+  <>
+    <StudentNavbar/>
+    <EventPage/>
     <FooterComponent/>
-    </>  );
+</>  
+);
 }
 
-export default EventPage;
+export default EventProfile;

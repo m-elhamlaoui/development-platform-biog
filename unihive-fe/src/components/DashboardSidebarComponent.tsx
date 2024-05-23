@@ -6,6 +6,7 @@ import {
   FlagIcon,
   UserIcon,
   Squares2X2Icon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
 import {
@@ -16,6 +17,7 @@ import {
   FlagIcon as FlagIconSolid,
   UserIcon as UserIconSolid,
   Squares2X2Icon as Squares2X2IconSolid,
+  UserCircleIcon as UserCircleIconSolid,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 
@@ -42,6 +44,7 @@ function DashboardSidebarComponent(props: { option: string }) {
     props.option === "addstudent" ||
     props.option === "upstudent";
   const request = props.option === "requests" || props.option === "viewrequest";
+  const profile = props.option === "profile";
 
   const navigate = useNavigate();
 
@@ -214,6 +217,35 @@ function DashboardSidebarComponent(props: { option: string }) {
           />
         )}
         <span>Sign Up Requests</span>
+      </button>
+      <button
+        className={"btn btn-pr" + (profile ? "-active" : "") + " sidebar-item"}
+        onClick={() => navigate("/superadmin/profile")}
+        type="button"
+        style={{
+          position: "absolute",
+          bottom: "0",
+          width: "88%",
+        }}
+      >
+        {profile ? (
+          <UserCircleIconSolid
+            style={{
+              width: "22px",
+              height: "22px",
+              marginBottom: "2px",
+            }}
+          />
+        ) : (
+          <UserCircleIcon
+            style={{
+              width: "22px",
+              height: "22px",
+              marginBottom: "2px",
+            }}
+          />
+        )}
+        <span>Profile</span>
       </button>
     </div>
   );

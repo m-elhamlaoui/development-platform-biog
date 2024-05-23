@@ -1,10 +1,10 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
 import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Club from "../models/Club";
+import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminClubsComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
@@ -105,7 +105,9 @@ function SuperAdminClubsComponent() {
               />
             </div>
             {isLoading ? (
-              <div className="no-data">Loading...</div>
+              <div className="no-data">
+                <CircularSpinner color="#000" size={60} speed={2} weight={3} />
+              </div>
             ) : clubsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (
