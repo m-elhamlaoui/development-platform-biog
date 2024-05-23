@@ -1,13 +1,13 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import Club from "../models/Club";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
+import Club from "../../models/Club";
 import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import Student from "../models/Student";
+import Student from "../../models/Student";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 

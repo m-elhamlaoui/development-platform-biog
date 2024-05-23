@@ -1,11 +1,11 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { decodeToken, isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import Request from "../models/Request";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
+import Request from "../../models/Request";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";

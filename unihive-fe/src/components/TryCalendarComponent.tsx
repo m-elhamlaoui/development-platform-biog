@@ -1,6 +1,8 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
-function TryCalendarComponent() {
+function TryCalendarComponent(props: { isLogged: boolean }) {
+  const navigate = useNavigate();
   return (
     <div className="container cont5">
       <div className="calendar-img">
@@ -9,7 +11,13 @@ function TryCalendarComponent() {
             Try Our <br />
             Calendar Manager!
           </span>
-          <button className="btn btn-primary try-calendar-btn" type="button">
+          <button
+            className="btn btn-primary try-calendar-btn"
+            type="button"
+            onClick={() => {
+              props.isLogged ? navigate("/calendar") : navigate("/login");
+            }}
+          >
             <span style={{ padding: "4px" }}>Try</span>
             <ChevronRightIcon
               style={{

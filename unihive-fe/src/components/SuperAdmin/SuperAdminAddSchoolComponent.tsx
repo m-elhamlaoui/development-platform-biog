@@ -1,18 +1,18 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
+import ModelsService from "../../services/SuperAdminModelsService";
+import { Schools } from "../../models/Schools";
+import { Cities } from "../../models/Cities";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminAddClubComponent() {
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isDisabled, setIsDisabled] = useState(false);
+function SuperAdminAddSchoolComponent() {
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -25,31 +25,20 @@ function SuperAdminAddClubComponent() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ModelsService.listSchools(token)
-      .then((response) => {
-        setSchools(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    setIsLoading(false);
   }, []);
 
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addClub(token, {
-      clubName: event.target[0].value,
-      clubLogo: event.target[1].value,
-      clubDescription: event.target[2].value,
-      clubBanner: event.target[3].value,
-      school: event.target[4].value,
-      email: event.target[5].value,
-      password: event.target[6].value,
+    ModelsService.addSchool(token, {
+      schoolName: event.target[0].value,
+      schoolAddress: event.target[1].value,
+      schoolCity: event.target[2].value,
     })
       .then((response) => {
         console.log(response);
-        enqueueSnackbar("Club added successfully", {
+        enqueueSnackbar("School added successfully", {
           variant: "success",
           autoHideDuration: 1000,
           transitionDuration: 300,
@@ -59,14 +48,14 @@ function SuperAdminAddClubComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/clubs");
+            navigate("/superadmin/schools");
           },
         });
       })
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to add club", {
+        enqueueSnackbar("Failed to add school", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -79,17 +68,22 @@ function SuperAdminAddClubComponent() {
       });
   };
 
+  const SchoolsArray = Object.values(Schools);
+  const CitiesArray = Object.values(Cities);
+  SchoolsArray.sort();
+  CitiesArray.sort();
+
   return (
     <>
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"addclub"} />
+          <DashboardSidebarComponent option={"addschool"} />
         </Col>
         <Col className="col2">
           <div className="table-entity-add">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Add Club</span>
+              <span style={{ fontSize: "1.5rem" }}>Add School</span>
             </div>
             {isLoading ? (
               <div className="is-loading">
@@ -99,43 +93,28 @@ function SuperAdminAddClubComponent() {
               <form onSubmit={handleSave}>
                 <div className="info">
                   <div className="info-row">
-                    CLUB NAME
-                    <input type="text" placeholder="club name" />
-                  </div>
-                  <div className="info-row">
-                    CLUB LOGO
-                    <input type="text" placeholder="club logo" />
-                  </div>
-                  <div className="info-row">
-                    CLUB DESCRIPTION
-                    <textarea placeholder="club description" />
-                  </div>
-                  <div className="info-row">
-                    CLUB BANNER
-                    <input type="text" placeholder="club banner" />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL
+                    SCHOOL NAME
                     <select name="" id="">
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
+                      {SchoolsArray.map((school: string) => (
+                        <option key={school} value={school}>
+                          {school}
                         </option>
                       ))}
                     </select>
                   </div>
                   <div className="info-row">
-                    EMAIL
-                    <input type="text" placeholder="email" />
+                    SCHOOL ADDRESS
+                    <input type="text" placeholder="school address" />
                   </div>
                   <div className="info-row">
-                    PASSWORD
-                    <input
-                      type="text"
-                      placeholder="password"
-                      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-                      title="Password must contain at least one lowercase letter, one uppercase letter, one special character, one number, and be at least 8 characters"
-                    />
+                    SCHOOL CITY
+                    <select name="" id="">
+                      {CitiesArray.map((city: string) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="info-btns">
                     <button
@@ -148,7 +127,7 @@ function SuperAdminAddClubComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/clubs")}
+                      onClick={() => navigate("/superadmin/schools")}
                     >
                       Cancel
                     </button>
@@ -163,4 +142,4 @@ function SuperAdminAddClubComponent() {
   );
 }
 
-export default SuperAdminAddClubComponent;
+export default SuperAdminAddSchoolComponent;

@@ -1,12 +1,12 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import { Schools } from "../models/Schools";
-import { Cities } from "../models/Cities";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
+import { Schools } from "../../models/Schools";
+import { Cities } from "../../models/Cities";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 

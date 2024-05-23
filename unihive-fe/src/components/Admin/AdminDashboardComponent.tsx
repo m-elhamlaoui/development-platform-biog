@@ -1,9 +1,9 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
+import ModelsService from "../../services/SuperAdminModelsService";
 import { CircularSpinner } from "infinity-spinners";
 
 function SuperAdminDashboardComponent() {

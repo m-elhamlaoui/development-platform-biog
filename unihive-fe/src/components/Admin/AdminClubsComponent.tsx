@@ -1,15 +1,14 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import Event from "../models/Event";
+import ModelsService from "../../services/SuperAdminModelsService";
+import Club from "../../models/Club";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminEventsComponent() {
-  const [events, setEvents] = useState<Event[]>([]);
+function SuperAdminClubsComponent() {
+  const [clubs, setClubs] = useState<Club[]>([]);
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -24,13 +23,13 @@ function SuperAdminEventsComponent() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
-  const [eventId, setEventId] = useState("");
-  const [eventName, setEventName] = useState("");
+  const [clubId, setClubId] = useState("");
+  const [clubName, setClubName] = useState("");
 
   useEffect(() => {
-    ModelsService.listEvents(token)
+    ModelsService.listClubs(token)
       .then((response) => {
-        setEvents(response.data);
+        setClubs(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -40,18 +39,18 @@ function SuperAdminEventsComponent() {
 
   const handleShow = (id: string, name: string) => {
     setShow(true);
-    setEventId(id);
-    setEventName(name);
+    setClubId(id);
+    setClubName(name);
   };
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteEvent(token, id)
+    ModelsService.deleteClub(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
-        enqueueSnackbar("Event deleted successfully.", {
+        enqueueSnackbar("Club deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -61,9 +60,9 @@ function SuperAdminEventsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listEvents(token)
+        ModelsService.listClubs(token)
           .then((response) => {
-            setEvents(response.data);
+            setClubs(response.data);
           })
           .catch((error) => {
             console.error(error);
@@ -72,7 +71,7 @@ function SuperAdminEventsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to delete event", {
+        enqueueSnackbar("Failed to delete club", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -85,47 +84,47 @@ function SuperAdminEventsComponent() {
       });
   };
 
-  const eventsArray = Object.values(events);
-  const eventsCount = eventsArray.length;
+  const clubsArray = Object.values(clubs);
+  const clubsCount = clubsArray.length;
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Event[]>(events);
+  const [searchResults, setSearchResults] = useState<Club[]>(clubs);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    const results = events.filter(
-      (event) =>
-        event.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.club.clubName.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = clubs.filter(
+      (club) =>
+        club.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        club.clubName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, events]);
+  }, [searchTerm, clubs]);
 
-  const filteredEvents = searchTerm ? searchResults : eventsArray;
+  const filteredClubs = searchTerm ? searchResults : clubsArray;
 
   return (
     <>
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"events"} />
+          <DashboardSidebarComponent option={"clubs"} />
         </Col>
         <Col className="col2">
           <div className="table-entity">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Events Table</span>
+              <span style={{ fontSize: "1.5rem" }}>Clubs Table</span>
               <span style={{ fontSize: "1.2rem" }}>
-                {eventsCount} {eventsCount > 1 ? "rows" : "row"}
+                {clubsCount} {clubsCount > 1 ? "rows" : "row"}
               </span>
             </div>
-            <div className="table-bar3">
+            <div className="table-bar1">
               <div>Search</div>
               <input
                 type="text"
-                placeholder="Event name, or club name"
+                placeholder="Email, or club name"
                 value={searchTerm}
                 onChange={handleSearch}
               />
@@ -134,7 +133,7 @@ function SuperAdminEventsComponent() {
               <div className="no-data">
                 <CircularSpinner color="#000" size={60} speed={2} weight={3} />
               </div>
-            ) : eventsCount === 0 ? (
+            ) : clubsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (
               <div className="table-table">
@@ -142,60 +141,44 @@ function SuperAdminEventsComponent() {
                   <thead>
                     <tr>
                       <th>NAME</th>
-                      <th>CATEGORY</th>
+                      <th>LOGO</th>
                       <th>DESCRIPTION</th>
-                      <th>LOCATION</th>
-                      <th>START TIME</th>
-                      <th>END TIME</th>
                       <th>BANNER</th>
                       <th>RATING</th>
-                      <th>CLUB</th>
+                      <th>SCHOOL</th>
+                      <th>EMAIL</th>
                       <th>EDIT/DELETE</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredEvents.map((event) => (
-                      <tr key={event.id}>
+                    {filteredClubs.map((club) => (
+                      <tr key={club.id}>
                         <td>
-                          {event.eventName.length > 4
-                            ? event.eventName.slice(0, 4) + "..."
-                            : event.eventName}
+                          {club.clubName.length > 4
+                            ? club.clubName.slice(0, 4) + "..."
+                            : club.clubName}
                         </td>
                         <td>
-                          {event.eventCategory.length > 8
-                            ? event.eventCategory.slice(0, 8) + "..."
-                            : event.eventCategory}
+                          {club.clubLogo.length > 4
+                            ? club.clubLogo.slice(0, 4) + "..."
+                            : club.clubLogo}
                         </td>
                         <td>
-                          {event.eventDescription.length > 11
-                            ? event.eventDescription.slice(0, 11) + "..."
-                            : event.eventDescription}
+                          {club.clubDescription.length > 11
+                            ? club.clubDescription.slice(0, 11) + "..."
+                            : club.clubDescription}
                         </td>
                         <td>
-                          {event.eventLocation.length > 8
-                            ? event.eventLocation.slice(0, 8) + "..."
-                            : event.eventLocation}
+                          {club.clubBanner.length > 6
+                            ? club.clubBanner.slice(0, 6) + "..."
+                            : club.clubBanner}
                         </td>
+                        <td>{club.clubRating}</td>
+                        <td>{club.school.schoolName}</td>
                         <td>
-                          {event.startTime!.toString()?.length > 10
-                            ? event.startTime?.toString()?.slice(0, 10) + "..."
-                            : event.startTime?.toString() ?? ""}
-                        </td>
-                        <td>
-                          {event.endTime!.toString()?.length > 8
-                            ? event.endTime?.toString()?.slice(0, 8) + "..."
-                            : event.endTime?.toString() ?? ""}
-                        </td>
-                        <td>
-                          {event.eventBanner.length > 6
-                            ? event.eventBanner.slice(0, 6) + "..."
-                            : event.eventBanner}
-                        </td>
-                        <td>{event.eventRating}</td>
-                        <td>
-                          {event.club.clubName.length > 4
-                            ? event.club.clubName.slice(0, 4) + "..."
-                            : event.club.clubName}
+                          {club.email.length > 5
+                            ? club.email.slice(0, 5) + "..."
+                            : club.email}
                         </td>
                         <td>
                           <div className="modify">
@@ -204,10 +187,10 @@ function SuperAdminEventsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upevent/${
-                                    events.indexOf(event) + 1
+                                  `/superadmin/upclub/${
+                                    clubs.indexOf(club) + 1
                                   }`,
-                                  { state: { event } }
+                                  { state: { club } }
                                 )
                               }
                             >
@@ -216,9 +199,7 @@ function SuperAdminEventsComponent() {
                             <button
                               className="btn btn-delete"
                               type="button"
-                              onClick={() =>
-                                handleShow(event.id, event.eventName)
-                              }
+                              onClick={() => handleShow(club.id, club.clubName)}
                             >
                               Delete
                             </button>
@@ -233,10 +214,10 @@ function SuperAdminEventsComponent() {
           </div>
           <button
             className="btn btn-add1"
+            onClick={() => navigate("/superadmin/addclub")}
             type="button"
-            onClick={() => navigate("/superadmin/addevent")}
           >
-            Add Event
+            Add Club
           </button>
         </Col>
       </Row>
@@ -244,7 +225,10 @@ function SuperAdminEventsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete Club with name {eventName}?</Modal.Body>
+        <Modal.Body>
+          Delete Club with name {clubName}? <br />
+          This will affect the table: Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -256,7 +240,7 @@ function SuperAdminEventsComponent() {
           <button
             className="btn modal-confirm"
             type="button"
-            onClick={() => handleDelete(eventId)}
+            onClick={() => handleDelete(clubId)}
             disabled={isDisabled}
           >
             Confirm
@@ -267,4 +251,4 @@ function SuperAdminEventsComponent() {
   );
 }
 
-export default SuperAdminEventsComponent;
+export default SuperAdminClubsComponent;

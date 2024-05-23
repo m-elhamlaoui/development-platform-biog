@@ -1,9 +1,9 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../DashboardSidebarComponent";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
+import ModelsService from "../../services/SuperAdminModelsService";
 import { CircularSpinner } from "infinity-spinners";
-import SuperAdmin from "../models/SuperAdmin";
+import SuperAdmin from "../../models/SuperAdmin";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminProfileComponent() {

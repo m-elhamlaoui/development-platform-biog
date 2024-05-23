@@ -87,7 +87,7 @@ function HomePage() {
           <ClubsRankings clubs={clubs} />
           <UpcomingEvents events={events} />
           <EventsRankings events={events} />
-          <TryCalendar />
+          <TryCalendar isLogged={isLogged} />
           <Footer />
           <ScrollToTop
             smooth
