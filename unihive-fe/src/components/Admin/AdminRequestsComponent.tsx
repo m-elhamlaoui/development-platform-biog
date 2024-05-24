@@ -134,7 +134,7 @@ function AdminRequestsComponent() {
       })
       .catch((error) => {
         console.error(error);
-        setIsDisabled2(false);
+        setIsDisabled1(false);
         enqueueSnackbar("Request to accept student", {
           variant: "error",
           autoHideDuration: 2000,

@@ -97,4 +97,11 @@ public class AuthenticationController {
       @PathVariable UUID id) throws MessagingException, UnsupportedEncodingException {
     return service.acceptRequest(id);
   }
+
+  @PutMapping("/acceptrequest/{schoolId}/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public ResponseEntity<String> acceptRequest(
+      @PathVariable UUID id, @PathVariable UUID schoolId) throws MessagingException, UnsupportedEncodingException {
+    return service.acceptRequest(id, schoolId);
+  }
 }
