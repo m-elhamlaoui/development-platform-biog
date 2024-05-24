@@ -35,6 +35,9 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
+  needs:
+    - build-backend
+    - build-frontend
   image: node:14
   script:
     # Authenticate with Heroku
