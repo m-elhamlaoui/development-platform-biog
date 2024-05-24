@@ -1,5 +1,6 @@
 stages:
-  - build
+  - build-backend
+  - build-frontend
   - deploy
 
 # Cache Maven dependencies and Node.js modules to speed up subsequent builds
@@ -10,7 +11,7 @@ cache:
 
 # Build the Spring Boot application
 build-backend:
-  stage: build
+  stage: build-backend
   image: maven:3.8.1-jdk-17
   script:
     - mvn clean package -DskipTests
@@ -20,7 +21,7 @@ build-backend:
 
 # Build the React application
 build-frontend:
-  stage: build
+  stage: build-frontend
   image: node:14
   script:
     - cd fe
