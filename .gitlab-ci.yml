@@ -12,7 +12,7 @@ cache:
 # Build the Spring Boot application
 build-backend:
   stage: build-backend
-  image: maven:3.9.6-jdk-17
+  image: maven:3.8.3-jdk-17
   script:
 
     - mvn -f unihive-backend/pom.xml clean package -DskipTests
