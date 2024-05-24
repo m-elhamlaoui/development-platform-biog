@@ -41,7 +41,8 @@ deploy:
   before_script:
     - apk update && apk add curl wget bash nodejs npm
     - mkdir -p /usr/local/lib/heroku/bin
-    - wget -qO- https://cli-assets.heroku.com/install.sh | sh
+    - wget -qO- https://cli-assets.heroku.com/install.sh | HOMEBREW_NO_ENV_FILTER=1 sh
+    - wget -qO- https://cli-assets.heroku.com/install.sh | HOMEBREW_NO_ENV_FILTER=1 HOMEBREW_BUILD_FROM_SOURCE=1 sh
   script:
     # Authenticate with Heroku using the Heroku API key
     - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
