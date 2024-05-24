@@ -1,8 +1,57 @@
 stages:
-  - heroku_deploy
+  - build
+  - deploy
 
-heroku_deploy:
-  stage: heroku_deploy
+# Cache Maven dependencies and Node.js modules to speed up subsequent builds
+cache:
+  paths:
+    - .m2/repository
+    - frontend/node_modules
+
+# Build the Spring Boot application
+build-backend:
+  stage: build
+  image: maven:3.8.1-jdk-17
   script:
-    - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+
+# Build the React application
+build-frontend:
+  stage: build
+  image: node:14
+  script:
+    - cd fe
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
+
+# Deploy to Heroku
+deploy:
+  stage: deploy
+  image: node:14
+  script:
+    # Authenticate with Heroku
+    - echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+    # Prepare the Heroku app for deployment
+    - heroku git:remote -a $HEROKU_APP_NAME
+    # Deploy the backend
+    - git add .
+    - git commit -m "Deploy to Heroku"
+    - git push heroku main
+    # Deploy the frontend build
+    - cd frontend
+    - mv build ../target/classes/static
+    - cd ..
+    - mvn clean package -DskipTests
+    - jar -cf myapp.war -C target .
+    - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+    - docker push registry.heroku.com/$HEROKU_APP_NAME/web
+    - heroku container:release web
+  only:
+    - master
+
