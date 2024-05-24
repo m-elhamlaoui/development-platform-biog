@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -33,6 +34,7 @@ public class StudentController {
         return studentService.getStudent(id);
     }
 
+
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/email/{email}")
     Student getStudentByEmail(@PathVariable String email) {
@@ -43,6 +45,12 @@ public class StudentController {
     @GetMapping("/events")
     List<Event> getAllEvents() {
         return eventService.getAllByStudent();
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @GetMapping("/events/{id}")
+    Optional<Event> getAllClubs(@PathVariable UUID id) throws AccessDeniedException {
+        return eventService.getEventByStudent(id);
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
@@ -93,10 +101,15 @@ public class StudentController {
         studentService.unfollowClub(studentId, clubId);
     }
 
+
+
     @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/test")
-    void test() {
-        System.out.println("test");
+    @GetMapping("/club/{clubId}/followers")
+    Club addFollower(@PathVariable UUID clubId,List<Student> students) throws AccessDeniedException {
+
+        return clubService.addFollowers(clubId, students);
     }
 
-}
+
+    }
+

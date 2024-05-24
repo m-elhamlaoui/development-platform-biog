@@ -12,6 +12,8 @@ import StudentProfilePage from "./pages/StudentProfilePage";
 import CalendarPage from "./pages/CalendarPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import EventPage from "./pages/EventPage";
+import EventProfile from "./pages/EventPage";
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/404" element={<NotFoundPage />}></Route>
           <Route path="*" element={<Navigate to="/404" />}></Route>
+          <Route path="/events/:id" element={<EventProfile />} />
         </Routes>
       </BrowserRouter>
     </>

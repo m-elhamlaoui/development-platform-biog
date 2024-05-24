@@ -49,6 +49,7 @@ function CalendarPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [newDescription, setNewDescription] = useState("");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
+  
 
   const handleAdding = () => {
     if (isAdding === false) {
@@ -688,9 +689,9 @@ function CalendarPage() {
                               <span>Event Details</span>
                               <button
                                 className="btn btn-primary see-calendar-event-btn"
-                                type="button"
+                                type="button"  onClick={() => navigate(`/events/${events[0].id}`)}
                               >
-                                See Event
+                                See Event 
                               </button>
                             </div>
                             <div className="calendar-event-desc">

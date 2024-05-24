@@ -19,4 +19,5 @@ public class EventController {
     List<Event> getAllClubs() throws AccessDeniedException {
         return eventService.getAll();
     }
+
 }

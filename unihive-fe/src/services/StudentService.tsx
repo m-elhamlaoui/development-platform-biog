@@ -4,6 +4,7 @@ const REST_API_URL_CLUB = "http://localhost:8080/student/club";
 const REST_API_URL_STUDENT_GET = "http://localhost:8080/student/email/";
 const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/";
 const REST_API_URL_STUDENT_CLUBS = "http://localhost:8080/student/clubs/";
+const REST_API_URL_EVENT="http://localhost:8080/student/events";
 
 export const getStudent = (token: string | null, email: string) =>
   axios.get(REST_API_URL_STUDENT_GET + email, {
@@ -58,6 +59,10 @@ export const getEvents = (token: string | null) =>
   axios.get(REST_API_URL_EVENTS, {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const getEvent = (token: string | null, id: string) =>
+    axios.get(`${REST_API_URL_EVENT}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 export const getClub = (token: string | null, id: string) =>
   axios.get(`${REST_API_URL_CLUB}/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -78,5 +83,6 @@ const StudentService = {
   updateStudentPassword,
   deleteStudent,
   unfollowClub,
+  getEvent,
 };
 export default StudentService;

@@ -15,4 +15,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("SELECT e FROM Event e")
     List<Event> findAll();
+
+
 }
