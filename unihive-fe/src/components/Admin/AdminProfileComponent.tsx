@@ -1,33 +1,36 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
+import ModelsService from "../../services/AdminModelsService";
 import { CircularSpinner } from "infinity-spinners";
-import SuperAdmin from "../models/SuperAdmin";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import Admin from "../../models/Admin";
+import { decodeToken } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
-function SuperAdminProfileComponent() {
-  const [superadmins, setSuperAdmins] = useState<SuperAdmin[]>([]);
+function AdminProfileComponent() {
+  const [admin, setAdmin] = useState<Admin>();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
-  var superadmin: SuperAdmin | null = null;
+  const navigate = useNavigate();
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    ModelsService.getAll(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.getAdmin(token, decodedToken.sub)
       .then((response) => {
-        setSuperAdmins(response.data);
+        setAdmin(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -38,7 +41,7 @@ function SuperAdminProfileComponent() {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     setIsDisabled(true);
-    if (superadmin!.email && oldPassword && newPassword) {
+    if (admin!.email && oldPassword && newPassword) {
       if (oldPassword === newPassword) {
         enqueueSnackbar("New password must be different", {
           variant: "warning",
@@ -52,7 +55,7 @@ function SuperAdminProfileComponent() {
         setIsDisabled(false);
         return;
       }
-      ModelsService.updateSuperAdminEmail(token, superadmin!.email).then(
+      ModelsService.updateAdminEmail(token, admin!.id, admin!.email).then(
         (response) => {
           localStorage.removeItem("superadmin");
           localStorage.setItem("superadmin", response.data.token);
@@ -61,7 +64,7 @@ function SuperAdminProfileComponent() {
           console.error(error);
         }
       );
-      ModelsService.updateSuperAdminPassword(token, {
+      ModelsService.updateAdminPassword(token, {
         oldPassword: oldPassword,
         newPassword: newPassword,
       }).then(
@@ -97,7 +100,7 @@ function SuperAdminProfileComponent() {
           console.error(error);
         }
       );
-    } else if (!superadmin!.email && oldPassword && newPassword) {
+    } else if (!admin!.email && oldPassword && newPassword) {
       if (oldPassword === newPassword) {
         enqueueSnackbar("New password must be different", {
           variant: "warning",
@@ -111,7 +114,7 @@ function SuperAdminProfileComponent() {
         setIsDisabled(false);
         return;
       }
-      ModelsService.updateSuperAdminPassword(token, {
+      ModelsService.updateAdminPassword(token, {
         oldPassword: oldPassword,
         newPassword: newPassword,
       }).then(
@@ -148,8 +151,8 @@ function SuperAdminProfileComponent() {
           console.error(error);
         }
       );
-    } else if (superadmin!.email && (!oldPassword || !newPassword)) {
-      ModelsService.updateSuperAdminEmail(token, superadmin!.email).then(
+    } else if (admin!.email && (!oldPassword || !newPassword)) {
+      ModelsService.updateAdminEmail(token, admin!.id, admin!.email).then(
         (response) => {
           localStorage.removeItem("superadmin");
           localStorage.setItem("superadmin", response.data.token);
@@ -174,8 +177,6 @@ function SuperAdminProfileComponent() {
     }
   };
 
-  superadmin = superadmins[0];
-
   return (
     <>
       <SnackbarProvider maxSnack={4} />
@@ -186,7 +187,7 @@ function SuperAdminProfileComponent() {
         <Col className="col2">
           <div className="table-entity-add">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Super Admin Profile</span>
+              <span style={{ fontSize: "1.5rem" }}>Admin Profile</span>
             </div>
             {isLoading ? (
               <div className="is-loading">
@@ -199,11 +200,11 @@ function SuperAdminProfileComponent() {
                   <input
                     type="text"
                     placeholder="email"
-                    value={superadmin.email}
+                    value={admin!.email}
                     onChange={(e) => {
-                      const updatedSuperAdmin = superadmin;
-                      updatedSuperAdmin!.email = e.target.value;
-                      setSuperAdmins([updatedSuperAdmin!]);
+                      const updatedAdmin = admin;
+                      updatedAdmin!.email = e.target.value;
+                      setAdmin(updatedAdmin!);
                     }}
                   />
                 </div>
@@ -256,4 +257,4 @@ function SuperAdminProfileComponent() {
   );
 }
 
-export default SuperAdminProfileComponent;
+export default AdminProfileComponent;

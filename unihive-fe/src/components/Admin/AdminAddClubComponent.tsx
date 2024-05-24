@@ -1,44 +1,60 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import { Schools } from "../models/Schools";
-import { Cities } from "../models/Cities";
+import ModelsService from "../../services/AdminModelsService";
+import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminAddSchoolComponent() {
+function AdminAddClubComponent() {
+  const [school, setSchool] = useState<School>();
+  const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   const navigate = useNavigate();
-  const [isDisabled, setIsDisabled] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(false);
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
+      .then((response) => {
+        setSchool(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addSchool(token, {
-      schoolName: event.target[0].value,
-      schoolAddress: event.target[1].value,
-      schoolCity: event.target[2].value,
-    })
+    ModelsService.addClub(
+      token,
+      {
+        clubName: event.target[0].value,
+        clubLogo: event.target[1].value,
+        clubDescription: event.target[2].value,
+        clubBanner: event.target[3].value,
+        school: school!.id,
+        email: event.target[4].value,
+        password: event.target[5].value,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
-        enqueueSnackbar("School added successfully", {
+        enqueueSnackbar("Club added successfully", {
           variant: "success",
           autoHideDuration: 1000,
           transitionDuration: 300,
@@ -48,14 +64,14 @@ function SuperAdminAddSchoolComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/admin/clubs");
           },
         });
       })
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to add school", {
+        enqueueSnackbar("Failed to add club", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -68,22 +84,17 @@ function SuperAdminAddSchoolComponent() {
       });
   };
 
-  const SchoolsArray = Object.values(Schools);
-  const CitiesArray = Object.values(Cities);
-  SchoolsArray.sort();
-  CitiesArray.sort();
-
   return (
     <>
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"addschool"} />
+          <DashboardSidebarComponent option={"addclub"} />
         </Col>
         <Col className="col2">
           <div className="table-entity-add">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Add School</span>
+              <span style={{ fontSize: "1.5rem" }}>Add Club</span>
             </div>
             {isLoading ? (
               <div className="is-loading">
@@ -93,28 +104,33 @@ function SuperAdminAddSchoolComponent() {
               <form onSubmit={handleSave}>
                 <div className="info">
                   <div className="info-row">
-                    SCHOOL NAME
-                    <select name="" id="">
-                      {SchoolsArray.map((school: string) => (
-                        <option key={school} value={school}>
-                          {school}
-                        </option>
-                      ))}
-                    </select>
+                    CLUB NAME
+                    <input type="text" placeholder="club name" />
                   </div>
                   <div className="info-row">
-                    SCHOOL ADDRESS
-                    <input type="text" placeholder="school address" />
+                    CLUB LOGO
+                    <input type="text" placeholder="club logo" />
                   </div>
                   <div className="info-row">
-                    SCHOOL CITY
-                    <select name="" id="">
-                      {CitiesArray.map((city: string) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                    </select>
+                    CLUB DESCRIPTION
+                    <textarea placeholder="club description" />
+                  </div>
+                  <div className="info-row">
+                    CLUB BANNER
+                    <input type="text" placeholder="club banner" />
+                  </div>
+                  <div className="info-row">
+                    EMAIL
+                    <input type="text" placeholder="email" />
+                  </div>
+                  <div className="info-row">
+                    PASSWORD
+                    <input
+                      type="text"
+                      placeholder="password"
+                      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                      title="Password must contain at least one lowercase letter, one uppercase letter, one special character, one number, and be at least 8 characters"
+                    />
                   </div>
                   <div className="info-btns">
                     <button
@@ -127,7 +143,7 @@ function SuperAdminAddSchoolComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/schools")}
+                      onClick={() => navigate("/admin/clubs")}
                     >
                       Cancel
                     </button>
@@ -142,4 +158,4 @@ function SuperAdminAddSchoolComponent() {
   );
 }
 
-export default SuperAdminAddSchoolComponent;
+export default AdminAddClubComponent;

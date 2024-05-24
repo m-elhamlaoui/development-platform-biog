@@ -30,7 +30,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getAllByStudent() {
-       return eventRepository.findAll();
+        return eventRepository.findAll();
 
     }
     @Override
@@ -83,6 +83,7 @@ public class EventServiceImpl implements EventService {
         newevent.setEventName(event.getEventName());
         newevent.setEventDescription(event.getEventDescription());
         newevent.setEventCategory(event.getEventCategory());
+        newevent.setEventLocation(event.getEventLocation());
         newevent.setStartTime(event.getStartTime());
         newevent.setEndTime(event.getEndTime());
         newevent.setEventBanner(event.getEventBanner());

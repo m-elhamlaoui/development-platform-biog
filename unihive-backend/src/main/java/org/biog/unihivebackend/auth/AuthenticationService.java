@@ -78,7 +78,36 @@ public class AuthenticationService {
     return AuthenticationResponse.builder().token(jwtToken).build();
   }
 
-  public AuthenticationResponse registerStudent(RegisterRequest request) {
+  public AuthenticationResponse registerStudent(RegisterRequest request, UUID... schoolId)
+      throws AccessDeniedException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    boolean isAdmin = authentication.getAuthorities().stream()
+        .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+    if (!isAdmin) {
+      var student = Student
+          .builder()
+          .email(request.getEmail())
+          .password(passwordEncoder.encode(request.getPassword()))
+          .lastName(request.getLastName())
+          .firstName(request.getFirstName())
+          .cne(request.getCne())
+          .numApogee(request.getNumApogee())
+          .school(schoolRepository.findById(schoolId[0]).orElseThrow(
+              () -> new NotFoundException(
+                  "School not found with id " + request.getSchool())))
+          .build();
+      studentRepository.save(student);
+      var jwtToken = jwtService.generateToken(student);
+      return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
+    if (!schoolId[0].equals(loggedInUserSchoolId)) {
+      throw new AccessDeniedException("You do not have permission to register a club in this school");
+    }
+
     var student = Student
         .builder()
         .email(request.getEmail())
@@ -94,9 +123,38 @@ public class AuthenticationService {
     studentRepository.save(student);
     var jwtToken = jwtService.generateToken(student);
     return AuthenticationResponse.builder().token(jwtToken).build();
+
   }
 
-  public AuthenticationResponse registerClub(RegisterRequest request) {
+  public AuthenticationResponse registerClub(RegisterRequest request, UUID... schoolId) throws AccessDeniedException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    boolean isAdmin = authentication.getAuthorities().stream()
+        .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+
+    if (!isAdmin) {
+      var club = Club
+          .builder()
+          .email(request.getEmail())
+          .password(passwordEncoder.encode(request.getPassword()))
+          .clubName(request.getClubName())
+          .clubLogo(request.getClubLogo())
+          .clubDescription(request.getClubDescription())
+          .clubBanner(request.getClubBanner())
+          .school(schoolRepository.findById(schoolId[0]).orElseThrow(
+              () -> new NotFoundException(
+                  "School not found with id " + request.getSchool())))
+          .build();
+      clubRepository.save(club);
+      var jwtToken = jwtService.generateToken(club);
+      return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
+    if (!schoolId[0].equals(loggedInUserSchoolId)) {
+      throw new AccessDeniedException("You do not have permission to register a club in this school");
+    }
+
     var club = Club
         .builder()
         .email(request.getEmail())

@@ -1,27 +1,29 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import Student from "../models/Student";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
+import Admin from "../../models/Admin";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminEditStudentComponent() {
+function SuperAdminEditAdminComponent() {
   const { id } = useParams();
   const { state } = useLocation();
   const [schools, setSchools] = useState<School[]>([]);
-  const [student, setStudent] = useState<Student>(state.student);
+  const [admin, setAdmin] = useState<Admin>(state.admin);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -45,34 +47,79 @@ function SuperAdminEditStudentComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
-    ModelsService.deleteStudent(token, student.id)
+    setIsDisabled1(true);
+    ModelsService.deleteAdmin(token, admin.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/students");
+        enqueueSnackbar("Admin deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/admins");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
-    ModelsService.updateStudent(token, student.id, {
+    ModelsService.updateAdmin(token, admin.id, {
       firstName: event.target[1].value,
       lastName: event.target[2].value,
-      cne: event.target[3].value,
-      numApogee: event.target[4].value,
-      profileImage: event.target[5].value,
-      school: schools.find((school) => school.id === event.target[6].value),
-      email: event.target[7].value,
+      school: schools.find((school) => school.id === event.target[3].value),
+      email: event.target[4].value,
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/students");
+        enqueueSnackbar("Admin updated successfully", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/admins");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -90,9 +137,10 @@ function SuperAdminEditStudentComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"upstudent"} />
+          <DashboardSidebarComponent option={"upadmin"} />
         </Col>
         <Col className="col2">
           <div className="table-entity-add">
@@ -108,20 +156,20 @@ function SuperAdminEditStudentComponent() {
                 <div className="info">
                   <div className="info-row">
                     ID
-                    <input type="text" value={student.id} disabled />
+                    <input type="text" value={admin.id} disabled />
                   </div>
                   <div className="info-row">
                     FIRST NAME
                     <input
                       type="text"
                       placeholder="first name"
-                      value={student.firstName}
+                      value={admin.firstName}
                       onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
+                        const updatedAdmin = {
+                          ...admin,
                           firstName: event.target.value,
                         };
-                        setStudent(updatedStudent);
+                        setAdmin(updatedAdmin);
                       }}
                     />
                   </div>
@@ -130,60 +178,13 @@ function SuperAdminEditStudentComponent() {
                     <input
                       type="text"
                       placeholder="last name"
-                      value={student.lastName}
+                      value={admin.lastName}
                       onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
+                        const updatedAdmin = {
+                          ...admin,
                           lastName: event.target.value,
                         };
-                        setStudent(updatedStudent);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    CNE
-                    <input
-                      type="text"
-                      placeholder="cne"
-                      value={student.cne}
-                      onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
-                          cne: event.target.value,
-                        };
-                        setStudent(updatedStudent);
-                      }}
-                    />
-                  </div>
-                  <div className="info-row">
-                    NUM APOGEE
-                    <input
-                      type="number"
-                      placeholder="num  apogee"
-                      value={student.numApogee}
-                      onChange={(event) => {
-                        const updatedClub = {
-                          ...student,
-                          numApogee: parseInt(event.target.value, 10),
-                        };
-                        setStudent(updatedClub);
-                      }}
-                      min={0}
-                      max={99999999}
-                    />
-                  </div>
-                  <div className="info-row">
-                    PROFILE IMAGE
-                    <input
-                      type="text"
-                      placeholder="profile image"
-                      value={student.profileImage}
-                      onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
-                          profileImage: event.target.value,
-                        };
-                        setStudent(updatedStudent);
+                        setAdmin(updatedAdmin);
                       }}
                     />
                   </div>
@@ -192,13 +193,13 @@ function SuperAdminEditStudentComponent() {
                     <select
                       name=""
                       id=""
-                      value={student.school.id}
+                      value={admin.school.id}
                       onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
+                        const updatedAdmin = {
+                          ...admin,
                           school: { id: event.target.value },
                         };
-                        setStudent(updatedStudent as Student);
+                        setAdmin(updatedAdmin as Admin);
                       }}
                     >
                       {schools.map((school) => (
@@ -213,13 +214,13 @@ function SuperAdminEditStudentComponent() {
                     <input
                       type="text"
                       placeholder="email"
-                      value={student.email}
+                      value={admin.email}
                       onChange={(event) => {
-                        const updatedStudent = {
-                          ...student,
+                        const updatedAdmin = {
+                          ...admin,
                           email: event.target.value,
                         };
-                        setStudent(updatedStudent);
+                        setAdmin(updatedAdmin);
                       }}
                     />
                   </div>
@@ -228,12 +229,16 @@ function SuperAdminEditStudentComponent() {
                     <input
                       type="text"
                       placeholder="password"
-                      value={student.password}
+                      value={admin.password}
                       disabled
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -246,7 +251,7 @@ function SuperAdminEditStudentComponent() {
                     <button
                       className="btn cancel-update"
                       type="button"
-                      onClick={() => navigate("/superadmin/students")}
+                      onClick={() => navigate("/superadmin/admins")}
                     >
                       Cancel
                     </button>
@@ -262,7 +267,8 @@ function SuperAdminEditStudentComponent() {
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Delete Student with name {student.firstName} {student.lastName}?
+          Delete Admin with name {admin.firstName} {admin.lastName}? <br />
+          This will affect the tables: Schools, Students, Clubs, and Events.
         </Modal.Body>
         <Modal.Footer>
           <button
@@ -276,6 +282,7 @@ function SuperAdminEditStudentComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>
@@ -285,4 +292,4 @@ function SuperAdminEditStudentComponent() {
   );
 }
 
-export default SuperAdminEditStudentComponent;
+export default SuperAdminEditAdminComponent;

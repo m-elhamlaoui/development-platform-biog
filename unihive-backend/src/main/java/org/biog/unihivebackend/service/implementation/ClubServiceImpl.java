@@ -18,7 +18,6 @@ import org.biog.unihivebackend.repository.StudentRepository;
 import org.biog.unihivebackend.service.ClubService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +29,6 @@ public class ClubServiceImpl implements ClubService {
 	private final ClubRepository clubRepository;
 	private final SchoolRepository schoolRepository;
 	private final StudentRepository studentRepository;
-	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<Event> getAllEventsByClub(UUID id) {
@@ -79,7 +77,6 @@ public class ClubServiceImpl implements ClubService {
 		}
 
 		oldclub.setEmail(newclub.getEmail());
-		oldclub.setPassword(passwordEncoder.encode(newclub.getPassword()));
 		oldclub.setClubName(newclub.getClubName());
 		oldclub.setClubLogo(newclub.getClubLogo());
 		oldclub.setClubDescription(newclub.getClubDescription());

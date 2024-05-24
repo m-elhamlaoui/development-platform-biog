@@ -1,30 +1,33 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import Club from "../models/Club";
+import ModelsService from "../../services/AdminModelsService";
+import School from "../../models/School";
+import Club from "../../models/Club";
 import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import Student from "../models/Student";
+import Student from "../../models/Student";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminEditClubComponent() {
+function AdminEditClubComponent() {
   const { id } = useParams();
   const { state } = useLocation();
-  const [schools, setSchools] = useState<School[]>([]);
+  const [school, setSchool] = useState<School>();
   const [club, setClub] = useState<Club>(state.club);
   const [students, setStudents] = useState<Student[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isAdding, setIsAdding] = useState(false);
@@ -34,9 +37,16 @@ function SuperAdminEditClubComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await ModelsService.listSchools(token);
-        setSchools(schoolsResponse.data);
-        const studentsResponse = await ModelsService.listStudents(token);
+        const decodedToken: any = decodeToken(token);
+        const schoolResponse = await ModelsService.School(
+          token,
+          decodedToken.sub
+        );
+        setSchool(schoolResponse.data);
+        const studentsResponse = await ModelsService.listStudents(
+          token,
+          schoolResponse.data.id
+        );
         setStudents(studentsResponse.data);
         setIsLoading(false);
       } catch (error) {
@@ -51,39 +61,91 @@ function SuperAdminEditClubComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = () => {
-    ModelsService.deleteClub(token, club.id)
+    setIsDisabled1(true);
+    ModelsService.deleteClub(token, club.id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/clubs");
+        enqueueSnackbar("Club deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/admin/clubs");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete admin", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
     const updatedStudentsArray = club.students.map((student) => ({
       id: student.id,
     }));
-    ModelsService.updateClub(token, club.id, {
-      clubName: event.target[1].value,
-      clubLogo: event.target[2].value,
-      clubDescription: event.target[3].value,
-      clubBanner: event.target[4].value,
-      clubRating: event.target[5].value,
-      ratingCount: event.target[6].value,
-      school: schools.find((school) => school.id === event.target[7].value),
-      students: updatedStudentsArray,
-      email: club.email,
-    })
+    ModelsService.updateClub(
+      token,
+      club.id,
+      {
+        clubName: event.target[1].value,
+        clubLogo: event.target[2].value,
+        clubDescription: event.target[3].value,
+        clubBanner: event.target[4].value,
+        clubRating: event.target[5].value,
+        ratingCount: event.target[6].value,
+        students: updatedStudentsArray,
+        email: club.email,
+      },
+      school!.id
+    )
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/clubs");
+        enqueueSnackbar("Club updated successfully", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/admin/clubs");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update club", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -102,6 +164,7 @@ function SuperAdminEditClubComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upclub"} />
@@ -213,27 +276,6 @@ function SuperAdminEditClubComponent() {
                       }}
                       min={0}
                     />
-                  </div>
-                  <div className="info-row">
-                    SCHOOL
-                    <select
-                      name=""
-                      id=""
-                      value={club.school.id}
-                      onChange={(event) => {
-                        const updatedClub = {
-                          ...club,
-                          school: { id: event.target.value },
-                        };
-                        setClub(updatedClub as Club);
-                      }}
-                    >
-                      {schools.map((school) => (
-                        <option key={school.id} value={school.id}>
-                          {school.schoolName}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                   <div className="info-row">
                     FOLLOWERS
@@ -380,7 +422,11 @@ function SuperAdminEditClubComponent() {
                     />
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -393,7 +439,7 @@ function SuperAdminEditClubComponent() {
                     <button
                       className="btn cancel-update"
                       type="button"
-                      onClick={() => navigate("/superadmin/clubs")}
+                      onClick={() => navigate("/admin/clubs")}
                     >
                       Cancel
                     </button>
@@ -408,7 +454,10 @@ function SuperAdminEditClubComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete Club with name {club.clubName}?</Modal.Body>
+        <Modal.Body>
+          Delete Club with name {club.clubName}? <br />
+          This will affect the table: Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -421,6 +470,7 @@ function SuperAdminEditClubComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>
@@ -430,4 +480,4 @@ function SuperAdminEditClubComponent() {
   );
 }
 
-export default SuperAdminEditClubComponent;
+export default AdminEditClubComponent;

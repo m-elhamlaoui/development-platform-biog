@@ -1,14 +1,17 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
+import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import Student from "../models/Student";
+import ModelsService from "../../services/SuperAdminModelsService";
+import Admin from "../../models/Admin";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
 
-function SuperAdminStudentsComponent() {
-  const [students, setStudents] = useState<Student[]>([]);
+function SuperAdminAdminsComponent() {
+  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -16,20 +19,27 @@ function SuperAdminStudentsComponent() {
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
-  const [studentId, setStudentId] = useState("");
-  const [studentName, setStudentName] = useState("");
+  const [adminId, setAdminId] = useState("");
+  const [adminName, setAdminName] = useState("");
 
   useEffect(() => {
-    ModelsService.listStudents(token)
+    ModelsService.listAdmins(token)
       .then((response) => {
-        setStudents(response.data);
+        setAdmins(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    ModelsService.listSchools(token)
+      .then((response) => {
+        setSchools(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -39,18 +49,19 @@ function SuperAdminStudentsComponent() {
 
   const handleShow = (id: string, name: string) => {
     setShow(true);
-    setStudentId(id);
-    setStudentName(name);
+    setAdminId(id);
+    setAdminName(name);
   };
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteStudent(token, id)
+    ModelsService.deleteAdmin(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
-        enqueueSnackbar("Student deleted successfully.", {
+        setIsDisabled(false);
+        enqueueSnackbar("Admin deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -60,9 +71,9 @@ function SuperAdminStudentsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listStudents(token)
+        ModelsService.listAdmins(token)
           .then((response) => {
-            setStudents(response.data);
+            setAdmins(response.data);
           })
           .catch((error) => {
             console.error(error);
@@ -71,7 +82,7 @@ function SuperAdminStudentsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to delete student", {
+        enqueueSnackbar("Failed to delete admin", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -84,41 +95,47 @@ function SuperAdminStudentsComponent() {
       });
   };
 
-  const studentsArray = Object.values(students);
-  const studentsCount = studentsArray.length;
+  const adminsArray = Object.values(admins);
+  const adminsCount = adminsArray.length;
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Student[]>(students);
+  const [searchResults, setSearchResults] = useState<Admin[]>(admins);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    const results = students.filter(
-      (student) =>
-        student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = admins.filter(
+      (admin) =>
+        admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        admin.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        admin.lastName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, students]);
+  }, [searchTerm, admins]);
 
-  const filteredStudents = searchTerm ? searchResults : studentsArray;
+  const filteredAdmins = searchTerm ? searchResults : adminsArray;
+  const filteredSchools = schools.filter((school) => {
+    const adminsForSchool = admins.filter(
+      (admin) => admin.school.id === school.id
+    );
+    return adminsForSchool.length === 0;
+  });
 
   return (
     <>
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"students"} />
+          <DashboardSidebarComponent option={"admins"} />
         </Col>
         <Col className="col2">
           <div className="table-entity">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Students Table</span>
+              <span style={{ fontSize: "1.5rem" }}>Admins Table</span>
               <span style={{ fontSize: "1.2rem" }}>
-                {studentsCount} {studentsCount > 1 ? "rows" : "row"}
+                {adminsCount} {adminsCount > 1 ? "rows" : "row"}
               </span>
             </div>
             <div className="table-bar2">
@@ -134,60 +151,42 @@ function SuperAdminStudentsComponent() {
               <div className="no-data">
                 <CircularSpinner color="#000" size={60} speed={2} weight={3} />
               </div>
-            ) : studentsCount === 0 ? (
+            ) : adminsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (
               <div className="table-table">
                 <Table>
                   <thead>
                     <tr>
-                      <th>CNE</th>
-                      <th>NUM APOGEE</th>
                       <th>FIRST NAME</th>
                       <th>LAST NAME</th>
-                      <th>PROFILE IMAGE</th>
                       <th>SCHOOL</th>
                       <th>EMAIL</th>
                       <th>EDIT/DELETE</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredStudents.map((student) => (
-                      <tr key={student.id}>
+                    {filteredAdmins.map((admin) => (
+                      <tr key={admin.id}>
                         <td>
-                          {student.cne.length > 3
-                            ? student.cne.slice(0, 3) + "..."
-                            : student.cne}
+                          {admin.firstName.length > 10
+                            ? admin.firstName.slice(0, 10) + "..."
+                            : admin.firstName}
                         </td>
                         <td>
-                          {student.numApogee!.toString().length > 10
-                            ? student.numApogee.toString().slice(0, 10) + "..."
-                            : student.numApogee.toString()}
+                          {admin.lastName.length > 9
+                            ? admin.lastName.slice(0, 9) + "..."
+                            : admin.lastName}
                         </td>
                         <td>
-                          {student.firstName.length > 10
-                            ? student.firstName.slice(0, 10) + "..."
-                            : student.firstName}
+                          {admin.school.schoolName.length > 6
+                            ? admin.school.schoolName.slice(0, 6) + "..."
+                            : admin.school.schoolName}
                         </td>
                         <td>
-                          {student.lastName.length > 9
-                            ? student.lastName.slice(0, 9) + "..."
-                            : student.lastName}
-                        </td>
-                        <td>
-                          {student.profileImage.length > 13
-                            ? student.profileImage.slice(0, 13) + "..."
-                            : student.profileImage}
-                        </td>
-                        <td>
-                          {student.school.schoolName.length > 6
-                            ? student.school.schoolName.slice(0, 6) + "..."
-                            : student.school.schoolName}
-                        </td>
-                        <td>
-                          {student.email.length > 5
-                            ? student.email.slice(0, 5) + "..."
-                            : student.email}
+                          {admin.email.length > 5
+                            ? admin.email.slice(0, 5) + "..."
+                            : admin.email}
                         </td>
                         <td>
                           <div className="modify">
@@ -196,10 +195,10 @@ function SuperAdminStudentsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upstudent/${
-                                    students.indexOf(student) + 1
+                                  `/superadmin/upadmin/${
+                                    admins.indexOf(admin) + 1
                                   }`,
-                                  { state: { student } }
+                                  { state: { admin } }
                                 )
                               }
                             >
@@ -210,8 +209,8 @@ function SuperAdminStudentsComponent() {
                               type="button"
                               onClick={() =>
                                 handleShow(
-                                  student.id,
-                                  student.firstName + " " + student.lastName
+                                  admin.id,
+                                  admin.firstName + " " + admin.lastName
                                 )
                               }
                             >
@@ -227,11 +226,28 @@ function SuperAdminStudentsComponent() {
             )}
           </div>
           <button
-            className="btn btn-add3"
+            className="btn btn-add2"
             type="button"
-            onClick={() => navigate("/superadmin/addstudent")}
+            onClick={() => {
+              if (filteredSchools.length > 0) {
+                navigate("/superadmin/addadmin", {
+                  state: { schools: filteredSchools },
+                });
+              } else {
+                enqueueSnackbar("No schools available to add an admin to.", {
+                  variant: "warning",
+                  autoHideDuration: 2000,
+                  transitionDuration: 300,
+                  anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "right",
+                  },
+                  preventDuplicate: true,
+                });
+              }
+            }}
           >
-            Add Student
+            Add Admin
           </button>
         </Col>
       </Row>
@@ -239,7 +255,10 @@ function SuperAdminStudentsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete Student with name {studentName}?</Modal.Body>
+        <Modal.Body>
+          Delete Admin with name {adminName}? <br />
+          This will affect the tables: Schools, Students, Clubs, and Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -251,7 +270,7 @@ function SuperAdminStudentsComponent() {
           <button
             className="btn modal-confirm"
             type="button"
-            onClick={() => handleDelete(studentId)}
+            onClick={() => handleDelete(adminId)}
             disabled={isDisabled}
           >
             Confirm
@@ -262,4 +281,4 @@ function SuperAdminStudentsComponent() {
   );
 }
 
-export default SuperAdminStudentsComponent;
+export default SuperAdminAdminsComponent;

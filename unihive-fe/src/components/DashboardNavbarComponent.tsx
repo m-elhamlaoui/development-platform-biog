@@ -14,7 +14,7 @@ function DashboardNavbarComponent(props: { name: string }) {
   return (
     <Navbar expand="lg" className="bg-body-tertiary nav2">
       <Container className="cont3" fluid>
-        <Navbar.Brand href="/">{props.name} Dashboard</Navbar.Brand>
+        <Navbar.Brand href="/">{props.name}</Navbar.Brand>
         <Nav>
           <button className="btn btn-outline-primary" onClick={logout}>
             Log Out

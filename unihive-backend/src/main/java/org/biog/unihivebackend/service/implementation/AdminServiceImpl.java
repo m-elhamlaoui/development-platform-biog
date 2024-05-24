@@ -3,6 +3,8 @@ package org.biog.unihivebackend.service.implementation;
 import java.util.List;
 import java.util.UUID;
 
+import org.biog.unihivebackend.auth.AuthenticationResponse;
+import org.biog.unihivebackend.config.JwtService;
 import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.School;
@@ -19,6 +21,7 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final SchoolRepository schoolRepository;
+    private final JwtService jwtService;
 
     @Override
     public List<Admin> getAll() {
@@ -51,8 +54,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public School getSchoolByAdmin(UUID id) {
-        return adminRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Admin with id " + id + " not found")).getSchool();
+    public School getSchoolByAdmin(String email) {
+        return adminRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Admin with email " + email + " not found")).getSchool();
+    }
+
+    @Override
+    public AuthenticationResponse updateAdminEmail(UUID id, String email) {
+        Admin admin = adminRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Admin with id " + id + " not found"));
+        admin.setEmail(email);
+        adminRepository.save(admin);
+        var jwtToken = jwtService.generateToken(admin);
+        return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    @Override
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Admin with email " + email + " not found"));
     }
 }

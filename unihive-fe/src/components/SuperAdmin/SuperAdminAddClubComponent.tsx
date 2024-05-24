@@ -1,14 +1,14 @@
 import { Col, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminAddAdminComponent() {
+function SuperAdminAddClubComponent() {
   const [schools, setSchools] = useState<School[]>([]);
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
@@ -17,9 +17,9 @@ function SuperAdminAddAdminComponent() {
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -38,16 +38,18 @@ function SuperAdminAddAdminComponent() {
   const handleSave = (event: any) => {
     setIsDisabled(true);
     event.preventDefault();
-    ModelsService.addAdmin(token, {
-      firstName: event.target[0].value,
-      lastName: event.target[1].value,
-      school: event.target[2].value,
-      email: event.target[3].value,
-      password: event.target[4].value,
+    ModelsService.addClub(token, {
+      clubName: event.target[0].value,
+      clubLogo: event.target[1].value,
+      clubDescription: event.target[2].value,
+      clubBanner: event.target[3].value,
+      school: event.target[4].value,
+      email: event.target[5].value,
+      password: event.target[6].value,
     })
       .then((response) => {
         console.log(response);
-        enqueueSnackbar("Admin added successfully", {
+        enqueueSnackbar("Club added successfully", {
           variant: "success",
           autoHideDuration: 1000,
           transitionDuration: 300,
@@ -57,14 +59,14 @@ function SuperAdminAddAdminComponent() {
           },
           preventDuplicate: true,
           onClose: () => {
-            navigate("/superadmin/admins");
+            navigate("/superadmin/clubs");
           },
         });
       })
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to add admin", {
+        enqueueSnackbar("Failed to add club", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -82,12 +84,12 @@ function SuperAdminAddAdminComponent() {
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"addadmin"} />
+          <DashboardSidebarComponent option={"addclub"} />
         </Col>
         <Col className="col2">
           <div className="table-entity-add">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Add Admin</span>
+              <span style={{ fontSize: "1.5rem" }}>Add Club</span>
             </div>
             {isLoading ? (
               <div className="is-loading">
@@ -97,12 +99,20 @@ function SuperAdminAddAdminComponent() {
               <form onSubmit={handleSave}>
                 <div className="info">
                   <div className="info-row">
-                    FIRST NAME
-                    <input type="text" placeholder="first name" />
+                    CLUB NAME
+                    <input type="text" placeholder="club name" />
                   </div>
                   <div className="info-row">
-                    LAST NAME
-                    <input type="text" placeholder="last name" />
+                    CLUB LOGO
+                    <input type="text" placeholder="club logo" />
+                  </div>
+                  <div className="info-row">
+                    CLUB DESCRIPTION
+                    <textarea placeholder="club description" />
+                  </div>
+                  <div className="info-row">
+                    CLUB BANNER
+                    <input type="text" placeholder="club banner" />
                   </div>
                   <div className="info-row">
                     SCHOOL
@@ -138,7 +148,7 @@ function SuperAdminAddAdminComponent() {
                     <button
                       className="btn cancel-save"
                       type="button"
-                      onClick={() => navigate("/superadmin/admins")}
+                      onClick={() => navigate("/superadmin/clubs")}
                     >
                       Cancel
                     </button>
@@ -153,4 +163,4 @@ function SuperAdminAddAdminComponent() {
   );
 }
 
-export default SuperAdminAddAdminComponent;
+export default SuperAdminAddClubComponent;

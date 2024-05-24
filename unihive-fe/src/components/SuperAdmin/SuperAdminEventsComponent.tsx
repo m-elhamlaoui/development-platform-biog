@@ -1,14 +1,15 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
+import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import Club from "../models/Club";
+import ModelsService from "../../services/SuperAdminModelsService";
+import Event from "../../models/Event";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
-function SuperAdminClubsComponent() {
-  const [clubs, setClubs] = useState<Club[]>([]);
+function SuperAdminEventsComponent() {
+  const [events, setEvents] = useState<Event[]>([]);
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -16,20 +17,20 @@ function SuperAdminClubsComponent() {
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
-  const [clubId, setClubId] = useState("");
-  const [clubName, setClubName] = useState("");
+  const [eventId, setEventId] = useState("");
+  const [eventName, setEventName] = useState("");
 
   useEffect(() => {
-    ModelsService.listClubs(token)
+    ModelsService.listEvents(token)
       .then((response) => {
-        setClubs(response.data);
+        setEvents(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -39,18 +40,19 @@ function SuperAdminClubsComponent() {
 
   const handleShow = (id: string, name: string) => {
     setShow(true);
-    setClubId(id);
-    setClubName(name);
+    setEventId(id);
+    setEventName(name);
   };
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
     setIsDisabled(true);
-    ModelsService.deleteClub(token, id)
+    ModelsService.deleteEvent(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
-        enqueueSnackbar("Club deleted successfully.", {
+        setIsDisabled(false);
+        enqueueSnackbar("Event deleted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -60,9 +62,9 @@ function SuperAdminClubsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listClubs(token)
+        ModelsService.listEvents(token)
           .then((response) => {
-            setClubs(response.data);
+            setEvents(response.data);
           })
           .catch((error) => {
             console.error(error);
@@ -71,7 +73,7 @@ function SuperAdminClubsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled(false);
-        enqueueSnackbar("Failed to delete club", {
+        enqueueSnackbar("Failed to delete event", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -84,47 +86,47 @@ function SuperAdminClubsComponent() {
       });
   };
 
-  const clubsArray = Object.values(clubs);
-  const clubsCount = clubsArray.length;
+  const eventsArray = Object.values(events);
+  const eventsCount = eventsArray.length;
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Club[]>(clubs);
+  const [searchResults, setSearchResults] = useState<Event[]>(events);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    const results = clubs.filter(
-      (club) =>
-        club.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        club.clubName.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = events.filter(
+      (event) =>
+        event.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.club.clubName.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchResults(results);
-  }, [searchTerm, clubs]);
+  }, [searchTerm, events]);
 
-  const filteredClubs = searchTerm ? searchResults : clubsArray;
+  const filteredEvents = searchTerm ? searchResults : eventsArray;
 
   return (
     <>
       <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
-          <DashboardSidebarComponent option={"clubs"} />
+          <DashboardSidebarComponent option={"events"} />
         </Col>
         <Col className="col2">
           <div className="table-entity">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Clubs Table</span>
+              <span style={{ fontSize: "1.5rem" }}>Events Table</span>
               <span style={{ fontSize: "1.2rem" }}>
-                {clubsCount} {clubsCount > 1 ? "rows" : "row"}
+                {eventsCount} {eventsCount > 1 ? "rows" : "row"}
               </span>
             </div>
-            <div className="table-bar1">
+            <div className="table-bar3">
               <div>Search</div>
               <input
                 type="text"
-                placeholder="Email, or club name"
+                placeholder="Event name, or club name"
                 value={searchTerm}
                 onChange={handleSearch}
               />
@@ -133,7 +135,7 @@ function SuperAdminClubsComponent() {
               <div className="no-data">
                 <CircularSpinner color="#000" size={60} speed={2} weight={3} />
               </div>
-            ) : clubsCount === 0 ? (
+            ) : eventsCount === 0 ? (
               <div className="no-data">No Data.</div>
             ) : (
               <div className="table-table">
@@ -141,44 +143,60 @@ function SuperAdminClubsComponent() {
                   <thead>
                     <tr>
                       <th>NAME</th>
-                      <th>LOGO</th>
+                      <th>CATEGORY</th>
                       <th>DESCRIPTION</th>
+                      <th>LOCATION</th>
+                      <th>START TIME</th>
+                      <th>END TIME</th>
                       <th>BANNER</th>
                       <th>RATING</th>
-                      <th>SCHOOL</th>
-                      <th>EMAIL</th>
+                      <th>CLUB</th>
                       <th>EDIT/DELETE</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredClubs.map((club) => (
-                      <tr key={club.id}>
+                    {filteredEvents.map((event) => (
+                      <tr key={event.id}>
                         <td>
-                          {club.clubName.length > 4
-                            ? club.clubName.slice(0, 4) + "..."
-                            : club.clubName}
+                          {event.eventName.length > 4
+                            ? event.eventName.slice(0, 4) + "..."
+                            : event.eventName}
                         </td>
                         <td>
-                          {club.clubLogo.length > 4
-                            ? club.clubLogo.slice(0, 4) + "..."
-                            : club.clubLogo}
+                          {event.eventCategory.length > 8
+                            ? event.eventCategory.slice(0, 8) + "..."
+                            : event.eventCategory}
                         </td>
                         <td>
-                          {club.clubDescription.length > 11
-                            ? club.clubDescription.slice(0, 11) + "..."
-                            : club.clubDescription}
+                          {event.eventDescription.length > 11
+                            ? event.eventDescription.slice(0, 11) + "..."
+                            : event.eventDescription}
                         </td>
                         <td>
-                          {club.clubBanner.length > 6
-                            ? club.clubBanner.slice(0, 6) + "..."
-                            : club.clubBanner}
+                          {event.eventLocation.length > 8
+                            ? event.eventLocation.slice(0, 8) + "..."
+                            : event.eventLocation}
                         </td>
-                        <td>{club.clubRating}</td>
-                        <td>{club.school.schoolName}</td>
                         <td>
-                          {club.email.length > 5
-                            ? club.email.slice(0, 5) + "..."
-                            : club.email}
+                          {event.startTime!.toString()?.length > 10
+                            ? event.startTime?.toString()?.slice(0, 10) + "..."
+                            : event.startTime?.toString() ?? ""}
+                        </td>
+                        <td>
+                          {event.endTime!.toString()?.length > 8
+                            ? event.endTime?.toString()?.slice(0, 8) + "..."
+                            : event.endTime?.toString() ?? ""}
+                        </td>
+                        <td>
+                          {event.eventBanner.length > 6
+                            ? event.eventBanner.slice(0, 6) + "..."
+                            : event.eventBanner}
+                        </td>
+                        <td>{event.eventRating}</td>
+                        <td>
+                          {event.club.clubName.length > 4
+                            ? event.club.clubName.slice(0, 4) + "..."
+                            : event.club.clubName}
                         </td>
                         <td>
                           <div className="modify">
@@ -187,10 +205,10 @@ function SuperAdminClubsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/upclub/${
-                                    clubs.indexOf(club) + 1
+                                  `/superadmin/upevent/${
+                                    events.indexOf(event) + 1
                                   }`,
-                                  { state: { club } }
+                                  { state: { event } }
                                 )
                               }
                             >
@@ -199,7 +217,9 @@ function SuperAdminClubsComponent() {
                             <button
                               className="btn btn-delete"
                               type="button"
-                              onClick={() => handleShow(club.id, club.clubName)}
+                              onClick={() =>
+                                handleShow(event.id, event.eventName)
+                              }
                             >
                               Delete
                             </button>
@@ -214,10 +234,10 @@ function SuperAdminClubsComponent() {
           </div>
           <button
             className="btn btn-add1"
-            onClick={() => navigate("/superadmin/addclub")}
             type="button"
+            onClick={() => navigate("/superadmin/addevent")}
           >
-            Add Club
+            Add Event
           </button>
         </Col>
       </Row>
@@ -225,10 +245,7 @@ function SuperAdminClubsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Delete Club with name {clubName}? <br />
-          This will affect the table: Events.
-        </Modal.Body>
+        <Modal.Body>Delete Club with name {eventName}?</Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -240,7 +257,7 @@ function SuperAdminClubsComponent() {
           <button
             className="btn modal-confirm"
             type="button"
-            onClick={() => handleDelete(clubId)}
+            onClick={() => handleDelete(eventId)}
             disabled={isDisabled}
           >
             Confirm
@@ -251,4 +268,4 @@ function SuperAdminClubsComponent() {
   );
 }
 
-export default SuperAdminClubsComponent;
+export default SuperAdminEventsComponent;

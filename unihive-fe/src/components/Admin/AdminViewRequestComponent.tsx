@@ -1,28 +1,31 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { decodeToken, isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import Request from "../models/Request";
+import ModelsService from "../../services/AdminModelsService";
+import School from "../../models/School";
+import Request from "../../models/Request";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminViewRequestComponent() {
+function AdminViewRequestComponent() {
   const { id } = useParams();
   const { state } = useLocation();
-  const [schools, setSchools] = useState<School[]>([]);
+  const [school, setSchool] = useState<School>();
   const [request, setRequest] = useState<Request>(state.request);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,8 +36,12 @@ function SuperAdminViewRequestComponent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const schoolsResponse = await ModelsService.listSchools(token);
-        setSchools(schoolsResponse.data);
+        const decodedToken: any = decodeToken(token);
+        const schoolResponse = await ModelsService.School(
+          token,
+          decodedToken.sub
+        );
+        setSchool(schoolResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -52,44 +59,75 @@ function SuperAdminViewRequestComponent() {
   const handleClose3 = () => setShow3(false);
 
   const handleReject = () => {
-    ModelsService.deleteRequest(token, request.id)
+    setIsDisabled1(true);
+    ModelsService.deleteRequest(token, request.id, school!.id)
       .then((response) => {
         console.log(response);
         handleClose1();
-        navigate("/superadmin/requests");
+        enqueueSnackbar("Request rejected successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/admin/requests");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to reject request", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleAccept = () => {
-    ModelsService.updateRequest(token, request.id, {
-      firstName: request.firstName,
-      lastName: request.lastName,
-      cne: request.cne,
-      numApogee: request.numApogee,
-      schoolName: request.schoolName,
-      email: request.email,
-    })
+    setIsDisabled2(true);
+    ModelsService.acceptRequest(token, request.id, school!.id)
       .then((response) => {
         console.log(response);
+        handleClose2();
+        enqueueSnackbar("Request accepted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/admin/requests");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
-      });
-
-    setTimeout(() => {
-      ModelsService.acceptRequest(token, request.id)
-        .then((response) => {
-          console.log(response);
-          handleClose2();
-          navigate("/superadmin/requests");
-        })
-        .catch((error) => {
-          console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update request", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
         });
-    }, 1000);
+      });
   };
 
   var strId = String(id);
@@ -106,6 +144,7 @@ function SuperAdminViewRequestComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"viewrequest"} />
@@ -133,13 +172,7 @@ function SuperAdminViewRequestComponent() {
                         type="text"
                         placeholder="first name"
                         value={request.firstName}
-                        onChange={(event) => {
-                          const updatedRequest = {
-                            ...request,
-                            firstName: event.target.value,
-                          };
-                          setRequest(updatedRequest);
-                        }}
+                        disabled
                       />
                     </div>
                     <div className="info-row">
@@ -148,13 +181,7 @@ function SuperAdminViewRequestComponent() {
                         type="text"
                         placeholder="last name"
                         value={request.lastName}
-                        onChange={(event) => {
-                          const updatedRequest = {
-                            ...request,
-                            lastName: event.target.value,
-                          };
-                          setRequest(updatedRequest);
-                        }}
+                        disabled
                       />
                     </div>
                     <div className="info-row">
@@ -163,13 +190,7 @@ function SuperAdminViewRequestComponent() {
                         type="text"
                         placeholder="cne"
                         value={request.cne}
-                        onChange={(event) => {
-                          const updatedRequest = {
-                            ...request,
-                            cne: event.target.value,
-                          };
-                          setRequest(updatedRequest);
-                        }}
+                        disabled
                       />
                     </div>
                     <div className="info-row">
@@ -178,39 +199,8 @@ function SuperAdminViewRequestComponent() {
                         type="number"
                         placeholder="num  apogee"
                         value={request.numApogee}
-                        onChange={(event) => {
-                          const updatedClub = {
-                            ...request,
-                            numApogee: parseInt(event.target.value, 10),
-                          };
-                          setRequest(updatedClub);
-                        }}
-                        min={0}
+                        disabled
                       />
-                    </div>
-                    <div className="info-row">
-                      SCHOOL
-                      <select
-                        name=""
-                        id=""
-                        value={request.schoolName}
-                        onChange={(event) => {
-                          const updatedRequest = {
-                            ...request,
-                            schoolName: event.target.value,
-                          };
-                          setRequest(updatedRequest);
-                        }}
-                      >
-                        {schools.map((school) => (
-                          <option
-                            key={school.schoolName}
-                            value={school.schoolName}
-                          >
-                            {school.schoolName}
-                          </option>
-                        ))}
-                      </select>
                     </div>
                     <div className="info-row">
                       EMAIL
@@ -218,13 +208,7 @@ function SuperAdminViewRequestComponent() {
                         type="text"
                         placeholder="email"
                         value={request.email}
-                        onChange={(event) => {
-                          const updatedRequest = {
-                            ...request,
-                            email: event.target.value,
-                          };
-                          setRequest(updatedRequest);
-                        }}
+                        disabled
                       />
                     </div>
                     <div className="info-row">
@@ -254,7 +238,7 @@ function SuperAdminViewRequestComponent() {
                       <button
                         className="btn cancel-update"
                         type="button"
-                        onClick={() => navigate("/superadmin/requests")}
+                        onClick={() => navigate("/admin/requests")}
                       >
                         Cancel
                       </button>
@@ -307,6 +291,7 @@ function SuperAdminViewRequestComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleReject}
+            disabled={isDisabled1}
           >
             Confirm
           </button>
@@ -332,6 +317,7 @@ function SuperAdminViewRequestComponent() {
             className="btn modal-confirm-2"
             type="button"
             onClick={handleAccept}
+            disabled={isDisabled2}
           >
             Confirm
           </button>
@@ -351,4 +337,4 @@ function SuperAdminViewRequestComponent() {
   );
 }
 
-export default SuperAdminViewRequestComponent;
+export default AdminViewRequestComponent;

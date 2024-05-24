@@ -1144,3 +1144,44 @@
   background-color: #e0e0e0 !important;
   color: #ff2f2f !important;
 }
+
+.not-found {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  line-height: 1;
+}
+
+.not-found-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.not-found .num {
+  font-size: 10rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.not-found .msg {
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.go-home {
+  width: 10rem;
+  height: 3rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  margin-top: 2rem;
+}

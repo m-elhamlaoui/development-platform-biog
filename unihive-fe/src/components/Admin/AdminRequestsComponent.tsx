@@ -1,26 +1,28 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
-import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
+import DashboardSidebarComponent from "../AdminDashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import Request from "../models/Request";
+import ModelsService from "../../services/AdminModelsService";
+import Request from "../../models/Request";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
+import { decodeToken } from "react-jwt";
 
-function SuperAdminRequestsComponent() {
+function AdminRequestsComponent() {
   const [requests, setRequests] = useState<Request[]>([]);
+  const [school, setSchool] = useState<School>();
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled1, setIsDisabled1] = useState(false);
   const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +32,18 @@ function SuperAdminRequestsComponent() {
   const [requestName, setRequestName] = useState("");
 
   useEffect(() => {
-    ModelsService.listRequests(token)
+    const decodedToken: any = decodeToken(token);
+    ModelsService.School(token, decodedToken.sub)
       .then((response) => {
-        setRequests(response.data);
-        setIsLoading(false);
+        setSchool(response.data);
+        ModelsService.listRequests(token, response.data.id)
+          .then((response) => {
+            setRequests(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
@@ -56,11 +66,12 @@ function SuperAdminRequestsComponent() {
 
   const handleReject = () => {
     setIsDisabled2(true);
-    ModelsService.deleteRequest(token, requestId)
+    ModelsService.deleteRequest(token, requestId, school!.id)
       .then((response) => {
         console.log(response);
         handleClose1();
-        enqueueSnackbar("Student rejected successfully.", {
+        setIsDisabled2(false);
+        enqueueSnackbar("Request rejected successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -71,7 +82,7 @@ function SuperAdminRequestsComponent() {
           preventDuplicate: true,
         });
         setIsLoading(true);
-        ModelsService.listRequests(token)
+        ModelsService.listRequests(token, school!.id)
           .then((response) => {
             setRequests(response.data);
             setIsLoading(false);
@@ -83,7 +94,7 @@ function SuperAdminRequestsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled2(false);
-        enqueueSnackbar("Failed to reject student", {
+        enqueueSnackbar("Failed to reject request", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -98,11 +109,12 @@ function SuperAdminRequestsComponent() {
 
   const handleAccept = () => {
     setIsDisabled1(true);
-    ModelsService.acceptRequest(token, requestId)
+    ModelsService.acceptRequest(token, requestId, school!.id)
       .then((response) => {
         console.log(response);
         handleClose2();
-        enqueueSnackbar("Student accepted successfully.", {
+        setIsDisabled1(false);
+        enqueueSnackbar("Request accepted successfully.", {
           variant: "success",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -112,7 +124,7 @@ function SuperAdminRequestsComponent() {
           },
           preventDuplicate: true,
         });
-        ModelsService.listRequests(token)
+        ModelsService.listRequests(token, school!.id)
           .then((response) => {
             setRequests(response.data);
           })
@@ -123,7 +135,7 @@ function SuperAdminRequestsComponent() {
       .catch((error) => {
         console.error(error);
         setIsDisabled2(false);
-        enqueueSnackbar("Failed to accept student", {
+        enqueueSnackbar("Request to accept student", {
           variant: "error",
           autoHideDuration: 2000,
           transitionDuration: 300,
@@ -252,7 +264,7 @@ function SuperAdminRequestsComponent() {
                               type="button"
                               onClick={() =>
                                 navigate(
-                                  `/superadmin/viewrequest/${
+                                  `/admin/viewrequest/${
                                     requests.indexOf(request) + 1
                                   }`,
                                   { state: { request } }
@@ -346,4 +358,4 @@ function SuperAdminRequestsComponent() {
   );
 }
 
-export default SuperAdminRequestsComponent;
+export default AdminRequestsComponent;

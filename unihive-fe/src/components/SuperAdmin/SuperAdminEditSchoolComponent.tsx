@@ -1,13 +1,14 @@
 import { Col, Modal, Row } from "react-bootstrap";
-import DashboardSidebarComponent from "./DashboardSidebarComponent";
+import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
-import ModelsService from "../services/SuperAdminModelsService";
-import School from "../models/School";
-import { Schools } from "../models/Schools";
-import { Cities } from "../models/Cities";
+import ModelsService from "../../services/SuperAdminModelsService";
+import School from "../../models/School";
+import { Schools } from "../../models/Schools";
+import { Cities } from "../../models/Cities";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminEditSchoolComponent() {
   const { id } = useParams();
@@ -15,13 +16,15 @@ function SuperAdminEditSchoolComponent() {
   const [school, setSchool] = useState<School>(state.school);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -47,14 +50,38 @@ function SuperAdminEditSchoolComponent() {
       .then((response) => {
         console.log(response);
         handleClose();
-        navigate("/superadmin/schools");
+        enqueueSnackbar("School deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/schools");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled1(false);
+        enqueueSnackbar("Failed to delete school", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleSave = (event: any) => {
+    setIsDisabled2(true);
     event.preventDefault();
     ModelsService.updateSchool(token, school.id, {
       schoolName: event.target[1].value,
@@ -63,10 +90,33 @@ function SuperAdminEditSchoolComponent() {
     })
       .then((response) => {
         console.log(response);
-        navigate("/superadmin/schools");
+        enqueueSnackbar("School updated successfully.", {
+          variant: "success",
+          autoHideDuration: 1000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+          onClose: () => {
+            navigate("/superadmin/schools");
+          },
+        });
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to update school", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -89,6 +139,7 @@ function SuperAdminEditSchoolComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"upschool"} />
@@ -167,7 +218,11 @@ function SuperAdminEditSchoolComponent() {
                     </select>
                   </div>
                   <div className="info-btns">
-                    <button className="btn save-update" type="submit">
+                    <button
+                      className="btn save-update"
+                      type="submit"
+                      disabled={isDisabled2}
+                    >
                       Save
                     </button>
                     <button
@@ -195,7 +250,10 @@ function SuperAdminEditSchoolComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete School with name {school.schoolName}?</Modal.Body>
+        <Modal.Body>
+          Delete School with name {school.schoolName}? <br />
+          This will affect the tables: Students, Clubs, and Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -208,6 +266,7 @@ function SuperAdminEditSchoolComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleDelete}
+            disabled={isDisabled1}
           >
             Confirm
           </button>
