@@ -50,6 +50,30 @@ function SuperAdminDashboardPage() {
       }
       navigate("/login");
     }
+
+    if (
+      option !== "dashboard" &&
+      option !== "admins" &&
+      option !== "clubs" &&
+      option !== "events" &&
+      option !== "schools" &&
+      option !== "students" &&
+      option !== "requests" &&
+      option !== "addclub" &&
+      option !== "upclub" &&
+      option !== "addadmin" &&
+      option !== "upadmin" &&
+      option !== "addevent" &&
+      option !== "upevent" &&
+      option !== "addschool" &&
+      option !== "upschool" &&
+      option !== "addstudent" &&
+      option !== "upstudent" &&
+      option !== "viewrequest" &&
+      option !== "profile"
+    ) {
+      navigate("/404");
+    }
   }, []);
 
   return (

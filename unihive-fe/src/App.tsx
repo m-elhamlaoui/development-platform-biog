@@ -26,8 +26,8 @@ function App() {
             path={"/superadmin/:option/:id"}
             element={<SuperAdminDashboardPage />}
           />
-          <Route path={"/admin/:option"} element={<AdminDashboardPage />} />
-          <Route path={"/admin/:option/:id"} element={<AdminDashboardPage />} />
+          <Route path="/admin/:option" element={<AdminDashboardPage />} />
+          <Route path="/admin/:option/:id" element={<AdminDashboardPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/user/:option" element={<StudentProfilePage />} />
