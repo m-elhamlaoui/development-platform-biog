@@ -38,6 +38,9 @@ deploy:
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://localhost:2375
+  before_script:
+    - apk add --no-cache git curl
+    - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     # Authenticate with Heroku using the Heroku API key
     - apk add --no-cache ruby ruby-dev git
