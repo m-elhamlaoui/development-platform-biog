@@ -14,6 +14,10 @@ build-backend:
   stage: build-backend
   image: maven:3.8.1-jdk-11
   script:
+    - apt-get update && apt-get install -y openjdk-17-jdk
+    - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    - export PATH=$JAVA_HOME/bin:$PATH
+    - java -version  # Verify JDK 17 is installed
     - mvn -f unihive-backend/pom.xml clean package -DskipTests
   artifacts:
     paths:
