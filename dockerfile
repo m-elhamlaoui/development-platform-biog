@@ -1,5 +1,5 @@
 # Use an official JDK runtime as a parent image
-FROM openjdk:17-jre-slim
+FROM openjdk:21-jre-slim
 
 # Set the working directory
 WORKDIR /unihive-backend
