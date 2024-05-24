@@ -101,10 +101,15 @@ public class StudentController {
         studentService.unfollowClub(studentId, clubId);
     }
 
+
+
     @PreAuthorize("hasRole('STUDENT')")
-    @GetMapping("/test")
-    void test() {
-        System.out.println("test");
+    @GetMapping("/club/{clubId}/followers")
+    Club addFollower(@PathVariable UUID clubId,List<Student> students) throws AccessDeniedException {
+
+        return clubService.addFollowers(clubId, students);
     }
 
-}
+
+    }
+
