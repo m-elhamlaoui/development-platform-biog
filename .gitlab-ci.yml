@@ -12,7 +12,7 @@ cache:
 # Build the Spring Boot application
 build-backend:
   stage: build-backend
-  image: maven:3.8.1-jdk-17
+  image: maven:3.8.1-jdk-11
   script:
     - mvn clean package -DskipTests
   artifacts:
