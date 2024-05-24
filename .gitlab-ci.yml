@@ -40,9 +40,8 @@ deploy:
     DOCKER_HOST: tcp://localhost:2375
   script:
     # Authenticate with Heroku using the Heroku API key
-    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-    # Prepare the Heroku app for deployment
-    - heroku git:remote -a $HEROKU_APP_NAME
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
     # Deploy the backend
     - cd unihive-backend
     - git add .
