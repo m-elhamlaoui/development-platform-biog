@@ -9,6 +9,7 @@ import ForgottenPassword from "./auth/ForgottenPassword";
 import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
 import StudentProfilePage from "./pages/StudentProfilePage";
+import CalendarPage from "./pages/CalendarPage";
 import EventPage from "./pages/EventPage";
 import EventProfile from "./pages/EventPage";
 
@@ -25,6 +26,8 @@ function App() {
             path={"/superadmin/:option/:id"}
             element={<SuperAdminDashboardPage />}
           />
+          <Route path="/" element={<HomePage />} />
+
           <Route path="/home" element={<HomePage />} />
           <Route path="/user/:option" element={<StudentProfilePage />} />
           <Route path="/login" element={<Login />} />
@@ -34,6 +37,7 @@ function App() {
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/club/:id" element={<Profile />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/events/:id" element={<EventProfile/>} />
 
         </Routes>

@@ -108,7 +108,6 @@ function Login() {
             vertical: "top",
             horizontal: "right",
           },
-          preventDuplicate: true,
         });
       }
     );

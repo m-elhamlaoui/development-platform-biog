@@ -19,6 +19,8 @@ function ClubTabs() {
         <EventsByClub  />
       </Tab>
       <Tab eventKey="about" title="About" >
+        
+
       </Tab>
       <Tab eventKey="contact" title="Contact" >
       </Tab>

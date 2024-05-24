@@ -416,10 +416,11 @@
 }
 
 .no-followers {
+  width: 44rem;
   font-size: 1.2rem;
   font-weight: 400;
   color: black;
   display: flex;
-  align-self: center;
-  justify-self: center;
+  justify-content: center;
+  align-items: center;
 }

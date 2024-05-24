@@ -1,16 +1,17 @@
 import { Col, Modal, Row, Table } from "react-bootstrap";
 import DashboardSidebarComponent from "../components/DashboardSidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Student from "../models/Student";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminStudentsComponent() {
   const [students, setStudents] = useState<Student[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -44,10 +45,21 @@ function SuperAdminStudentsComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
+    setIsDisabled(true);
     ModelsService.deleteStudent(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
+        enqueueSnackbar("Student deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
         ModelsService.listStudents(token)
           .then((response) => {
             setStudents(response.data);
@@ -58,6 +70,17 @@ function SuperAdminStudentsComponent() {
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled(false);
+        enqueueSnackbar("Failed to delete student", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -85,6 +108,7 @@ function SuperAdminStudentsComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"students"} />
@@ -215,7 +239,7 @@ function SuperAdminStudentsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete School with name {studentName}?</Modal.Body>
+        <Modal.Body>Delete Student with name {studentName}?</Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -228,6 +252,7 @@ function SuperAdminStudentsComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={() => handleDelete(studentId)}
+            disabled={isDisabled}
           >
             Confirm
           </button>

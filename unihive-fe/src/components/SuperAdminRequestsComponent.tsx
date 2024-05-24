@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Request from "../models/Request";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminRequestsComponent() {
   const [requests, setRequests] = useState<Request[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled1, setIsDisabled1] = useState(false);
+  const [isDisabled2, setIsDisabled2] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -52,10 +55,21 @@ function SuperAdminRequestsComponent() {
   const handleClose2 = () => setShow2(false);
 
   const handleReject = () => {
+    setIsDisabled2(true);
     ModelsService.deleteRequest(token, requestId)
       .then((response) => {
         console.log(response);
         handleClose1();
+        enqueueSnackbar("Student rejected successfully.", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
         setIsLoading(true);
         ModelsService.listRequests(token)
           .then((response) => {
@@ -68,14 +82,36 @@ function SuperAdminRequestsComponent() {
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to reject student", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
   const handleAccept = () => {
+    setIsDisabled1(true);
     ModelsService.acceptRequest(token, requestId)
       .then((response) => {
         console.log(response);
         handleClose2();
+        enqueueSnackbar("Student accepted successfully.", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
         ModelsService.listRequests(token)
           .then((response) => {
             setRequests(response.data);
@@ -86,6 +122,17 @@ function SuperAdminRequestsComponent() {
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled2(false);
+        enqueueSnackbar("Failed to accept student", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -113,6 +160,7 @@ function SuperAdminRequestsComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"requests"} />
@@ -265,6 +313,7 @@ function SuperAdminRequestsComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={handleReject}
+            disabled={isDisabled2}
           >
             Confirm
           </button>
@@ -287,6 +336,7 @@ function SuperAdminRequestsComponent() {
             className="btn modal-confirm-2"
             type="button"
             onClick={handleAccept}
+            disabled={isDisabled1}
           >
             Confirm
           </button>

@@ -1,9 +1,11 @@
 package org.biog.unihivebackend.service.implementation;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
+import org.biog.unihivebackend.email.EmailService;
 import org.biog.unihivebackend.exception.NotFoundException;
 import org.biog.unihivebackend.model.Admin;
 import org.biog.unihivebackend.model.Request;
@@ -15,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -23,6 +26,7 @@ public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
     private final SchoolRepository schoolRepository;
+    private final EmailService emailService;
 
     @Override
     public List<Request> getAll(UUID... schoolId) throws AccessDeniedException {
@@ -75,7 +79,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void deleteRequest(UUID id, UUID... schoolId) throws AccessDeniedException {
+    public void deleteRequest(UUID id, UUID... schoolId)
+            throws AccessDeniedException, UnsupportedEncodingException, MessagingException {
         Request request = requestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Request with id " + id + " not found"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,6 +90,10 @@ public class RequestServiceImpl implements RequestService {
 
         if (!isAdmin) {
             requestRepository.delete(request);
+            emailService.sendEmail(
+                    request.getEmail(),
+                    "Request Rejected",
+                    "Unfortunately, your request has been rejected. Please contact the school administration for more information.");
         } else {
 
             UUID loggedInUserSchoolId = ((Admin) (authentication).getPrincipal()).getSchool().getId();
@@ -92,6 +101,10 @@ public class RequestServiceImpl implements RequestService {
                 throw new AccessDeniedException("You do not have permission to delete this request");
             }
             requestRepository.delete(request);
+            emailService.sendEmail(
+                    request.getEmail(),
+                    "Request Rejected",
+                    "Unfortunately, your request has been rejected. Please contact the school administration for more information.");
         }
     }
 

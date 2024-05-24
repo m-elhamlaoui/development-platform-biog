@@ -64,6 +64,10 @@ public class Student implements UserDetails {
   @JoinColumn(name = "school_id", referencedColumnName = "id", nullable = false)
   private School school;
 
+  @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
+  private GoogleUser googleUser;
+
   @Builder.Default
   @Enumerated(EnumType.STRING)
   private Role role = Role.STUDENT;

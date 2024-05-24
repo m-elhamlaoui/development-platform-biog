@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import Club from "../models/Club";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminClubsComponent() {
   const [clubs, setClubs] = useState<Club[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -43,10 +45,21 @@ function SuperAdminClubsComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
+    setIsDisabled(true);
     ModelsService.deleteClub(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
+        enqueueSnackbar("Club deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
         ModelsService.listClubs(token)
           .then((response) => {
             setClubs(response.data);
@@ -57,6 +70,17 @@ function SuperAdminClubsComponent() {
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled(false);
+        enqueueSnackbar("Failed to delete club", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -83,6 +107,7 @@ function SuperAdminClubsComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"clubs"} />
@@ -200,7 +225,10 @@ function SuperAdminClubsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete Club with name {clubName}?</Modal.Body>
+        <Modal.Body>
+          Delete Club with name {clubName}? <br />
+          This will affect the table: Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -213,6 +241,7 @@ function SuperAdminClubsComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={() => handleDelete(clubId)}
+            disabled={isDisabled}
           >
             Confirm
           </button>

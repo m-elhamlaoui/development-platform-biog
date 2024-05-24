@@ -1,7 +1,6 @@
 import { Col, Modal, Row } from "react-bootstrap";
 import DashboardSidebarComponent from "./DashboardSidebarComponent";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { isExpired } from "react-jwt";
 import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";

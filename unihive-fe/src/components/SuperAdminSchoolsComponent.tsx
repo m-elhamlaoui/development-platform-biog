@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import ModelsService from "../services/SuperAdminModelsService";
 import School from "../models/School";
 import { CircularSpinner } from "infinity-spinners";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminSchoolsComponent() {
   const [schools, setSchools] = useState<School[]>([]);
   var token: string = "";
   const navigate = useNavigate();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
@@ -44,10 +46,21 @@ function SuperAdminSchoolsComponent() {
   const handleClose = () => setShow(false);
 
   const handleDelete = (id: string) => {
+    setIsDisabled(true);
     ModelsService.deleteSchool(token, id)
       .then((response) => {
         console.log(response);
         handleClose();
+        enqueueSnackbar("School deleted successfully.", {
+          variant: "success",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
         ModelsService.listSchools(token)
           .then((response) => {
             setSchools(response.data);
@@ -58,6 +71,17 @@ function SuperAdminSchoolsComponent() {
       })
       .catch((error) => {
         console.error(error);
+        setIsDisabled(false);
+        enqueueSnackbar("Failed to delete school", {
+          variant: "error",
+          autoHideDuration: 2000,
+          transitionDuration: 300,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
       });
   };
 
@@ -84,6 +108,7 @@ function SuperAdminSchoolsComponent() {
 
   return (
     <>
+      <SnackbarProvider maxSnack={4} />
       <Row className="row2">
         <Col className="col-md-2">
           <DashboardSidebarComponent option={"schools"} />
@@ -179,7 +204,10 @@ function SuperAdminSchoolsComponent() {
         <Modal.Header>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete School with name {schoolName}?</Modal.Body>
+        <Modal.Body>
+          Delete School with name {schoolName}? <br />
+          This will affect the tables: Students, Clubs, and Events.
+        </Modal.Body>
         <Modal.Footer>
           <button
             className="btn modal-cancel"
@@ -192,6 +220,7 @@ function SuperAdminSchoolsComponent() {
             className="btn modal-confirm"
             type="button"
             onClick={() => handleDelete(schoolId)}
+            disabled={isDisabled}
           >
             Confirm
           </button>

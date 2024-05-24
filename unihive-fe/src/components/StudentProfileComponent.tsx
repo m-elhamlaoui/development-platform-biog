@@ -28,6 +28,10 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
   const token = localStorage.getItem("student");
   const student = props.student;
 
+  useEffect(() => {
+    document.title = "UniHive - Profile";
+  });
+
   const handleUpdate1 = async () => {
     setIsDisabled1(true);
     if (email && !file) {
@@ -419,6 +423,8 @@ function StudentProfileComponent(props: { student: Student; clubs: Club[] }) {
                 <input
                   type="password"
                   placeholder="new password"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                  title="Password must contain at least one lowercase letter, one uppercase letter, one special character, one number, and be at least 8 characters"
                   onChange={(e) => setNewPassword(e.target.value)}
                 />
               </div>
