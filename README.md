@@ -1,3 +1,4 @@
+
 # UniHive (Project for managing club events)
 ## UniHive
 
