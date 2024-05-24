@@ -63,9 +63,9 @@ function EventsByClub() {
             </div>
             <Card.Body>
               <Card.Title>{event.eventName}</Card.Title>
-              <Card.Subtitle>{`From ${formatDate(
-                event.startTime
-              )} to ${formatDate(event.endTime)}`}</Card.Subtitle>
+              {/* <Card.Subtitle>{`From ${formatDate(
+                // event.startTime
+              )} to ${formatDate(event.endTime)}`}</Card.Subtitle> */}
               <Button variant="primary" style={{ bottom: "10px" }}>
                 Learn More
               </Button>

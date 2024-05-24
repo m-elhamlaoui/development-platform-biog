@@ -37,8 +37,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgottenpassword" element={<ForgottenPassword />} />
           <Route path="/events" element={<Event />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/Contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/club/:id" element={<Profile />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/404" element={<NotFoundPage />}></Route>

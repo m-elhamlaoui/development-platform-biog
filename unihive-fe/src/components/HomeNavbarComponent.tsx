@@ -41,7 +41,10 @@ function HomeNavbarComponent(props: {
           <a className={"nav-link" + (props.events ? " active" : "")} href="#">
             Events
           </a>
-          <a className={"nav-link" + (props.contact ? " active" : "")} href="#">
+          <a
+            className={"nav-link" + (props.contact ? " active" : "")}
+            href="/contact"
+          >
             Contact
           </a>
           <a

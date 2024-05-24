@@ -61,19 +61,15 @@ function EventPage() {
   }, [token]);
 
   const handleAdd = async () => {
-    
     if (event && student) {
-      CalendarService.addEvent(token,
-        student.id,
-        {
-          title: "UniHive:" + event?.eventName,
-          startTime: event?.startTime?.toString().slice(0, -1) + "+01:00",
-          endTime: event?.startTime?.toString().slice(0, -1) + "+01:00",
-          location: event?.eventLocation,
-          reminder: "True",
-          color: "7",
-        }
-      )
+      CalendarService.addEvent(token, student.id, {
+        title: "UniHive:" + event?.eventName,
+        startTime: event?.startTime?.toString().slice(0, -1) + "+01:00",
+        endTime: event?.startTime?.toString().slice(0, -1) + "+01:00",
+        location: event?.eventLocation,
+        reminder: "True",
+        color: "7",
+      })
         .then((response) => {
           console.log(response.data);
         })
@@ -136,13 +132,17 @@ function EventPage() {
                 />
                 <span>{event.club?.clubName || ""}</span>
               </button>
-              
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "row", height: "400px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "row", height: "400px" }}
+          >
             <div style={{ borderRight: "1px solid grey", width: "500px" }}>
               <div style={{ height: "200px", marginRight: "30px" }}>
-                <EventTime startTime={event.startTime} endTime={event.endTime} />
+                <EventTime
+                  startTime={event.startTime}
+                  endTime={event.endTime}
+                />
                 <Button
                   variant="primary"
                   style={{ bottom: "10px", marginTop: "10px" }}
@@ -151,13 +151,13 @@ function EventPage() {
                 >
                   Add to calendar
                 </Button>
-                <div className="rating">
-                <UserRating  />
-                </div>
+                <div className="rating">{/* <UserRating  /> */}</div>
               </div>
             </div>
             <div style={{ marginTop: "20px", marginLeft: "20px" }}>
-              <div style={{ fontSize: "22px", fontWeight: "bold" }}>Description</div>
+              <div style={{ fontSize: "22px", fontWeight: "bold" }}>
+                Description
+              </div>
               <div>{event.eventDescription || ""}</div>
             </div>
           </div>
