@@ -40,6 +40,7 @@ deploy:
     DOCKER_HOST: tcp://localhost:2375
   script:
     # Authenticate with Heroku using the Heroku API key
+    - sudo apt-get install rubygems
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
     # Deploy the backend
