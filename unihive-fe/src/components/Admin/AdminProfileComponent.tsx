@@ -6,6 +6,7 @@ import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 import Admin from "../../models/Admin";
 import { decodeToken } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
 function AdminProfileComponent() {
   const [admin, setAdmin] = useState<Admin>();
@@ -13,13 +14,14 @@ function AdminProfileComponent() {
   const [newPassword, setNewPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
+  const navigate = useNavigate();
 
   if (localStorage.getItem("superadmin")) {
-    token = localStorage.getItem("superadmin") as string;
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);

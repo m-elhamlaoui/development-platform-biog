@@ -13,12 +13,12 @@ function AdminDashboardComponent() {
   const navigate = useNavigate();
   const [school, setSchool] = useState<School>();
 
-  if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+  if (localStorage.getItem("superadmin")) {
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const isMyTokenExpired = isExpired(token);

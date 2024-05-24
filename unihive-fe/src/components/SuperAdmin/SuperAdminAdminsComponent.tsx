@@ -7,9 +7,11 @@ import ModelsService from "../../services/SuperAdminModelsService";
 import Admin from "../../models/Admin";
 import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import School from "../../models/School";
 
 function SuperAdminAdminsComponent() {
   const [admins, setAdmins] = useState<Admin[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   var token: string = "";
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -17,9 +19,9 @@ function SuperAdminAdminsComponent() {
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +33,13 @@ function SuperAdminAdminsComponent() {
     ModelsService.listAdmins(token)
       .then((response) => {
         setAdmins(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    ModelsService.listSchools(token)
+      .then((response) => {
+        setSchools(response.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -107,6 +116,12 @@ function SuperAdminAdminsComponent() {
   }, [searchTerm, admins]);
 
   const filteredAdmins = searchTerm ? searchResults : adminsArray;
+  const filteredSchools = schools.filter((school) => {
+    const adminsForSchool = admins.filter(
+      (admin) => admin.school.id === school.id
+    );
+    return adminsForSchool.length === 0;
+  });
 
   return (
     <>
@@ -213,7 +228,24 @@ function SuperAdminAdminsComponent() {
           <button
             className="btn btn-add2"
             type="button"
-            onClick={() => navigate("/superadmin/addadmin")}
+            onClick={() => {
+              if (filteredSchools.length > 0) {
+                navigate("/superadmin/addadmin", {
+                  state: { schools: filteredSchools },
+                });
+              } else {
+                enqueueSnackbar("No schools available to add an admin to.", {
+                  variant: "warning",
+                  autoHideDuration: 2000,
+                  transitionDuration: 300,
+                  anchorOrigin: {
+                    vertical: "top",
+                    horizontal: "right",
+                  },
+                  preventDuplicate: true,
+                });
+              }
+            }}
           >
             Add Admin
           </button>

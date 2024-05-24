@@ -14,12 +14,12 @@ function AdminAddClubComponent() {
   var token: string = "";
   const navigate = useNavigate();
 
-  if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+  if (localStorage.getItem("superadmin")) {
+    navigate("/superadmin/dashboard");
   } else if (localStorage.getItem("admin")) {
     token = localStorage.getItem("admin") as string;
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);

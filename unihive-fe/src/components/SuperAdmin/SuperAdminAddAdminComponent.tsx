@@ -1,7 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import DashboardSidebarComponent from "../SuperAdminDashboardSidebarComponent";
-import { useNavigate } from "react-router-dom";
-import { isExpired } from "react-jwt";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ModelsService from "../../services/SuperAdminModelsService";
 import School from "../../models/School";
@@ -9,7 +8,9 @@ import { CircularSpinner } from "infinity-spinners";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function SuperAdminAddAdminComponent() {
-  const [schools, setSchools] = useState<School[]>([]);
+  const { state } = useLocation();
+  const schools = state.schools as School[];
+
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   const navigate = useNavigate();
@@ -17,23 +18,12 @@ function SuperAdminAddAdminComponent() {
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    ModelsService.listSchools(token)
-      .then((response) => {
-        setSchools(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = (event: any) => {
     setIsDisabled(true);

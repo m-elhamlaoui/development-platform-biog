@@ -5,6 +5,7 @@ import ModelsService from "../../services/SuperAdminModelsService";
 import { CircularSpinner } from "infinity-spinners";
 import SuperAdmin from "../../models/SuperAdmin";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 function SuperAdminProfileComponent() {
   const [superadmins, setSuperAdmins] = useState<SuperAdmin[]>([]);
@@ -13,13 +14,14 @@ function SuperAdminProfileComponent() {
   const [isDisabled, setIsDisabled] = useState(false);
   var token: string = "";
   var superadmin: SuperAdmin | null = null;
+  const navigate = useNavigate();
 
   if (localStorage.getItem("superadmin")) {
     token = localStorage.getItem("superadmin") as string;
   } else if (localStorage.getItem("admin")) {
-    token = localStorage.getItem("admin") as string;
+    navigate("/admin/dashboard");
   } else if (localStorage.getItem("student")) {
-    token = localStorage.getItem("student") as string;
+    navigate("/home");
   }
 
   const [isLoading, setIsLoading] = useState(true);
