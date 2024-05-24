@@ -39,7 +39,7 @@ deploy:
   variables:
     DOCKER_HOST: tcp://localhost:2375
   before_script:
-    - apk update && apk add curl wget
+    - apk update && apk add curl wget bash
     - wget -qO- https://cli-assets.heroku.com/install.sh | sh
   script:
     # Authenticate with Heroku using the Heroku API key
