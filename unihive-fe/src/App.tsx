@@ -6,7 +6,7 @@ import Event from "./pages/Events";
 import Contact from "./pages/ContactPage";
 import About from "./pages/AboutPage";
 import ForgottenPassword from "./auth/ForgottenPassword";
-import Profile from "./pages/ClubProfile";
+// import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
 import StudentProfilePage from "./pages/StudentProfilePage";
 import CalendarPage from "./pages/CalendarPage";
@@ -39,7 +39,7 @@ function App() {
           <Route path="/events" element={<Event />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/club/:id" element={<Profile />} />
+          {/* <Route path="/club/:id" element={<Profile />} /> */}
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/404" element={<NotFoundPage />}></Route>
           <Route path="*" element={<Navigate to="/404" />}></Route>
