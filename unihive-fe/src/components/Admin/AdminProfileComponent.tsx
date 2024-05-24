@@ -185,7 +185,7 @@ function AdminProfileComponent() {
         <Col className="col2">
           <div className="table-entity-add">
             <div className="header">
-              <span style={{ fontSize: "1.5rem" }}>Super Admin Profile</span>
+              <span style={{ fontSize: "1.5rem" }}>Admin Profile</span>
             </div>
             {isLoading ? (
               <div className="is-loading">

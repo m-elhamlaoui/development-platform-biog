@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/uh-logo.png";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Dropdown } from "react-bootstrap";
 import AuthService from "../services/AuthService";
@@ -24,7 +23,11 @@ function HomeNavbarComponent(props: {
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
         <a className="navbar-brand" href="/home">
-          <img src={logo} alt="UniHive Logo" width="80%" />
+          <img
+            src="https://storage.googleapis.com/unihive-files/uh-logo.png"
+            alt="UniHive Logo"
+            width="80%"
+          />
         </a>
         <div className="navbar-nav">
           <a
