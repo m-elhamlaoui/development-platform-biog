@@ -39,7 +39,8 @@ deploy:
   variables:
     DOCKER_HOST: tcp://localhost:2375
   before_script:
-    - curl https://cli-assets.heroku.com/install.sh | sh
+    - apt-get update && apt-get install -y wget
+    - wget -qO- https://cli-assets.heroku.com/install.sh | sh
   script:
     # Authenticate with Heroku using the Heroku API key
     - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
