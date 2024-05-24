@@ -38,11 +38,11 @@ deploy:
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://localhost:2375
+  before_script:
+    - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     # Authenticate with Heroku using the Heroku API key
-    - apk add --no-cache ruby ruby-dev git
-    - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_PRODUCTION_KEY
+    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
     # Deploy the backend
     - cd unihive-backend
     - git add .
