@@ -23,16 +23,16 @@ function EventsByClub() {
     token = localStorage.getItem("student") as string;
   }
 
-  useEffect(() => {
-    StudentService.getEventsByClub(token, id)
-      .then((response) => {
-        setEvents(response.data);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   StudentService.getEventsByClub(token, id)
+  //     .then((response) => {
+  //       setEvents(response.data);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
   const firstEvent = events.length > 0 ? events[0] : null;
 
   return (
