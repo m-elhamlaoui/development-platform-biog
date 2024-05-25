@@ -65,8 +65,8 @@ deploy:
     - cd unihive-backend
     # Commit and push changes to Heroku
     - git add .
-    - git commit -m "Deploy backend to Heroku"
-    - git push heroku main
+    - git commit -m "Deploy frontend to Heroku"
+    - git push heroku master
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
     # Push the Docker image to Heroku registry
