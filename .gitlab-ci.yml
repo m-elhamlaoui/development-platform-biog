@@ -63,13 +63,14 @@ deploy:
     - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
     # Change to backend directory
     - cd unihive-backend
-    # Add Heroku remote
+    # Create a new branch named 'main' and switch to it
+    - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
     - heroku git:remote -a unihive
     # Unshallow the repository
     - git fetch --unshallow
     # Switch to main branch and ensure it's fully unshallowed
-    - git checkout -b main || git checkout main
-    - git pull origin main --unshallow
+    - git checkout -b main
+    # - git pull origin main --unshallow
     # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
@@ -82,6 +83,6 @@ deploy:
     - heroku container:release web --app $HEROKU_APP_NAME
   artifacts:
     paths:
-      - unihive-backend/src/main/resources
+      - unihive-backend/src/main/resources/static
   only:
     - main
