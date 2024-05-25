@@ -1,12 +1,14 @@
+import { ArrowUpIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import HomeNavbar from "../components/HomeNavbarComponent";
-import Student from "../models/Student";
-import { useNavigate } from "react-router-dom";
 import { decodeToken, isExpired } from "react-jwt";
-import StudentService from "../services/StudentService";
 import { InfinitySpin } from "react-loader-spinner";
-import PageTitleComponent from "../components/PageTitleComponent";
+import { useNavigate } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
 import Footer from "../components/FooterComponent";
+import HomeNavbar from "../components/HomeNavbarComponent";
+import PageTitleComponent from "../components/PageTitleComponent";
+import Student from "../models/Student";
+import StudentService from "../services/StudentService";
 
 function Contact() {
   const [isLogged, setIsLogged] = useState(false);
@@ -124,6 +126,36 @@ function Contact() {
             </div>
           </div>
           <Footer />
+          <ScrollToTop
+            smooth
+            component={
+              <div
+                style={{
+                  width: "3rem",
+                  height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#46bfff",
+                  borderRadius: "0.5rem",
+                  border: "none",
+                  boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+                  cursor: "pointer",
+                }}
+              >
+                <ArrowUpIcon width={30} height={30} color="white" />
+              </div>
+            }
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "3rem",
+              height: "3rem",
+              padding: "0",
+              borderRadius: "0.5rem",
+            }}
+          />
         </>
       )}
     </>
