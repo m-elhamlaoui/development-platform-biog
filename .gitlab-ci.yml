@@ -18,6 +18,10 @@ build-backend:
   artifacts:
     paths:
       - ./unihive-backend/target/*.jar
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .m2/repository
 
 # Build the React application
 build-frontend:
@@ -30,7 +34,10 @@ build-frontend:
   artifacts:
     paths:
       - ./unihive-fe/dist
-
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - unihive-fe/node_modules
 # Deploy to Heroku
 deploy:
   stage: deploy
