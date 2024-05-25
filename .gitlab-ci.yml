@@ -63,7 +63,9 @@ deploy:
     - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
     # Change to backend directory
     - cd unihive-backend
-    # Commit and push changes to Heroku
+    # Create a new branch named 'main' and switch to it
+    - git checkout -b main
+    # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
     - git push heroku main
