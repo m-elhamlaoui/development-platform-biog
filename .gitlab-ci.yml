@@ -38,6 +38,10 @@ deploy:
   image: docker:dind
   services:
     - docker:dind
+  before_script:
+    # Install Heroku CLI
+    - curl https://cli-assets.heroku.com/install.sh | sh
+    - heroku --version
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
   # before_script:
