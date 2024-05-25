@@ -65,7 +65,7 @@ deploy:
     - cd unihive-backend
     # Create a new branch named 'main' and switch to it
     - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
-    # - git checkout -b main
+    - git checkout -b main
     # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
