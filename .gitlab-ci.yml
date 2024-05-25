@@ -44,6 +44,8 @@ deploy:
     # Install Heroku CLI
     - curl https://cli-assets.heroku.com/install.sh | bash
     - heroku --version
+    - git config --global user.email "ghita28loukili@gmail.com"
+    - git config --global user.name "GhitaLoukili"
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
   # before_script:
