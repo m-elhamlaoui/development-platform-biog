@@ -39,7 +39,7 @@ deploy:
   services:
     - docker:dind
   before_script:
-    # Install Heroku CLI
+    - apk update && apk add curl
     - curl https://cli-assets.heroku.com/install.sh | sh
     - heroku --version
   # variables:
