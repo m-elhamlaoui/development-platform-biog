@@ -35,7 +35,7 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: heroku/heroku:20-build
+  image: cirunner/heroku-docker
   services:
     - docker:dind
   # variables:
