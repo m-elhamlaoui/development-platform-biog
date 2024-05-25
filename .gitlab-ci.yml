@@ -41,6 +41,7 @@ deploy:
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
   before_script:
+    - apk update && apk add docker
     - curl https://cli-assets.heroku.com/install.sh | sh
     - heroku --version
     - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
