@@ -1,19 +1,21 @@
-import Login from "./auth/Login";
-import HomePage from "./pages/HomePage";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
-import Event from "./pages/Events";
-import Contact from "./pages/ContactPage";
-import About from "./pages/AboutPage";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ForgottenPassword from "./auth/ForgottenPassword";
+import Login from "./auth/Login";
+import About from "./pages/AboutPage";
+import Contact from "./pages/ContactPage";
+import Event from "./pages/Events";
+import HomePage from "./pages/HomePage";
+import SuperAdminDashboardPage from "./pages/SuperAdminDashboardPage";
 // import Profile from "./pages/ClubProfile";
 import Signup from "./auth/Signup";
-import StudentProfilePage from "./pages/StudentProfilePage";
-import CalendarPage from "./pages/CalendarPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import CalendarPage from "./pages/CalendarPage";
+import {
+  default as EventPage,
+  default as EventProfile,
+} from "./pages/EventPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import EventPage from "./pages/EventPage";
-import EventProfile from "./pages/EventPage";
+import StudentProfilePage from "./pages/StudentProfilePage";
 
 function App() {
   function updateAdaptiveStyles(): void {

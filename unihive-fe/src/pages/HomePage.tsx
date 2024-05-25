@@ -1,22 +1,22 @@
-import HomeNavbar from "../components/HomeNavbarComponent";
-import Trending from "../components/TrendingComponent";
+import { ArrowUpIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+import { decodeToken, isExpired } from "react-jwt";
+import { InfinitySpin } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
+import ScrollToTop from "react-scroll-to-top";
 import ClubsRankings from "../components/ClubsRankingsComponent";
 import EventsRankings from "../components/EventsRankingsComponent";
-import UpcomingEvents from "../components/UpcomingEventsComponent";
-import TryCalendar from "../components/TryCalendarComponent";
 import Footer from "../components/FooterComponent";
-import { decodeToken, isExpired } from "react-jwt";
-import { useEffect, useState } from "react";
-import Student from "../models/Student";
-import StudentService from "../services/StudentService";
-import { InfinitySpin } from "react-loader-spinner";
-import ClubService from "../services/ClubService";
+import HomeNavbar from "../components/HomeNavbarComponent";
+import Trending from "../components/TrendingComponent";
+import TryCalendar from "../components/TryCalendarComponent";
+import UpcomingEvents from "../components/UpcomingEventsComponent";
 import Club from "../models/Club";
-import EventService from "../services/EventService";
 import Event from "../models/Event";
-import ScrollToTop from "react-scroll-to-top";
-import { ArrowUpIcon } from "@heroicons/react/24/solid";
-import { useNavigate } from "react-router-dom";
+import Student from "../models/Student";
+import ClubService from "../services/ClubService";
+import EventService from "../services/EventService";
+import StudentService from "../services/StudentService";
 
 function HomePage() {
   const [isLogged, setIsLogged] = useState(false);
@@ -94,10 +94,13 @@ function HomePage() {
           <ScrollToTop
             smooth
             component={
-              <button
+              <div
                 style={{
                   width: "3rem",
                   height: "3rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   backgroundColor: "#46bfff",
                   borderRadius: "0.5rem",
                   border: "none",
@@ -106,7 +109,7 @@ function HomePage() {
                 }}
               >
                 <ArrowUpIcon width={30} height={30} color="white" />
-              </button>
+              </div>
             }
             style={{
               display: "flex",
