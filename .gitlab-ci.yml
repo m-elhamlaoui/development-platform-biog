@@ -40,7 +40,7 @@ deploy:
     - docker:dind
   before_script:
     # Install necessary tools
-    - apk update && apk add curl bash
+    - apk update && apk add curl bash nodejs npm
     # Install Heroku CLI
     - curl https://cli-assets.heroku.com/install.sh | sh
     - heroku --version
