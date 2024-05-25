@@ -67,7 +67,7 @@ deploy:
     - git remote add heroku https://git.heroku.com/unihive.git
     # - git checkout -b main
     # Add, commit, and push changes to 'main'
-    # - git add .
+    - git add .
     - git commit -m "Deploy frontend to Heroku"
     - git push heroku master
     # Build the Docker image
