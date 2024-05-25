@@ -38,6 +38,7 @@ build-frontend:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - unihive-fe/node_modules
+      
 # Deploy to Heroku
 deploy:
   stage: deploy
