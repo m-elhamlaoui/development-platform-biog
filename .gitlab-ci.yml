@@ -60,7 +60,7 @@ deploy:
     # Verify frontend build directory exists
     - if [ ! -d "./unihive-fe/dist" ]; then echo "Frontend build directory does not exist"; exit 1; fi
     # Copy frontend build to backend resources
-    - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources/static
+    - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
     # Change to backend directory
     - cd unihive-backend
     # Commit and push changes to Heroku
