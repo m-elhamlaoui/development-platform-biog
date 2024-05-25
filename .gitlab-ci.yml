@@ -35,15 +35,16 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: docker:latest
+  image: heroku/heroku
   services:
     - docker:dind
   before_script:
     # Install necessary tools
-    - apk update && apk add curl bash nodejs
-    # Install Heroku CLI
-    - curl https://cli-assets.heroku.com/install.sh | bash
-    - heroku --version
+    # - apk update && apk add curl bash nodejs
+    # # Install Heroku CLI
+    # - curl https://cli-assets.heroku.com/install.sh | bash
+    # - heroku --version
+    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
     - git config --global user.email "ghita28loukili@gmail.com"
     - git config --global user.name "GhitaLoukili"
   # variables:
