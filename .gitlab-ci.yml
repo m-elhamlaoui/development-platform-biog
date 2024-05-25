@@ -14,7 +14,6 @@ build-backend:
   stage: build-backend
   image: maven:3.8.3-openjdk-17
   script:
-
     - mvn -f unihive-backend/pom.xml clean package -DskipTests
   artifacts:
     paths:
@@ -30,7 +29,7 @@ build-frontend:
     - npm run build
   artifacts:
     paths:
-      - frontend/build/
+      - unihive-fe/build/
 
 # Deploy to Heroku
 deploy:
