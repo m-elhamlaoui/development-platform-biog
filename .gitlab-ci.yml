@@ -35,7 +35,7 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: heroku/heroku
+  image: heroku/heroku:24
   services:
     - docker:dind
   before_script:
