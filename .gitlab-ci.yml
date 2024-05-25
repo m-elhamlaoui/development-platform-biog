@@ -47,7 +47,7 @@ deploy:
     - docker:dind
   before_script:
     # Install necessary tools
-    - apk update && apk add curl bash nodejs npm
+    - apk update && apk add curl bash nodejs npm git
     # Install Heroku CLI
     - curl https://cli-assets.heroku.com/install.sh | sh
     - heroku --version
@@ -63,14 +63,16 @@ deploy:
     - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
     # Change to backend directory
     - cd unihive-backend
-    # Create a new branch named 'main' and switch to it
-    - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
+    # Add Heroku remote
+    - heroku git:remote -a unihive
+    # Unshallow the repository
+    - git fetch --unshallow
+    # Switch to main branch and ensure it's fully unshallowed
+    - git checkout -b main || git checkout main
+    - git pull origin main --unshallow
     # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
-    - heroku git:remote -a unihive
-    - git checkout -b main
-    - git fetch --all --unshallow
     - git push heroku main:main
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
@@ -80,6 +82,6 @@ deploy:
     - heroku container:release web --app $HEROKU_APP_NAME
   artifacts:
     paths:
-      - unihive-backend/src/main/resources/static
+      - unihive-backend/src/main/resources
   only:
     - main
