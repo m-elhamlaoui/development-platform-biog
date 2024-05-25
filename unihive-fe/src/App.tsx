@@ -16,6 +16,23 @@ import EventPage from "./pages/EventPage";
 import EventProfile from "./pages/EventPage";
 
 function App() {
+  function updateAdaptiveStyles(): void {
+    const rootFontSize: number = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const viewportWidth: number = window.innerWidth;
+    const viewportHeight: number = window.innerHeight;
+
+    const remToVw: number = rootFontSize * (100 / viewportWidth);
+    const remToVh: number = rootFontSize * (100 / viewportHeight);
+
+    document.documentElement.style.setProperty("--rem-to-vw", `${remToVw}vw`);
+    document.documentElement.style.setProperty("--rem-to-vh", `${remToVh}vh`);
+  }
+
+  window.addEventListener("resize", updateAdaptiveStyles);
+  updateAdaptiveStyles();
+
   return (
     <>
       <BrowserRouter>

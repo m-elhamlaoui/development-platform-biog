@@ -38,7 +38,6 @@ function AdminDashboardPage() {
   const isMyTokenExpired = isExpired(token);
 
   useEffect(() => {
-    document.title = "UniHive - Super Admin Dashboard";
     if (isMyTokenExpired) {
       if (localStorage.getItem("superadmin")) {
         localStorage.removeItem("superadmin");
@@ -78,6 +77,8 @@ function AdminDashboardPage() {
     ModelsService.School(token, decodedToken.sub)
       .then((response) => {
         setSchool(response.data);
+        document.title =
+          "UniHive - Admin Dashboard -" + response.data.schoolName;
         setIsLoading(false);
       })
       .catch((error) => {
