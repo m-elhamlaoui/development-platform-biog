@@ -35,9 +35,9 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  # image: cirunner/heroku-docker
-  # services:
-  #   - docker:dind
+  image: docker:dind
+  services:
+    - docker:dind
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
   # before_script:
