@@ -67,14 +67,14 @@ deploy:
     - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
     - heroku git:remote -a unihive
     # Unshallow the repository
-    - git fetch --unshallow
+    # - git fetch --unshallow
     # Switch to main branch and ensure it's fully unshallowed
     - git checkout -b main
-    - git pull heroku main --rebase
+    # - git pull heroku main --rebase
     # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
-    - git push heroku main
+    - git push heroku main --force
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web -f ./unihive-backend/Dockerfile .
     # Push the Docker image to Heroku registry
