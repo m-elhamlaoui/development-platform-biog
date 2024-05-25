@@ -66,7 +66,7 @@ deploy:
     # Commit and push changes to Heroku
     - git add .
     - git commit -m "Deploy backend to Heroku"
-    - git push heroku master
+    - git push heroku main
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
     # Push the Docker image to Heroku registry
