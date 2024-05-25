@@ -70,6 +70,7 @@ deploy:
     - git fetch --unshallow
     # Switch to main branch and ensure it's fully unshallowed
     - git checkout -b main
+    - git pull heroku main --allow-unrelated-histories
     # Add, commit, and push changes to 'main'
     - git add .
     - git commit -m "Deploy frontend to Heroku"
