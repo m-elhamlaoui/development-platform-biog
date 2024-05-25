@@ -35,18 +35,29 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: heroku/heroku:24
+  image: docker:latest
   services:
     - docker:dind
   before_script:
     # Install necessary tools
-    # - apk update && apk add curl bash nodejs
-    # # Install Heroku CLI
-    # - curl https://cli-assets.heroku.com/install.sh | bash
-    # - heroku --version
+    - apk update && apk add curl bash
+    # Install Heroku CLI
+    - curl https://cli-assets.heroku.com/install.sh | sh
+    - heroku --version
+    # Authenticate Docker with Heroku
     - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+    # Configure git
     - git config --global user.email "ghita28loukili@gmail.com"
     - git config --global user.name "GhitaLoukili"
+  # before_script:
+  #   # Install necessary tools
+  #   # - apk update && apk add curl bash nodejs
+  #   # # Install Heroku CLI
+  #   # - curl https://cli-assets.heroku.com/install.sh | bash
+  #   # - heroku --version
+  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+  #   - git config --global user.email "ghita28loukili@gmail.com"
+  #   - git config --global user.name "GhitaLoukili"
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
   # before_script:
@@ -55,33 +66,48 @@ deploy:
   #   - heroku --version
   #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
   script:
-    # Prepare Docker build context
-    # - cp -r unihive-fe/build unihive-backend/src/main/resources/static
-    # - cd unihive-backend
-    # Authenticate with Heroku using the Heroku API key
-    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-    # Deploy the backend
+    # Copy frontend build to backend resources
+    - cp -r unihive-fe/build unihive-backend/src/main/resources/static
+    # Change to backend directory
     - cd unihive-backend
+    # Commit and push changes to Heroku
     - git add .
     - git commit -m "Deploy backend to Heroku"
     - git push heroku main
-    # Deploy the frontend build
-    - cd ../unihive-fe
-    - npm install
-    - npm run build
-    - cd ..
-    - mv unihive-fe/build unihive-backend/src/main/resources/static
-    - cd unihive-backend
-    - mvn clean package -DskipTests
-
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
-
     # Push the Docker image to Heroku registry
     - docker push registry.heroku.com/$HEROKU_APP_NAME/web
-
     # Release the Docker image
     - heroku container:release web --app $HEROKU_APP_NAME
+  # script:
+  #   # Prepare Docker build context
+  #   # - cp -r unihive-fe/build unihive-backend/src/main/resources/static
+  #   # - cd unihive-backend
+  #   # Authenticate with Heroku using the Heroku API key
+  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+  #   # Deploy the backend
+  #   - cd unihive-backend
+  #   - git add .
+  #   - git commit -m "Deploy backend to Heroku"
+  #   - git push heroku main
+  #   # Deploy the frontend build
+  #   - cd ../unihive-fe
+  #   - npm install
+  #   - npm run build
+  #   - cd ..
+  #   - mv unihive-fe/build unihive-backend/src/main/resources/static
+  #   - cd unihive-backend
+  #   - mvn clean package -DskipTests
+
+  #   # Build the Docker image
+  #   - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+
+  #   # Push the Docker image to Heroku registry
+  #   - docker push registry.heroku.com/$HEROKU_APP_NAME/web
+
+  #   # Release the Docker image
+  #   - heroku container:release web --app $HEROKU_APP_NAME
   # before_script:
   #   - apk update && apk add curl wget bash nodejs npm
   #   - mkdir -p /usr/local/lib/heroku/bin
