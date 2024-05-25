@@ -70,7 +70,7 @@ deploy:
     - git add .
     - git commit -m "Deploy frontend to Heroku"
     - heroku git:remote -a unihive
-    - git push heroku main
+    - git push heroku main:main
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
     # Push the Docker image to Heroku registry
