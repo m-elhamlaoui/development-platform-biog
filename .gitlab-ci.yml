@@ -7,18 +7,21 @@ stages:
 cache:
   paths:
     - .m2/repository
-    - frontend/node_modules
+    - unihive-fe/node_modules
 
 # Build the Spring Boot application
 build-backend:
   stage: build-backend
   image: maven:3.8.3-openjdk-17
   script:
-
     - mvn -f unihive-backend/pom.xml clean package -DskipTests
   artifacts:
     paths:
-      - target/*.jar
+      - ./unihive-backend/target/*.jar
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .m2/repository
 
 # Build the React application
 build-frontend:
@@ -30,30 +33,47 @@ build-frontend:
     - npm run build
   artifacts:
     paths:
-      - frontend/build/
-
+      - ./unihive-fe/dist
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - unihive-fe/node_modules
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: node:14
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    # Install necessary tools
+    - apk update && apk add curl bash nodejs npm
+    # Install Heroku CLI
+    - curl https://cli-assets.heroku.com/install.sh | sh
+    - heroku --version
+    # Authenticate Docker with Heroku
+    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+    # Configure git
+    - git config --global user.email "ghita28loukili@gmail.com"
+    - git config --global user.name "GhitaLoukili"
   script:
-    # Authenticate with Heroku
-    - echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-    # Prepare the Heroku app for deployment
-    - heroku git:remote -a $HEROKU_APP_NAME
-    # Deploy the backend
+    # Verify frontend build directory exists
+    - if [ ! -d "./unihive-fe/dist" ]; then echo "Frontend build directory does not exist"; exit 1; fi
+    # Copy frontend build to backend resources
+    - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources/static
+    # Change to backend directory
+    - cd unihive-backend
+    # Commit and push changes to Heroku
     - git add .
-    - git commit -m "Deploy to Heroku"
+    - git commit -m "Deploy backend to Heroku"
     - git push heroku main
-    # Deploy the frontend build
-    - cd frontend
-    - mv build ../target/classes/static
-    - cd ..
-    - mvn clean package -DskipTests
-    - jar -cf myapp.war -C target .
+    # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+    # Push the Docker image to Heroku registry
     - docker push registry.heroku.com/$HEROKU_APP_NAME/web
-    - heroku container:release web
+    # Release the Docker image
+    - heroku container:release web --app $HEROKU_APP_NAME
+  artifacts:
+    paths:
+      - unihive-backend/src/main/resources/static
   only:
-    - master
-
+    - main
