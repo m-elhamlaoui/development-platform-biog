@@ -28,6 +28,7 @@ function App() {
 
     document.documentElement.style.setProperty("--rem-to-vw", `${remToVw}vw`);
     document.documentElement.style.setProperty("--rem-to-vh", `${remToVh}vh`);
+    console.log(window.innerWidth, window.innerHeight);
   }
 
   window.addEventListener("resize", updateAdaptiveStyles);

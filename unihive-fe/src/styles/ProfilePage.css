@@ -3,18 +3,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: calc(2.5 * var(--rem-to-vh)) !important;
-  margin-bottom: calc(1.5 * var(--rem-to-vh)) !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
 .student-profile {
   width: 75%;
-  height: calc(27 * var(--rem-to-vh));
+  height: 27rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(0.5 * var(--rem-to-vw));
-  margin-bottom: calc(1.2 * var(--rem-to-vh));
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .profile-dash-1 {
@@ -23,10 +23,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 0.1125rem solid #46bfff;
+  border: 1.8px solid #46bfff;
   border-radius: 0.5rem;
   color: black;
-  gap: calc(0.5 * var(--rem-to-vh));
+  gap: 0.5rem;
   padding: 0 !important;
   overflow: hidden;
 }
@@ -37,20 +37,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: calc(0.3 * var(--rem-to-vh));
+  gap: 0.3rem;
   padding: 0 !important;
 }
 
 .panel {
   width: 100%;
-  height: calc(2.35 * var(--rem-to-vh));
+  height: 2.35rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  border: 0.1125rem solid #46bfff;
+  border: 1.8px solid #46bfff;
   border-radius: 0.5rem;
-  gap: calc(0.8 * var(--rem-to-vw));
-  padding-left: calc(1.8 * var(--rem-to-vw));
+  gap: 0.8rem;
+  padding-left: 1.8rem;
 }
 
 .profile-info,
@@ -60,20 +60,20 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border: 0.1125rem solid #46bfff;
+  border: 1.8px solid #46bfff;
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 400;
   color: black;
-  padding: calc(2 * var(--rem-to-vh));
+  padding: 2rem;
 }
 
 .profile-info {
-  gap: calc(0.6 * var(--rem-to-vw));
+  gap: 0.6rem;
 }
 
 .profile-info2 {
-  gap: calc(1.5 * var(--rem-to-vw));
+  gap: 1.5rem;
 }
 
 .profile-info-row {
@@ -82,15 +82,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-right: calc(8 * var(--rem-to-vw));
+  padding-right: 8rem;
 }
 
 .profile-info-row input {
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.125rem solid #d5d5d5;
-  padding: calc(0.4 * var(--rem-to-vh)) 0.7rem 0.4rem 0.7rem;
-  width: calc(18 * var(--rem-to-vw));
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 0.7rem 0.4rem 0.7rem;
+  width: 18rem;
 }
 
 .profile-info-row input:focus {
@@ -103,15 +103,15 @@
 }
 
 .pfp {
-  width: calc(12 * var(--rem-to-vw));
-  height: calc(12 * var(--rem-to-vh));
+  width: 12rem;
+  height: 12rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0.1875rem solid #46bfff;
+  border: 3px solid #46bfff;
   border-radius: 50%;
   overflow: hidden;
-  margin-top: calc(3 * var(--rem-to-vh));
+  margin-top: 3rem;
 }
 
 .pfp img {
@@ -149,7 +149,7 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  gap: calc(0.2 * var(--rem-to-vh));
+  gap: 0.2rem;
 }
 
 .logout {
@@ -160,7 +160,7 @@
   justify-content: center;
   color: white;
   background-color: #46bfff;
-  margin-top: calc(1.5 * var(--rem-to-vh));
+  margin-top: 1.5rem;
   font-size: 1.2rem;
   cursor: pointer;
   user-select: none;
@@ -171,11 +171,11 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.125rem solid #d5d5d5;
-  padding-left: calc(0.7 * var(--rem-to-vw));
-  width: calc(18 * var(--rem-to-vw));
-  height: calc(2.65 * var(--rem-to-vh));
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding-left: 0.7rem;
+  width: 18rem;
+  height: 2.65rem;
 }
 
 .file-input-2 label {
@@ -183,19 +183,19 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding-left: calc(0.7 * var(--rem-to-vw));
-  padding-right: calc(0.7 * var(--rem-to-vw));
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
   background-color: #d5d5d5;
   cursor: pointer;
 }
 
 .profile-info-btn {
   width: 100%;
-  height: calc(2.65 * var(--rem-to-vh));
+  height: 2.65rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: calc(13 * var(--rem-to-vw));
+  padding-right: 13rem;
 }
 
 .save-save-2 {
@@ -204,8 +204,8 @@
   border-color: var(--btn-save) !important;
   color: white !important;
   border-radius: 0.3rem !important;
-  box-shadow: 0 0 0.3125rem 0 rgba(0, 0, 0, 0.25);
-  width: calc(7.9 * var(--rem-to-vw));
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 7.9rem;
 }
 .save-save-2:hover {
   --btn-save: #21b1ff;
@@ -225,7 +225,7 @@
   align-items: center;
   justify-content: center;
   color: black;
-  gap: calc(0.2 * var(--rem-to-vw));
+  gap: 0.2rem;
   cursor: pointer;
   user-select: none;
 }
@@ -239,7 +239,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-left: calc(18.5 * var(--rem-to-vw));
+  margin-left: 18.5rem;
   color: black;
 }
 
@@ -249,14 +249,14 @@
 }
 
 .clubs {
-  width: calc(44 * var(--rem-to-vw));
+  width: 44rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  margin-top: calc(1.2 * var(--rem-to-vh));
+  margin-top: 1.2rem;
   color: black;
-  gap: calc(0.2 * var(--rem-to-vh));
+  gap: 0.2rem;
 }
 
 .club-item {
@@ -264,38 +264,38 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: calc(6.5 * var(--rem-to-vh));
-  border: 0.15625rem solid #c5c5c5;
+  height: 6.5rem;
+  border: 2.5px solid #c5c5c5;
   border-radius: 0.8rem;
-  box-shadow: 0 0 0.3125rem 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
 .club-logo {
-  width: calc(8 * var(--rem-to-vw));
-  height: calc(8 * var(--rem-to-vh));
+  width: 8rem;
+  height: 8rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
-  border-right: calc(0.15625 * var(--rem-to-vw)) solid #46bfff;
-  border-top: calc(0.15625 * var(--rem-to-vh)) solid #46bfff;
-  border-bottom: calc(0.15625 * var(--rem-to-vh)) solid #46bfff;
-  padding-right: calc(0.5 * var(--rem-to-vw));
+  border-right: 2.5px solid #46bfff;
+  border-top: 2.5px solid #46bfff;
+  border-bottom: 2.5px solid #46bfff;
+  padding-right: 0.5rem;
 }
 
 .club-logo img {
   width: 70%;
-  filter: drop-shadow(0 0 0.3125rem rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
 }
 
 .club-title {
-  width: calc(22 * var(--rem-to-vw));
+  width: 22rem;
   font-size: 2rem;
   font-weight: 600;
   color: black;
-  margin-left: calc(2 * var(--rem-to-vw));
+  margin-left: 2rem;
   text-wrap: nowrap;
 }
 
@@ -306,8 +306,8 @@
   border-radius: 0.8rem !important;
   font-size: 1.2rem !important;
   font-weight: 600 !important;
-  height: calc(2.5 * var(--rem-to-vh)) !important;
-  margin-left: calc(3.5 * var(--rem-to-vw));
+  height: 2.5rem !important;
+  margin-left: 3.5rem;
 }
 
 .unfollow-btn:hover {
@@ -326,17 +326,17 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding-right: calc(5 * var(--rem-to-vw));
-  gap: calc(8.5 * var(--rem-to-vw));
+  padding-right: 5rem;
+  gap: 8.5rem;
 }
 
 .profile-info-row2 input[type="text"] {
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.125rem 0 rgba(0, 0, 0, 0.25);
-  border: 0.125rem solid #d5d5d5;
-  padding: calc(0.4 * var(--rem-to-vh)) 0.7rem 0.4rem 0.7rem;
-  margin-left: calc(0.8 * var(--rem-to-vw));
-  width: calc(18 * var(--rem-to-vw));
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 0.7rem 0.4rem 0.7rem;
+  margin-left: 0.8rem;
+  width: 18rem;
 }
 
 .profile-info-row2 input[type="text"]:hover {
@@ -352,18 +352,18 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: calc(3 * var(--rem-to-vw));
+  gap: 3rem;
 }
 
 .radio-item {
   display: inline-block;
   position: relative;
-  gap: calc(0.5 * var(--rem-to-vw));
+  gap: 0.5rem;
 }
 
 .radio-item input[type="radio"] {
-  width: calc(1.2 * var(--rem-to-vw));
-  height: calc(1.2 * var(--rem-to-vh));
+  width: 1.2rem;
+  height: 1.2rem;
   display: none;
 }
 
@@ -371,23 +371,23 @@
   content: " ";
   display: inline-block;
   position: relative;
-  top: calc(0.3125 * var(--rem-to-vh));
-  margin: 0 0.625rem 0 0;
-  width: calc(1.25 * var(--rem-to-vw));
-  height: calc(1.25 * var(--rem-to-vh));
-  border-radius: 0.6875rem;
-  border: 0.125rem solid #c5c5c5;
+  top: 5px;
+  margin: 0 10px 0 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 11px;
+  border: 2px solid #c5c5c5;
   background-color: transparent;
   cursor: pointer;
 }
 
 .radio-item input[type="radio"]:checked + label:after {
-  border-radius: 0.6875rem;
-  width: calc(0.75 * var(--rem-to-vw));
-  height: calc(0.75 * var(--rem-to-vh));
+  border-radius: 11px;
+  width: 12px;
+  height: 12px;
   position: absolute;
-  top: calc(0.5625 * var(--rem-to-vh));
-  left: calc(0.25 * var(--rem-to-vw));
+  top: 9px;
+  left: 4px;
   content: " ";
   display: block;
   background: #c5c5c5;
@@ -400,9 +400,9 @@
   border-color: var(--btn-delete) !important;
   color: white !important;
   border-radius: 0.3rem !important;
-  box-shadow: 0 0 0.3125rem 0 rgba(0, 0, 0, 0.25);
-  width: calc(12 * var(--rem-to-vw));
-  margin-right: calc(2.8 * var(--rem-to-vw));
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+  width: 12rem;
+  margin-right: 2.8rem;
 }
 .delete-account:hover {
   --btn-delete: #ff1919;
@@ -416,7 +416,7 @@
 }
 
 .no-followers {
-  width: calc(44 * var(--rem-to-vw));
+  width: 44rem;
   font-size: 1.2rem;
   font-weight: 400;
   color: black;
