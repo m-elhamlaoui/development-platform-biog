@@ -7,7 +7,7 @@ stages:
 cache:
   paths:
     - .m2/repository
-    - frontend/node_modules
+    - unihive-fe/node_modules
 
 # Build the Spring Boot application
 build-backend:
@@ -17,7 +17,7 @@ build-backend:
     - mvn -f unihive-backend/pom.xml clean package -DskipTests
   artifacts:
     paths:
-      - target/*.jar
+      - ./unihive-backend/target/*.jar
 
 # Build the React application
 build-frontend:
@@ -29,7 +29,7 @@ build-frontend:
     - npm run build
   artifacts:
     paths:
-      - unihive-fe/build/
+      - ./unihive-fe/build
 
 # Deploy to Heroku
 deploy:
@@ -48,25 +48,11 @@ deploy:
     # Configure git
     - git config --global user.email "ghita28loukili@gmail.com"
     - git config --global user.name "GhitaLoukili"
-  # before_script:
-  #   # Install necessary tools
-  #   # - apk update && apk add curl bash nodejs
-  #   # # Install Heroku CLI
-  #   # - curl https://cli-assets.heroku.com/install.sh | bash
-  #   # - heroku --version
-  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-  #   - git config --global user.email "ghita28loukili@gmail.com"
-  #   - git config --global user.name "GhitaLoukili"
-  # variables:
-  #   DOCKER_HOST: tcp://localhost:2375
-  # before_script:
-  #   - apk update && apk add docker
-  #   - curl https://cli-assets.heroku.com/install.sh | sh
-  #   - heroku --version
-  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
   script:
+    # Verify frontend build directory exists
+    - if [ ! -d "./unihive-fe/build" ]; then echo "Frontend build directory does not exist"; exit 1; fi
     # Copy frontend build to backend resources
-    - cp -r unihive-fe/build unihive-backend/src/main/resources/static
+    - cp -r ./unihive-fe/build/* unihive-backend/src/main/resources/static
     # Change to backend directory
     - cd unihive-backend
     # Commit and push changes to Heroku
@@ -79,60 +65,8 @@ deploy:
     - docker push registry.heroku.com/$HEROKU_APP_NAME/web
     # Release the Docker image
     - heroku container:release web --app $HEROKU_APP_NAME
-  # script:
-  #   # Prepare Docker build context
-  #   # - cp -r unihive-fe/build unihive-backend/src/main/resources/static
-  #   # - cd unihive-backend
-  #   # Authenticate with Heroku using the Heroku API key
-  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-  #   # Deploy the backend
-  #   - cd unihive-backend
-  #   - git add .
-  #   - git commit -m "Deploy backend to Heroku"
-  #   - git push heroku main
-  #   # Deploy the frontend build
-  #   - cd ../unihive-fe
-  #   - npm install
-  #   - npm run build
-  #   - cd ..
-  #   - mv unihive-fe/build unihive-backend/src/main/resources/static
-  #   - cd unihive-backend
-  #   - mvn clean package -DskipTests
-
-  #   # Build the Docker image
-  #   - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
-
-  #   # Push the Docker image to Heroku registry
-  #   - docker push registry.heroku.com/$HEROKU_APP_NAME/web
-
-  #   # Release the Docker image
-  #   - heroku container:release web --app $HEROKU_APP_NAME
-  # before_script:
-  #   - apk update && apk add curl wget bash nodejs npm
-  #   - mkdir -p /usr/local/lib/heroku/bin
-  #   - wget -qO- https://cli-assets.heroku.com/install.sh | HOMEBREW_NO_ENV_FILTER=1 sh
-  #   - wget -qO- https://cli-assets.heroku.com/install.sh | HOMEBREW_NO_ENV_FILTER=1 HOMEBREW_BUILD_FROM_SOURCE=1 sh
-  # script:
-  #   # Authenticate with Heroku using the Heroku API key
-  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
-  #   # Deploy the backend
-  #   - cd unihive-backend
-  #   - git add .
-  #   - git commit -m "Deploy backend to Heroku"
-  #   - git push heroku main
-  #   # Deploy the frontend build
-  #   - cd ../unihive-fe
-  #   - npm install
-  #   - npm run build
-  #   - cd ..
-  #   - mv unihive-fe/build unihive-backend/src/main/resources/static
-  #   - cd unihive-backend
-  #   - mvn clean package -DskipTests
-  #   # Tag and push the Docker image
-  #   - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
-  #   - docker push registry.heroku.com/$HEROKU_APP_NAME/web
-  #   # Release the Docker image
-  #   - heroku container:release web --app $HEROKU_APP_NAME
+  artifacts:
+    paths:
+      - unihive-backend/src/main/resources/static
   only:
     - main
-
