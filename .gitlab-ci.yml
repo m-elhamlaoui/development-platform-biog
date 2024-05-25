@@ -35,20 +35,35 @@ build-frontend:
 # Deploy to Heroku
 deploy:
   stage: deploy
-  image: cirunner/heroku-docker
-  services:
-    - docker:dind
+  # image: cirunner/heroku-docker
+  # services:
+  #   - docker:dind
   # variables:
   #   DOCKER_HOST: tcp://localhost:2375
-  before_script:
-    - apk update && apk add docker
-    - curl https://cli-assets.heroku.com/install.sh | sh
-    - heroku --version
-    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+  # before_script:
+  #   - apk update && apk add docker
+  #   - curl https://cli-assets.heroku.com/install.sh | sh
+  #   - heroku --version
+  #   - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
   script:
     # Prepare Docker build context
-    - cp -r unihive-fe/build unihive-backend/src/main/resources/static
+    # - cp -r unihive-fe/build unihive-backend/src/main/resources/static
+    # - cd unihive-backend
+    # Authenticate with Heroku using the Heroku API key
+    - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+    # Deploy the backend
     - cd unihive-backend
+    - git add .
+    - git commit -m "Deploy backend to Heroku"
+    - git push heroku main
+    # Deploy the frontend build
+    - cd ../unihive-fe
+    - npm install
+    - npm run build
+    - cd ..
+    - mv unihive-fe/build unihive-backend/src/main/resources/static
+    - cd unihive-backend
+    - mvn clean package -DskipTests
 
     # Build the Docker image
     - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
