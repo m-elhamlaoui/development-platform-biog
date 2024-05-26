@@ -34,6 +34,9 @@ jobs:
       - name: Run temporary container
         run: docker run --name temp-container -d ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }}
         
+      - name: List files in temp-container
+        run: docker exec temp-container ls /app
+        
       - name: Create build artifacts directories
         run: |
             mkdir -p build-artifacts/frontend
