@@ -18,10 +18,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 # Copy the Spring Boot jar
 COPY --from=build-backend /app/unihive-backend/target/*.jar ./app.jar
-# Copy the gcp-account-file.json to the final image
-COPY --from=build-backend /app/unihive-backend/src/main/resources/gcp-account-file.json ./src/main/resources/gcp-account-file.json
 # Copy the frontend build to the backend static resources
 COPY --from=build-frontend /app/unihive-fe/dist ./static
+# Copy the gcp-account-file.json to the final image
+COPY --from=build-backend /app/unihive-backend/src/main/resources/gcp-account-file.json ./src/main/resources/gcp-account-file.json
 
 # Expose port and define the entry point
 EXPOSE 8080
