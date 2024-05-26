@@ -20,10 +20,8 @@ WORKDIR /app
 COPY --from=build-backend /app/unihive-backend/target/*.jar ./app.jar
 # Copy the frontend build to the backend static resources
 COPY --from=build-frontend /app/unihive-fe/dist ./static
-# Copy the Google Cloud credentials file
-COPY unihive-backend/src/main/resources/gcp-account-file.json ./gcp-account-file.json
 # Set environment variable for Google Cloud credentials
-ENV GOOGLE_CLOUD_CREDENTIALS=./gcp-account-file.json
+ENV GOOGLE_CLOUD_CREDENTIALS=./src/resources/gcp-account-file.json
 
 # Expose port and define the entry point
 EXPOSE 8080
