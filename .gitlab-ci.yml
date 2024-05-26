@@ -84,6 +84,6 @@ deploy:
     - heroku container:release web --app $HEROKU_APP_NAME
   artifacts:
     paths:
-      - unihive-backend/src/main/resources/static
+      - unihive-backend/src/main/resources
   only:
     - main
