@@ -35,7 +35,7 @@ jobs:
         run: docker run --name temp-container -d ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }}
         
       - name: List files in temp-container
-        run: docker exec temp-container ls /app
+        run: docker exec temp-container ls /app/static
         
       - name: Create build artifacts directories
         run: |
@@ -43,10 +43,10 @@ jobs:
             mkdir -p build-artifacts/backend
   
       - name: Copy frontend build artifacts
-        run: docker cp temp-container:./static ./build-artifacts/frontend
+        run: docker cp temp-container:app/static ./build-artifacts/frontend
 
       - name: Copy backend build artifacts
-        run: docker cp temp-container:./app.jar ./build-artifacts/backend
+        run: docker cp temp-container:app/app.jar ./build-artifacts/backend
 
       - name: Remove temporary container
         run: docker rm temp-container
