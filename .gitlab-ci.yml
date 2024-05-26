@@ -1,6 +1,7 @@
 stages:
-  - build-backend
-  - build-frontend
+#  - build-backend
+#  - build-frontend
+  - build
   - deploy
 
 # Cache Maven dependencies and Node.js modules to speed up subsequent builds
@@ -10,34 +11,52 @@ cache:
     - unihive-fe/node_modules
 
 # Build the Spring Boot application
-build-backend:
-  stage: build-backend
-  image: maven:3.8.3-openjdk-17
-  script:
-    - mvn -f unihive-backend/pom.xml clean package -DskipTests
-  artifacts:
-    paths:
-      - ./unihive-backend/target/*.jar
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .m2/repository
+#build-backend:
+#  stage: build-backend
+#  image: maven:3.8.3-openjdk-17
+#  script:
+#    - mvn -f unihive-backend/pom.xml clean package -DskipTests
+#  artifacts:
+#    paths:
+#      - ./unihive-backend/target/*.jar
+#  cache:
+#    key: ${CI_COMMIT_REF_SLUG}
+#    paths:
+#      - .m2/repository
 
 # Build the React application
-build-frontend:
-  stage: build-frontend
-  image: node:14
+#build-frontend:
+#  stage: build-frontend
+#  image: node:14
+#  script:
+#    - cd unihive-fe
+#    - npm install
+#    - npm run build
+#  artifacts:
+#    paths:
+#      - ./unihive-fe/dist
+#  cache:
+#    key: ${CI_COMMIT_REF_SLUG}
+#    paths:
+#      - unihive-fe/node_modules
+
+    # Build stage
+build:
+  stage: build
+  services:
+    - docker:dind
+  image: docker:latest
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - cd unihive-fe
-    - npm install
-    - npm run build
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   artifacts:
     paths:
-      - ./unihive-fe/dist
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - unihive-fe/node_modules
+      - unihive-backend/target/*.jar
+      - unihive-fe/dist
+  only:
+    - main
       
 # Deploy to Heroku
 deploy:
@@ -54,27 +73,27 @@ deploy:
     # Authenticate Docker with Heroku
     - echo "$HEROKU_PRODUCTION_KEY" | docker login --username=_ --password-stdin registry.heroku.com
     # Configure git
-    - git config --global user.email "ghita28loukili@gmail.com"
-    - git config --global user.name "GhitaLoukili"
+#    - git config --global user.email "ghita28loukili@gmail.com"
+#    - git config --global user.name "GhitaLoukili"
   script:
     # Copy frontend build to backend resources
-    - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
+#    - cp -r ./unihive-fe/dist/* unihive-backend/src/main/resources
     # Change to backend directory
-    - cd unihive-backend
+#    - cd unihive-backend
     # Create a new branch named 'main' and switch to it
-    - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
-    - heroku git:remote -a unihive
+#    - git remote add heroku https://heroku:$HEROKU_PRODUCTION_KEY@git.heroku.com/unihive.git
+#    - heroku git:remote -a unihive
     # Unshallow the repository
     # - git fetch --unshallow
     # Switch to main branch and ensure it's fully unshallowed
-    - git checkout -b main
+#    - git checkout -b main
     # - git pull heroku main --rebase
     # Add, commit, and push changes to 'main'
-    - git add .
-    - git commit -m "Deploy frontend to Heroku"
-    - git push heroku main --force
+#    - git add .
+#    - git commit -m "Deploy frontend to Heroku"
+#    - git push heroku main --force
     # Build the Docker image
-    - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web -f Dockerfile .
+    - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web
     # Push the Docker image to Heroku registry
     - docker push registry.heroku.com/$HEROKU_APP_NAME/web
     # Release the Docker image

@@ -1,14 +1,26 @@
-# Use an official JDK runtime as a parent image
-FROM openjdk:17-jre-slim
+# Stage 1: Build the frontend
+FROM node:14 as build-frontend
+WORKDIR /app/unihive-fe
+COPY unihive-fe/package*.json ./
+RUN npm install
+COPY unihive-fe/ ./
+RUN npm run build
 
-# Set the working directory
-WORKDIR /unihive-backend
+# Stage 2: Build the backend
+FROM maven:3.8.3-openjdk-17 as build-backend
+WORKDIR /app/unihive-backend
+COPY unihive-backend/pom.xml .
+COPY unihive-backend/src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the Spring Boot jar to the container
-COPY target/*.jar unihive-backend.jar
+# Stage 3: Prepare the final image
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+# Copy the Spring Boot jar
+COPY --from=build-backend /app/unihive-backend/target/*.jar ./app.jar
+# Copy the frontend build to the backend static resources
+COPY --from=build-frontend /app/unihive-fe/dist ./static
 
-# Expose the port the app runs on
+# Expose port and define the entry point
 EXPOSE 8080
-
-# Command to run the Spring Boot app
-ENTRYPOINT ["java", "-jar", "unihive-backend.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
