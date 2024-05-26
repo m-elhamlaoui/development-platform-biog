@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite preview --port 8080"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
