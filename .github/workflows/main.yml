@@ -32,8 +32,8 @@ jobs:
         run: docker build -t ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }} .
 
       - name: Run temporary container
-        run: docker run --name temp-container ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }} sleep 60
-
+        run: docker run --name temp-container -d ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }}
+        
       - name: Copy frontend build artifacts
         run: docker cp temp-container:/app/frontend-dist ./build-artifacts/frontend
 
