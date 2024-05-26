@@ -53,6 +53,7 @@ build:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     # Create a directory for build artifacts
     - mkdir build-artifacts
+    - ls
     # Copy backend and frontend builds into the build-artifacts directory
     - cp -r unihive-backend/target/*.jar ./build-artifacts
     - cp -r unihive-fe/dist ./build-artifacts
