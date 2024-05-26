@@ -11,7 +11,6 @@ FROM maven:3.8.3-openjdk-17 as build-backend
 WORKDIR /app/unihive-backend
 COPY /unihive-backend/pom.xml .
 COPY /unihive-backend/src ./src
-COPY /unihive-backend/src/main/resources/gcp-account-file.json ./src/main/resources/gcp-account-file.json
 RUN mvn clean package -DskipTests
 
 # Stage 3: Prepare the final image
