@@ -19,7 +19,7 @@ public class StorageConfig {
         return StorageOptions.newBuilder()
                 .setCredentials(ServiceAccountCredentials
                         .fromStream(new FileInputStream(
-                                "src/main/resources/gcp-account-file.json")))
+                                "unihive-backend/src/main/resources/gcp-account-file.json")))
                 .build().getService();
     }
 }
