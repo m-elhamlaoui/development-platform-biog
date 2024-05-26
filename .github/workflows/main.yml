@@ -40,10 +40,10 @@ jobs:
             mkdir -p build-artifacts/backend
   
       - name: Copy frontend build artifacts
-        run: docker cp temp-container:/app/frontend-dist ./build-artifacts/frontend
+        run: docker cp temp-container:./static ./build-artifacts/frontend
 
       - name: Copy backend build artifacts
-        run: docker cp temp-container:/app/app.jar ./build-artifacts/backend
+        run: docker cp temp-container:./app.jar ./build-artifacts/backend
 
       - name: Remove temporary container
         run: docker rm temp-container
