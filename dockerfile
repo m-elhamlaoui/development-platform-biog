@@ -5,8 +5,6 @@ COPY /unihive-fe/package*.json ./
 RUN npm install
 COPY unihive-fe/ ./
 RUN npm run build
-RUN ls -l /app/unihive-fe
-RUN ls -l ./
 
 # Stage 2: Build the backend
 FROM maven:3.8.3-openjdk-17 as build-backend
@@ -18,7 +16,6 @@ RUN mvn clean package -DskipTests
 # Stage 3: Prepare the final image
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-RUN ls
 # Copy the Spring Boot jar
 COPY --from=build-backend /app/unihive-backend/target/*.jar ./app.jar
 # Copy the frontend build to the backend static resources
