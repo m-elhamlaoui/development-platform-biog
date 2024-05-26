@@ -49,6 +49,7 @@ build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
+    - ls
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   artifacts:
@@ -93,7 +94,7 @@ deploy:
 #    - git commit -m "Deploy frontend to Heroku"
 #    - git push heroku main --force
     # Build the Docker image
-    - docker build -t registry.heroku.com/$HEROKU_APP_NAME/web
+    - docker buildx build -t registry.heroku.com/$HEROKU_APP_NAME/web
     # Push the Docker image to Heroku registry
     - docker push registry.heroku.com/$HEROKU_APP_NAME/web
     # Release the Docker image
