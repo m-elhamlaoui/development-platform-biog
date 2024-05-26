@@ -19,7 +19,7 @@ WORKDIR /app
 # Copy the Spring Boot jar
 COPY --from=build-backend /app/unihive-backend/target/*.jar ./app.jar
 # Copy the Google Cloud credentials file
-COPY --from=build-backend /app/unihive-backend/src/resources/gcp-account-file.json ./gcp-account-file.json
+COPY --from=build-backend /app/unihive-backend/src/main/resources/gcp-account-file.json ./gcp-account-file.json
 # Set environment variable for Google Cloud credentials
 ENV GOOGLE_CLOUD_CREDENTIALS=./gcp-account-file.json
 # Copy the frontend build to the backend static resources
