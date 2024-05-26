@@ -51,10 +51,16 @@ build:
   script:
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    # Create a directory for build artifacts
+    - mkdir build-artifacts
+    # Copy backend and frontend builds into the build-artifacts directory
+    - cp -r ./unihive-backend/target/*.jar ./build-artifacts
+    - cp -r ./unihive-fe/dist ./build-artifacts
   artifacts:
     paths:
-      - unihive-backend/target/*.jar
-      - unihive-fe/dist
+      - build-artifacts
+      # - unihive-backend/target/*.jar
+      # - unihive-fe/dist
   only:
     - main
       
@@ -92,7 +98,8 @@ deploy:
 #    - git add .
 #    - git commit -m "Deploy frontend to Heroku"
 #    - git push heroku main --force
-    - ls 
+    # Use the build artifacts from the previous stage
+    - cp -r build-artifacts/* .
     # Build the Docker image
     - docker buildx build -t registry.heroku.com/$HEROKU_APP_NAME/web
     # Push the Docker image to Heroku registry
