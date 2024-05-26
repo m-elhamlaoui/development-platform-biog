@@ -54,8 +54,8 @@ build:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   artifacts:
     paths:
-      - ./unihive-backend/target/*.jar
-      - ./unihive-fe/dist
+      - unihive-backend/target/*.jar
+      - unihive-fe/dist
   only:
     - main
       
