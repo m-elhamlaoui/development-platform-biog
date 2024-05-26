@@ -50,13 +50,12 @@ build:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-    # Create a directory for build artifacts
-    - mkdir build-artifacts
-    - ls
-    # Copy backend and frontend builds into the build-artifacts directory
-    - cp -r unihive-backend/target/*.jar ./build-artifacts
-    - cp -r unihive-fe/dist ./build-artifacts
+    - docker run --name temp-container $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA sleep 60
+    - docker cp temp-container:/app/frontend-dist ./build-artifacts/frontend
+    - docker cp temp-container:/app/app.jar ./build-artifacts/backend
+    - docker rm temp-container
+    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    # - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   artifacts:
     paths:
       - build-artifacts
