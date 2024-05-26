@@ -90,7 +90,8 @@ jobs:
 
       - name: Build and push Docker image to Heroku
         run: |
-          docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web build-artifacts
+          cp -r build-artifacts/* .
+          docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
           docker push registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
       - name: Release Docker image to Heroku
