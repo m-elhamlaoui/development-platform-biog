@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const REST_API_URL = "http://localhost:8080/auth/";
-const REST_API_GOOGLE_URL = "http://localhost:8080/calendar/authorize/";
+const REST_API_URL = "https://unihive-0bcdbacd92b4.herokuapp.com/auth/";
+const REST_API_GOOGLE_URL =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/calendar/authorize/";
 
 function register(data: any) {
   return axios.post(REST_API_URL + "signup", {

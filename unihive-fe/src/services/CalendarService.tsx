@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const REST_API_URL = "http://localhost:8080/calendar/";
+const REST_API_URL = "https://unihive-0bcdbacd92b4.herokuapp.com/calendar/";
 
 function getCalendar(token: string | null, id: string | null) {
   return axios.get(REST_API_URL + "get/" + id, {

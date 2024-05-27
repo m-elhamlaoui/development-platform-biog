@@ -1,54 +1,87 @@
 import axios from "axios";
 
 // GET_APIS
-const REST_API_URL_CLUBS_GET = "http://localhost:8080/superadmin/clubs";
-const REST_API_URL_ADMINS_GET = "http://localhost:8080/superadmin/admins";
-const REST_API_URL_EVENTS_GET = "http://localhost:8080/superadmin/events";
-const REST_API_URL_SCHOOLS_GET = "http://localhost:8080/superadmin/schools";
-const REST_API_URL_STUDENTS_GET = "http://localhost:8080/superadmin/students";
-const REST_API_URL_REQUESTS_GET = "http://localhost:8080/superadmin/requests";
-const REST_API_URL_CLUB_GET = "http://localhost:8080/superadmin/club";
-const REST_API_URL_ADMIN_GET = "http://localhost:8080/superadmin/admin";
-const REST_API_URL_EVENT_GET = "http://localhost:8080/superadmin/event";
-const REST_API_URL_SCHOOL_GET = "http://localhost:8080/superadmin/school";
-const REST_API_URL_STUDENT_GET = "http://localhost:8080/superadmin/student";
-const REST_API_URL_REQUEST_GET = "http://localhost:8080/superadmin/request";
-const REST_API_URL_ALLCOUNTS_GET = "http://localhost:8080/superadmin/allcounts";
-const REST_API_URL_ALL_GET = "http://localhost:8080/superadmin/all";
+const REST_API_URL_CLUBS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/clubs";
+const REST_API_URL_ADMINS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/admins";
+const REST_API_URL_EVENTS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/events";
+const REST_API_URL_SCHOOLS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/schools";
+const REST_API_URL_STUDENTS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/students";
+const REST_API_URL_REQUESTS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/requests";
+const REST_API_URL_CLUB_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/club";
+const REST_API_URL_ADMIN_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/admin";
+const REST_API_URL_EVENT_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/event";
+const REST_API_URL_SCHOOL_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/school";
+const REST_API_URL_STUDENT_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/student";
+const REST_API_URL_REQUEST_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/request";
+const REST_API_URL_ALLCOUNTS_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/allcounts";
+const REST_API_URL_ALL_GET =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/all";
 
 // POST_APIS
-const REST_API_URL_CLUB_POST = "http://localhost:8080/auth/register/club";
-const REST_API_URL_ADMIN_POST = "http://localhost:8080/auth/register/admin";
-const REST_API_URL_EVENT_POST = "http://localhost:8080/superadmin/addevent";
-const REST_API_URL_SCHOOL_POST = "http://localhost:8080/superadmin/addschool";
-const REST_API_URL_STUDENT_POST = "http://localhost:8080/auth/register/student";
-const REST_API_URL_REQUEST_POST = "http://localhost:8080/superadmin/addrequest";
+const REST_API_URL_CLUB_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/auth/register/club";
+const REST_API_URL_ADMIN_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/auth/register/admin";
+const REST_API_URL_EVENT_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/addevent";
+const REST_API_URL_SCHOOL_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/addschool";
+const REST_API_URL_STUDENT_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/auth/register/student";
+const REST_API_URL_REQUEST_POST =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/addrequest";
 
 // PUT_APIS
-const REST_API_URL_CLUB_PUT = "http://localhost:8080/superadmin/upclub/";
-const REST_API_URL_ADMIN_PUT = "http://localhost:8080/superadmin/upadmin/";
-const REST_API_URL_EVENT_PUT = "http://localhost:8080/superadmin/upevent/";
-const REST_API_URL_SCHOOL_PUT = "http://localhost:8080/superadmin/upschool/";
-const REST_API_URL_STUDENT_PUT = "http://localhost:8080/superadmin/upstudent/";
-const REST_API_URL_REQUEST_PUT = "http://localhost:8080/superadmin/uprequest/";
-const REST_API_URL_SA_PUT = "http://localhost:8080/superadmin/upemail";
-const REST_API_URL_SAPASS_PUT = "http://localhost:8080/superadmin/uppassword";
+const REST_API_URL_CLUB_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upclub/";
+const REST_API_URL_ADMIN_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upadmin/";
+const REST_API_URL_EVENT_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upevent/";
+const REST_API_URL_SCHOOL_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upschool/";
+const REST_API_URL_STUDENT_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upstudent/";
+const REST_API_URL_REQUEST_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/uprequest/";
+const REST_API_URL_SA_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/upemail";
+const REST_API_URL_SAPASS_PUT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/uppassword";
 
 // DELETE_APIS
-const REST_API_URL_CLUB_DELETE = "http://localhost:8080/superadmin/delclub/";
-const REST_API_URL_ADMIN_DELETE = "http://localhost:8080/superadmin/deladmin/";
-const REST_API_URL_EVENT_DELETE = "http://localhost:8080/superadmin/delevent/";
+const REST_API_URL_CLUB_DELETE =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/delclub/";
+const REST_API_URL_ADMIN_DELETE =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/deladmin/";
+const REST_API_URL_EVENT_DELETE =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/delevent/";
 const REST_API_URL_SCHOOL_DELETE =
-  "http://localhost:8080/superadmin/delschool/";
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/delschool/";
 const REST_API_URL_STUDENT_DELETE =
-  "http://localhost:8080/superadmin/delstudent/";
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/delstudent/";
 const REST_API_URL_REQUEST_DELETE =
-  "http://localhost:8080/superadmin/delrequest/";
+  "https://unihive-0bcdbacd92b4.herokuapp.com/superadmin/delrequest/";
 
-const REST_API_URL_FILE_UPLOAD = "http://localhost:8080/upload";
+const REST_API_URL_FILE_UPLOAD =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/upload";
 
 // ACCEPT_REQUEST
-const REST_API_URL_REQUEST_ACCEPT = "http://localhost:8080/auth/acceptrequest/";
+const REST_API_URL_REQUEST_ACCEPT =
+  "https://unihive-0bcdbacd92b4.herokuapp.com/auth/acceptrequest/";
 
 const listClubs = (token: string | null) =>
   axios.get(REST_API_URL_CLUBS_GET, {

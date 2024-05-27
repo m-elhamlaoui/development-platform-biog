@@ -1,10 +1,10 @@
 import axios from "axios";
-const REST_API_URL_EVENTS = "http://localhost:8080/student/events";
-const REST_API_URL_CLUB = "http://localhost:8080/student/club";
-const REST_API_URL_STUDENT_GET = "http://localhost:8080/student/email/";
-const REST_API_URL_STUDENT_UPDATE = "http://localhost:8080/student/";
-const REST_API_URL_STUDENT_CLUBS = "http://localhost:8080/student/clubs/";
-const REST_API_URL_EVENT="http://localhost:8080/student/events";
+const REST_API_URL_EVENTS = "https://unihive-0bcdbacd92b4.herokuapp.com/student/events";
+const REST_API_URL_CLUB = "https://unihive-0bcdbacd92b4.herokuapp.com/student/club";
+const REST_API_URL_STUDENT_GET = "https://unihive-0bcdbacd92b4.herokuapp.com/student/email/";
+const REST_API_URL_STUDENT_UPDATE = "https://unihive-0bcdbacd92b4.herokuapp.com/student/";
+const REST_API_URL_STUDENT_CLUBS = "https://unihive-0bcdbacd92b4.herokuapp.com/student/clubs/";
+const REST_API_URL_EVENT="https://unihive-0bcdbacd92b4.herokuapp.com/student/events";
 
 export const getStudent = (token: string | null, email: string) =>
   axios.get(REST_API_URL_STUDENT_GET + email, {
