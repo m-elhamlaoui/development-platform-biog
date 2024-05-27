@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/club")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 public class ClubController {
     private final ClubService clubService;
 

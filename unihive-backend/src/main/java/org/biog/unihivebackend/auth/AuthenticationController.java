@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 @RequestMapping("/auth")
 public class AuthenticationController {
 

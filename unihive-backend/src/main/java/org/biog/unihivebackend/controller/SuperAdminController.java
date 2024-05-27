@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/superadmin")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 public class SuperAdminController {
     private final AdminService adminService;
     private final StudentService studentService;

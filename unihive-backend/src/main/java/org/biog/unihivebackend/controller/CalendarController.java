@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/calendar")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 public class CalendarController {
 
     private final CalendarService calendarService;

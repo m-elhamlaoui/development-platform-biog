@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/student")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 public class StudentController {
     private final EventService eventService;
     private final ClubService clubService;

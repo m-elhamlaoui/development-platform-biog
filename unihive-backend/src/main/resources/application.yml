@@ -46,6 +46,13 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  graphql:
+    cors:
+      allowed-origins: https://unihive-0bcdbacd92b4.herokuapp.com
+      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+      allowed-headers: "*"
+      allow-credentials: true
+      max-age: 3600
 gcp:
   bucket:
     name: unihive-files

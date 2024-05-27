@@ -20,6 +20,7 @@ import org.biog.unihivebackend.service.ClubService;
 import org.biog.unihivebackend.service.EventService;
 import org.biog.unihivebackend.service.RequestService;
 import org.biog.unihivebackend.service.StudentService;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.mail.MessagingException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminController {
