@@ -1,0 +1,48 @@
+
+.hr-lines {
+  position: relative;
+  margin-top: 23px;
+  text-align: center;
+}
+
+.hr-lines:before,
+.hr-lines:after {
+  content: " ";
+  height: 2px; /* Set height for horizontal lines */
+  background: rgb(0, 0, 0);
+  display: block;
+  position: absolute;
+  width: calc(50% - 200px); /* Adjust this value to control the length of the lines */
+}
+
+.hr-lines:before {
+  transform: translateY(-50%);
+  left: 0; /* Position at the left side of the container */
+  }
+  
+ 
+
+.hr-lines:after {
+  transform: translateY(-50%);
+  right: 0; /* Position at the right side of the container */
+  margin-top: 0px;
+
+}
+
+.event-banner {
+  height: 50px;
+  width: 400px;
+  background-color: white;
+  border-radius: 20px;
+  border: 1px solid black;
+  position: absolute;
+  left: 50%;
+  margin-top: 90px;
+  transform: translate( -50%); /* Center the banner horizontally and vertically */
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+

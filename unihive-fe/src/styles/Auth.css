@@ -1,0 +1,275 @@
+.row3 {
+  width: 100vw;
+  height: 100vh;
+}
+
+.col3 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.col4 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.col3-1 {
+  flex: 1 0 35% !important;
+}
+
+.col4-1 {
+  flex: 1 0 0% !important;
+}
+
+.auth-img {
+  width: 100%;
+  height: 100%;
+}
+
+.auth-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fields {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.field2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: black;
+}
+
+.field input {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 0.7rem 0.4rem 0.7rem;
+  width: 18rem;
+  height: 3rem;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #46bfff;
+}
+
+.auth-btn {
+  width: 18rem;
+  height: 3rem;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 1.5rem !important;
+  font-weight: 500;
+  --btn-auth: #46bfff;
+  background-color: var(--btn-auth) !important;
+  border-color: var(--btn-auth) !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+}
+
+.auth-btn:hover {
+  --btn-auth: #21b1ff;
+  background-color: var(--btn-auth) !important;
+  border-color: var(--btn-auth) !important;
+}
+
+.auth-btn:active {
+  --btn-auth: #0e8edf;
+  background-color: var(--btn-auth) !important;
+  border-color: var(--btn-auth) !important;
+}
+
+.show-pass {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: black;
+}
+
+.show-pass input {
+  display: none;
+}
+
+.show-pass label {
+  user-select: none;
+}
+
+.show-pass input[type="checkbox"] + label {
+  position: relative;
+  cursor: pointer;
+  padding-left: 1.8rem;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.show-pass input[type="checkbox"] + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #d5d5d5;
+  border-radius: 0.3rem;
+  background-color: white;
+}
+
+.show-pass input[type="checkbox"]:checked + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #46bfff;
+  border-radius: 0.3rem;
+  background-color: white;
+}
+
+.show-pass input[type="checkbox"]:checked + label:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #46bfff;
+  border-radius: 0.3rem;
+  background-image: url(../assets/check.png);
+  background-size: contain;
+  background-color: white;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+.forgot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #46bfff;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.uh-logo,
+.uh-logo2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.uh-logo {
+  margin-bottom: 5rem;
+}
+
+.uh-logo2 {
+  margin-bottom: 1.5rem;
+}
+
+.account,
+.account2 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: black;
+  gap: 0.5rem;
+}
+
+.account {
+  margin-top: 2rem;
+}
+
+.account2 {
+  margin-top: 1rem;
+}
+
+.file-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding-left: 0.7rem;
+  width: 37rem;
+  height: 3rem;
+}
+
+.file-input label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  background-color: #d5d5d5;
+  cursor: pointer;
+}
+
+.field select {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid #d5d5d5;
+  padding: 0.4rem 1.7rem 0.4rem 0.7rem;
+  width: 18rem;
+  height: 100%;
+  background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")
+    no-repeat;
+  background-position: calc(100% - 0.75rem) center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  max-height: 100px !important;
+}
