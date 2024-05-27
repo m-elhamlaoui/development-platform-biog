@@ -53,6 +53,26 @@ jobs:
 
       - name: Remove Docker image
         run: docker rmi ${{ secrets.CI_REGISTRY_IMAGE }}:${{ github.sha }}
+        
+      - name: Delete Old Artifacts
+        uses: actions/github-script@v6
+        id: artifact
+        with:
+          script: |
+            const res = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+    
+            res.data.artifacts
+              .forEach(({ id }) => {
+                github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: id,
+                  permissions: write-all
+                })
+              })
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
