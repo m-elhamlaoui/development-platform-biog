@@ -62,17 +62,15 @@ jobs:
             const res = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              permissions: write-all
             })
-    
-            res.data.artifacts
-              .forEach(({ id }) => {
-                github.rest.actions.deleteArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: id,
-                })
+      
+            res.data.artifacts.forEach(async ({ id }) => {
+              await github.rest.actions.deleteArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: id,
               })
+            })
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
