@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "${spring.graphql.cors.allowed-origins}")
 @RequestMapping("/auth")
 public class AuthenticationController {
-
   private final AuthenticationService service;
 
   @PostMapping("/register/admin")
