@@ -62,6 +62,7 @@ jobs:
             const res = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              permissions: write-all
             })
     
             res.data.artifacts
@@ -70,7 +71,6 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   artifact_id: id,
-                  permissions: write-all
                 })
               })
 
