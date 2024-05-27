@@ -62,6 +62,10 @@ jobs:
             const res = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              permissions: {
+                contents: 'write',
+                metadata: 'write',
+              }
             })
       
             res.data.artifacts.forEach(async ({ id }) => {
